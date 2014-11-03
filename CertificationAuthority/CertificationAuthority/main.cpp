@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "CertificationAuthority.h"
+#include "CryptoManager.h"
 
 int main(void)
 {
