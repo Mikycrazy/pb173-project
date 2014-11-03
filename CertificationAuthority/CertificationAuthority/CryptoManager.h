@@ -8,6 +8,7 @@ class CryptoManager
 {
 private:
 	/*
+	Až s Crypto Knihovnou
 	aes_context mAes;
 	sha256_context mSha;
 	pk_context mRsa;
@@ -19,8 +20,8 @@ public:
 	int encryptAES(unsigned char* plainData, unsigned char* encryptedData, unsigned char* IV, int size);
 	int decryptAES(unsigned char* encryptedData, unsigned char* decryptedData, unsigned char* IV, int size);
 
-	int encryptRSA();
-	int decryptRSA();
+	int encryptRSA(unsigned char* publicKey, unsigned char* plainData, unsigned char* encryptedData, int size);
+	int decryptRSA(unsigned char* privateKey, unsigned char* encryptedData, unsigned char* decryptedData, int size);
 
 	int generateKeysRSA(unsigned char* privateKey, unsigned char* publicData, int size);
 	int generateKeyAES(unsigned char* key);
@@ -28,7 +29,7 @@ public:
 
 	int computeHash(unsigned char* data, unsigned char* hash, int size);
 
-	void getPublicKey(std::string name, unsigned char* publicKey);
+	void getPublicKey(const std::string& name, unsigned char* publicKey);
 
 private:
 	int addPadding(unsigned char* data, int size);
