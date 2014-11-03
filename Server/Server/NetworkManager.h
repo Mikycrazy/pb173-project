@@ -51,6 +51,6 @@ public:
 	* @return				velkost prijatych dat
 	*/
 	int receiveData(int connectionID, unsigned char* data);
-}
+};
 
 #endif

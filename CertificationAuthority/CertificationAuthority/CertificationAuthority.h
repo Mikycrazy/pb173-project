@@ -3,8 +3,7 @@
 #include <string>
 #include <list>
 #include "CaUser.h"
-const int AES_KEY_LENGTH = 128;
-const int RSA_KEY_LENGTH = 1024;
+
 
 class CA
 {
