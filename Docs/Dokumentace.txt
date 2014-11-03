@@ -1,2 +1,2 @@
 Pro šifrování pouijeme knihovny PolarSSL.
-Pro síovou komunikaci pouijeme knihovny QT. 
+Pro síovou komunikaci pravdepodobnì pouijeme knihovny QT. 
