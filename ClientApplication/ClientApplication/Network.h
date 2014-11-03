@@ -1,6 +1,9 @@
 #pragma once
+#include <stdlib.h>
+#include <iostream>
+#include <string>
 
-const char* IP_CA = "192.168.0.1";
+const std::string IP_CA = "192.168.0.1";
 
 class NetworkManager
 {

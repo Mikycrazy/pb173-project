@@ -1,5 +1,9 @@
 #include <string>
 
+
+const int AES_KEY_LENGTH = 128;
+const int AES_IV_LENGTH = 16;
+
 class CryptoManager
 {
 private:

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string.h>
+#include "Crypto.h"
+#include "Network.h"
 
 class Client
 {
