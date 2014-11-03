@@ -23,5 +23,11 @@
     <ClInclude Include="CertificationAuthority.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CaUser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CryptoManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
