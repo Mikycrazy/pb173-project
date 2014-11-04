@@ -1,2 +1,11 @@
 Pro šifrování pouijeme knihovny PolarSSL.
-Pro síovou komunikaci pravdepodobnì pouijeme knihovny QT. 
+Pro síovou komunikaci pravdepodobnì pouijeme knihovny QT.
+
+pakety budou vypadat:
+1byteTypPaketu-10bytuRandomData-4bytyDelkaDatVBajtech-Data-(pozdejiZdeBUdeHash)
+1-login request
+2-login response
+3-logout request
+4-logout response
+5-getOnlineUsersList request
+6-getOnlineUsersList response
