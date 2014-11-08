@@ -1,14 +1,13 @@
 #include   "Client.h"
 
-Client::Client() : mUsername(), mEmail()
+Client::Client() : mUsername(), mEmail(), mLoggedToServer(false), mConnectedToClient(false)
 {
 
 }
 
-Client::Client(string username, string email)
+Client::Client(string username, string email) : mUsername(username), mEmail(email), mLoggedToServer(false), mConnectedToClient(false)
 {
-    mUsername = username;
-    mEmail = email;
+
 }
 Client::~Client()
 {
@@ -67,6 +66,8 @@ int Client::logout()
 
 int Client::getOnlineList()
 {
+    if(!mLoggedToServer)
+        return 1;
 
     unsigned char *data = NULL;
     int dataSize = mUsername.size();
@@ -155,4 +156,14 @@ int Client::processPacket(unsigned char* packet, unsigned char** data)
     }
     return dataSize;
 
+}
+
+bool Client::isLogged()
+{
+    return mLoggedToServer;
+}
+
+bool Client::isConnected()
+{
+    return mConnectedToClient;
 }

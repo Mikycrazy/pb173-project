@@ -7,10 +7,10 @@ int NetworkManager::startConnection(QString ipAddress, quint16 port)
     return 0;
 }
 
-bool NetworkManager::sendData(int connectionID, const char *data, int size)
+bool NetworkManager::sendData(int connectionID, unsigned char *data, int size)
 {
     bool b = false;
-    mTcpClient.write(data,size);
+    mTcpClient.write(reinterpret_cast<const char*>(data),size);
 
     return b;
 }
@@ -21,6 +21,12 @@ void NetworkManager::startListening( quint16 port)
 }
 int NetworkManager::acceptConnection()
 {
-  mPTcpClient = mTcpServer.nextPendingConnection();
+    mPTcpClient = mTcpServer.nextPendingConnection();
     return 0;
+}
+
+int NetworkManager::receiveData(int connectionID, unsigned char *data)
+{
+    int sizeData = 0;
+    return sizeData;
 }

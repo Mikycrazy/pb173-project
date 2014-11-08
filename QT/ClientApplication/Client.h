@@ -119,6 +119,10 @@ public:
 
     int createPacket(unsigned char id, unsigned char* data, unsigned char **packet, int size);
 
+    bool isLogged();
+
+    bool isConnected();
+
 private:
 
 

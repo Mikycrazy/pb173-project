@@ -72,7 +72,7 @@ public:
     *
     * @return				true ak sa odoslanie podarilo, inak false
     */
-    bool sendData(int connectionID, const char* data, int size);
+    bool sendData(int connectionID, unsigned char* data, int size);
 
     /**
     * Prijme data od vybraneho spojenia
