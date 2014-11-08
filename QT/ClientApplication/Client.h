@@ -91,19 +91,28 @@ public:
 	int startCommunication(unsigned char* data);
 
     /**
-    * Zpracuje prisla data
+    * Zpracuje prisly packet, a data necha v paketu
+    *
+    * @param packet		prisli packet
+    * @param data		sem se ulozi data obsazena v paketu
+    *
+    * @return vrati id paketu
+    */
+    int processData(unsigned char* packet, unsigned char** data, int *dataSize);
+
+    /**
+    * Zpracuje data a id pozadavku do podoby paketu k odeslani po siti
     *
     * @param id         id paketu, jestli jde o login/logout nebo neco dalsiho
     * @param data		data
+    * @param packet		sem se ulozi packet, ktery je pripraven k odeslani
+    * @param size		delka dat
     */
+
     int packetCreator(unsigned char id, unsigned char* data, unsigned char **packet, int size);
+
 private:
-	/**
-	* Zpracuje prisla data
-	*
-	* @param data		data
-	*/
-	int processData(unsigned char* data);
+
 
 
 };

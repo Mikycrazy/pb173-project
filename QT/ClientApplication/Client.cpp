@@ -56,7 +56,7 @@ int Client::logout()
        printf("%c",packet[i]);
 
     //bude nasledovat sifrovani a poslani pres sit
-    mLoggedToServer = false;
+
     delete[] data;
     return 0;
 }
@@ -88,4 +88,36 @@ int Client::packetCreator(unsigned char id, unsigned char *data, unsigned char *
     memcpy(&((*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size)]),data, size);
 
     return newSize;
+}
+
+int Client::processData(unsigned char* packet, unsigned char** data, int* dataSize)
+{
+    int id = 0;
+    //desifrovani zkontrolovani hashu atd. tady bude
+    if(sizeof(int) == 4)
+    {
+        id = packet[0];
+        *dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
+        *data = new unsigned char [*dataSize];
+        memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], *dataSize);
+
+        switch(id)
+        {
+         case LOGIN_REQUEST:
+              break;
+         case LOGIN_RESPONSE:
+            mLoggedToServer = true;
+              break;
+         case LOGOUT_REQUEST:
+             break;
+         case LOGOUT_RESPONSE:
+            mLoggedToServer = false;
+             break;
+         default:
+             break;
+
+        }
+    }
+    return id;
+
 }
