@@ -18,19 +18,91 @@ TEST_CASE("SERVER")
 TEST_CASE("PACKET CREATING")
 {
     Client c;
-	SECTION("login packet")
+    SECTION("Create login packet with 'aaaaaaaaaa' data ")
 	{
-        unsigned char* data = new unsigned char[10];
+        const int DATA_LENGTH = 10;
+        unsigned char* data = new unsigned char[DATA_LENGTH];
         unsigned char* packet = NULL;
-        memset(data, 97, 10);
-        int size = c.packetCreator(LOGIN_REQUEST, data, &packet, 10);
+        unsigned char* data2 = NULL;
+        int size2;
 
-        REQUIRE(size == 25);
+        memset(data, 97, DATA_LENGTH);
+
+        int size = c.packetCreator(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
+        int ID = c.processData(packet, &data2, &size2);
+
+        REQUIRE(size == DATA_LENGTH + 15);
+        REQUIRE(size2 == DATA_LENGTH);
+        REQUIRE(ID == LOGIN_REQUEST);
+        REQUIRE(strcmp(reinterpret_cast<const char*>(data), reinterpret_cast<const char*>(data2)) == 0);
+
+        delete data;
+        delete packet;
+        delete data2;
 	}
-	SECTION("logout packet")
+    SECTION("Create login packet with zero data ")
+    {
+        const int DATA_LENGTH = 0;
+        unsigned char* data = NULL;
+        unsigned char* packet = NULL;
+        unsigned char* data2 = NULL;
+        int size2;
+
+        int size = c.packetCreator(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
+        int ID = c.processData(packet, &data2, &size2);
+
+        REQUIRE(size == DATA_LENGTH + 15);
+        REQUIRE(size2 == DATA_LENGTH);
+        REQUIRE(ID == LOGIN_REQUEST);
+
+        delete data;
+        delete packet;
+        delete data2;
+    }
+    SECTION("Create logout packet with 'bbbbb' data")
 	{
+        const int DATA_LENGTH = 5;
+        unsigned char* data = new unsigned char[DATA_LENGTH];
+        unsigned char* packet = NULL;
+        unsigned char* data2 = NULL;
+        int size2;
 
+        memset(data, 97, DATA_LENGTH);
+
+        int size = c.packetCreator(LOGOUT_REQUEST, data, &packet, DATA_LENGTH);
+        int ID = c.processData(packet, &data2, &size2);
+
+        REQUIRE(size == DATA_LENGTH + 15);
+        REQUIRE(size2 == DATA_LENGTH);
+        REQUIRE(ID == LOGOUT_REQUEST);
+        REQUIRE(strcmp(reinterpret_cast<const char*>(data), reinterpret_cast<const char*>(data2)) == 0);
+
+        delete data;
+        delete packet;
+        delete data2;
 	}
+    SECTION("Create logout packet with long data")
+    {
+        const int DATA_LENGTH = 1024;
+        unsigned char* data = new unsigned char[DATA_LENGTH];
+        unsigned char* packet = NULL;
+        unsigned char* data2 = NULL;
+        int size2;
+
+        memset(data, 97, DATA_LENGTH);
+
+        int size = c.packetCreator(LOGOUT_REQUEST, data, &packet, DATA_LENGTH);
+        int ID = c.processData(packet, &data2, &size2);
+
+        REQUIRE(size == DATA_LENGTH + 15);
+        REQUIRE(size2 == DATA_LENGTH);
+        REQUIRE(ID == LOGOUT_REQUEST);
+        REQUIRE(strcmp(reinterpret_cast<const char*>(data), reinterpret_cast<const char*>(data2)) == 0);
+
+        delete data;
+        delete packet;
+        delete data2;
+    }
 	SECTION("get online list packet")
 	{
 
