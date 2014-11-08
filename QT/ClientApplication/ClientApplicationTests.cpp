@@ -7,21 +7,32 @@ TEST_CASE("SERVER")
 
 	SECTION("is avaible")
 	{
+        unsigned char* packet = NULL;
+        unsigned char* data2 = NULL;
+
         Client c("pepa", "pepa@seznam.cz");
         c.login();
 
-        //TO DO listening for answer
+        NetworkManager receiver;
 
+        receiver.startListening(8888);
+        receiver.acceptConnection();
+        receiver.receiveData(1, packet);
+        int size = c.processPacket(packet, &data2);
+
+        REQUIRE(size == 1);
+
+        if(size == 1)
+        {
+            REQUIRE(data2[0] == 1);
+        }
 
         REQUIRE(c.isLogged());
 	}
 	SECTION("is not avaible")
 	{
         Client c("pepa", "pepa@seznam.cz");
-        c.login();
-
-        //TO DO listening for answer
-
+        REQUIRE_FALSE(c.login());
 
         REQUIRE_FALSE(c.isLogged());
 	}
@@ -44,7 +55,18 @@ TEST_CASE("PACKET CREATING")
 
         REQUIRE(size == DATA_LENGTH + 15);
         REQUIRE(size2 == DATA_LENGTH);
-        REQUIRE(strcmp(reinterpret_cast<const char*>(data), reinterpret_cast<const char*>(data2)) == 0);
+
+        if(size2 == DATA_LENGTH)
+        {
+            bool match = true;
+            for(int i = 0; i < DATA_LENGTH; i++)
+            {
+                if(data[i] != data2[i])
+                    match = false;
+            }
+
+            REQUIRE(match);
+        }
 
         delete data;
         delete packet;
@@ -81,7 +103,18 @@ TEST_CASE("PACKET CREATING")
 
         REQUIRE(size == DATA_LENGTH + 15);
         REQUIRE(size2 == DATA_LENGTH);
-        REQUIRE(strcmp(reinterpret_cast<const char*>(data), reinterpret_cast<const char*>(data2)) == 0);
+
+        if(size2 == DATA_LENGTH)
+        {
+            bool match = true;
+            for(int i = 0; i < DATA_LENGTH; i++)
+            {
+                if(data[i] != data2[i])
+                    match = false;
+            }
+
+            REQUIRE(match);
+        }
 
         delete data;
         delete packet;
@@ -101,7 +134,18 @@ TEST_CASE("PACKET CREATING")
 
         REQUIRE(size == DATA_LENGTH + 15);
         REQUIRE(size2 == DATA_LENGTH);
-        REQUIRE(strcmp(reinterpret_cast<const char*>(data), reinterpret_cast<const char*>(data2)) == 0);
+
+        if(size2 == DATA_LENGTH)
+        {
+            bool match = true;
+            for(int i = 0; i < DATA_LENGTH; i++)
+            {
+                if(data[i] != data2[i])
+                    match = false;
+            }
+
+            REQUIRE(match);
+        }
 
         delete data;
         delete packet;
@@ -121,7 +165,18 @@ TEST_CASE("PACKET CREATING")
 
         REQUIRE(size == DATA_LENGTH + 15);
         REQUIRE(size2 == DATA_LENGTH);
-        REQUIRE(strcmp(reinterpret_cast<const char*>(data), reinterpret_cast<const char*>(data2)) == 0);
+
+        if(size2 == DATA_LENGTH)
+        {
+            bool match = true;
+            for(int i = 0; i < DATA_LENGTH; i++)
+            {
+                if(data[i] != data2[i])
+                    match = false;
+            }
+
+            REQUIRE(match);
+        }
 
         delete data;
         delete packet;
@@ -145,14 +200,25 @@ TEST_CASE("SENDING DATA")
 
         receiver.startListening(8888);
         receiver.acceptConnection();
-        receiver.receiveData(2, data2);
+        int size = receiver.receiveData(1, data2);
 
-        REQUIRE(strcmp(reinterpret_cast<const char*>(data), reinterpret_cast<const char*>(data2)) == 0);
+        if(size == DATA_LENGTH)
+        {
+            bool match = true;
+            for(int i = 0; i < DATA_LENGTH; i++)
+            {
+                if(data[i] != data2[i])
+                    match = false;
+            }
+
+            REQUIRE(match);
+        }
 
         delete data;
         delete data2;
 	}
 }
+
 TEST_CASE("RECIEVING DATA")
 {
 	SECTION("login succesful")
@@ -175,10 +241,11 @@ TEST_CASE("RECIEVING DATA")
 
         receiver.startListening(8888);
         receiver.acceptConnection();
-        receiver.receiveData(2, packet);
+        receiver.receiveData(1, packet);
 
         int size = c.processPacket(packet, &data2);
         REQUIRE(size == 1);
+
         if(size == 1)
         {
             REQUIRE(data2[0] == 1);
@@ -206,10 +273,11 @@ TEST_CASE("RECIEVING DATA")
 
         receiver.startListening(8888);
         receiver.acceptConnection();
-        receiver.receiveData(2, packet);
+        receiver.receiveData(1, packet);
 
         int size = c.processPacket(packet, &data2);
         REQUIRE(size == 1);
+
         if(size == 1)
         {
             REQUIRE(data2[0] == 1);
@@ -243,11 +311,23 @@ TEST_CASE("RECIEVING DATA")
 
         receiver.startListening(8888);
         receiver.acceptConnection();
-        receiver.receiveData(2, packet);
+        receiver.receiveData(1, packet);
 
         int size = c.processPacket(packet, &data2);
 
         REQUIRE(size == DATA_LENGTH);
-        REQUIRE(strcmp(reinterpret_cast<const char*>(data), reinterpret_cast<const char*>(data2)) == 0);
+
+        if(size == DATA_LENGTH)
+        {
+            bool match = true;
+            for(int i = 0; i < DATA_LENGTH; i++)
+            {
+                if(data[i] != data2[i])
+                    match = false;
+            }
+
+            REQUIRE(match);
+        }
 	}
 }
+
