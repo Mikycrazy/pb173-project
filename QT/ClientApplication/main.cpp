@@ -16,14 +16,14 @@ int main(int argc, char *argv[])
     unsigned char *packet = NULL;
     for(int i = 0; i < 5; i++)
         data[i] = 'a';
-    int packetSize = c.packetCreator(1,data,&packet,5);
+    int packetSize = c.createPacket(1,data,&packet,5);
 
     for(int i = 0; i < packetSize; i++)
        printf("%c",packet[i]);
 
     unsigned char * recievedData = NULL;
     int dataSize = 0;
-    int id = c.processData(packet, &recievedData, &dataSize);
+    int id = c.processPacket(packet, &recievedData, &dataSize);
 
     printf("\n id: %d, datasize: %d \n",id, dataSize);
 

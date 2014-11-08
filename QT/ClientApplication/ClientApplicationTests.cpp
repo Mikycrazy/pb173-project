@@ -24,16 +24,14 @@ TEST_CASE("PACKET CREATING")
         unsigned char* data = new unsigned char[DATA_LENGTH];
         unsigned char* packet = NULL;
         unsigned char* data2 = NULL;
-        int size2;
 
         memset(data, 97, DATA_LENGTH);
 
-        int size = c.packetCreator(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
-        int ID = c.processData(packet, &data2, &size2);
+        int size = c.createPacket(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
+        int size2 = c.processPacket(packet, &data2);
 
         REQUIRE(size == DATA_LENGTH + 15);
         REQUIRE(size2 == DATA_LENGTH);
-        REQUIRE(ID == LOGIN_REQUEST);
         REQUIRE(strcmp(reinterpret_cast<const char*>(data), reinterpret_cast<const char*>(data2)) == 0);
 
         delete data;
@@ -46,14 +44,12 @@ TEST_CASE("PACKET CREATING")
         unsigned char* data = NULL;
         unsigned char* packet = NULL;
         unsigned char* data2 = NULL;
-        int size2;
 
-        int size = c.packetCreator(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
-        int ID = c.processData(packet, &data2, &size2);
+        int size = c.createPacket(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
+        int size2 = c.processPacket(packet, &data2);
 
         REQUIRE(size == DATA_LENGTH + 15);
         REQUIRE(size2 == DATA_LENGTH);
-        REQUIRE(ID == LOGIN_REQUEST);
 
         delete data;
         delete packet;
@@ -65,16 +61,14 @@ TEST_CASE("PACKET CREATING")
         unsigned char* data = new unsigned char[DATA_LENGTH];
         unsigned char* packet = NULL;
         unsigned char* data2 = NULL;
-        int size2;
 
         memset(data, 97, DATA_LENGTH);
 
-        int size = c.packetCreator(LOGOUT_REQUEST, data, &packet, DATA_LENGTH);
-        int ID = c.processData(packet, &data2, &size2);
+        int size = c.createPacket(LOGOUT_REQUEST, data, &packet, DATA_LENGTH);
+        int size2 = c.processPacket(packet, &data2);
 
         REQUIRE(size == DATA_LENGTH + 15);
         REQUIRE(size2 == DATA_LENGTH);
-        REQUIRE(ID == LOGOUT_REQUEST);
         REQUIRE(strcmp(reinterpret_cast<const char*>(data), reinterpret_cast<const char*>(data2)) == 0);
 
         delete data;
@@ -87,16 +81,14 @@ TEST_CASE("PACKET CREATING")
         unsigned char* data = new unsigned char[DATA_LENGTH];
         unsigned char* packet = NULL;
         unsigned char* data2 = NULL;
-        int size2;
 
         memset(data, 97, DATA_LENGTH);
 
-        int size = c.packetCreator(LOGOUT_REQUEST, data, &packet, DATA_LENGTH);
-        int ID = c.processData(packet, &data2, &size2);
+        int size = c.createPacket(LOGOUT_REQUEST, data, &packet, DATA_LENGTH);
+        int size2 = c.processPacket(packet, &data2);
 
         REQUIRE(size == DATA_LENGTH + 15);
         REQUIRE(size2 == DATA_LENGTH);
-        REQUIRE(ID == LOGOUT_REQUEST);
         REQUIRE(strcmp(reinterpret_cast<const char*>(data), reinterpret_cast<const char*>(data2)) == 0);
 
         delete data;
