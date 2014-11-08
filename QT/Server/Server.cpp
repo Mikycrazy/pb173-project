@@ -49,7 +49,7 @@ bool Server::logoutUser(User* user)
     return false;
 }
 
-int Server::sendOnlineList()
+void Server::sendOnlineList(User* user)
 {
     unsigned char *data = NULL;
     string s;
@@ -61,6 +61,7 @@ int Server::sendOnlineList()
         s += mUsers[i]->getUsername() + ":";
         s += mUsers[i]->getIPAddress() + ";";
     }
+
     int dataSize = s.size();
     data = new unsigned char [dataSize];
     memcpy(data, s.c_str(), s.size());
@@ -72,7 +73,8 @@ int Server::sendOnlineList()
 int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **packet, int size)
 {
     int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size;
-    *packet = new unsigned char[newSize];//casem pribude hash
+    *packet = new unsigned char[newSize];
+    //casem pribude hash
 
     (*packet)[0] = id;
     //tady asi pak bude treba lepsi random

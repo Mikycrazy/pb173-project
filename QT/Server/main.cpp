@@ -1,6 +1,7 @@
 #include <QCoreApplication>
 #include "NetworkManager.h"
 
+#ifdef TEST
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -9,3 +10,5 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
+
+#endif

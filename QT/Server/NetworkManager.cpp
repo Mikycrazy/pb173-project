@@ -21,6 +21,6 @@ void NetworkManager::startListening( quint16 port)
 }
 int NetworkManager::acceptConnection()
 {
-  mPTcpClient = mTcpServer.nextPendingConnection();
+    mPTcpClient = mTcpServer.nextPendingConnection();
     return 0;
 }

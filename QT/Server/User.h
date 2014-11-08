@@ -17,6 +17,7 @@ private:
 	bool mOnline;
 
 public:
+    User() : mUsername(), mEmail(), mIPAddress(), mOnline(false) {}
 	User(string username, string email, string ip, unsigned char* key) :
 		mUsername(username), mEmail(email), mIPAddress(ip), mPublicKey(key), mOnline(false) {}
 

@@ -1,8 +1,10 @@
 #ifndef SERVER_H
 #define SERVER_H
 
-#include "User.h"
 #include <vector>
+#include <stdlib.h>
+#include "User.h"
+
 
 using namespace std;
 
@@ -17,6 +19,7 @@ const int GET_ONLINE_USER_LIST_RESPONSE = 6;
 
 class Server
 {
+
 private:
 	int mPort;
 	vector<User*> mUsers;
@@ -31,8 +34,9 @@ public:
 	*
 	* @param port	server port
 	*/
-	Server(const int port) : mPort(port) {}
-	~Server();
+    Server() : mPort(8888) {}
+    Server(int port) : mPort(port) {}
+    ~Server() {}
 
 	/**
 	* Bindne server na port zadany v konstruktori a zacne spracovavat prichadzajuce spojenia
@@ -40,8 +44,6 @@ public:
 	* @return	true ak sa server podarilo spustit, inak false
 	*/
 	bool start();
-
-private:
 
 	/**
 	* Prihlasenie pouzivatela

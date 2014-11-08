@@ -18,9 +18,11 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     NetworkManager.cpp \
-    Server.cpp
+    Server.cpp \
+    ServerTest.cpp
 
 HEADERS += \
     Server.h \
     NetworkManager.h \
-    User.h
+    User.h \
+    catch.hpp

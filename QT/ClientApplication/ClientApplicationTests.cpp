@@ -14,10 +14,12 @@ TEST_CASE("SERVER")
         c.login();
 
         NetworkManager receiver;
+        c.createPacket(1, data2, &packet, 0);
 
         receiver.startListening(8888);
         receiver.acceptConnection();
         receiver.receiveData(1, packet);
+
         int size = c.processPacket(packet, &data2);
 
         REQUIRE(size == 1);
