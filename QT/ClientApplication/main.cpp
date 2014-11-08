@@ -2,7 +2,7 @@
 #include "NetworkManager.h"
 #include "Client.h"
 
-
+#ifdef Test
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -32,3 +32,4 @@ int main(int argc, char *argv[])
 
     return 0;
 }
+#endif

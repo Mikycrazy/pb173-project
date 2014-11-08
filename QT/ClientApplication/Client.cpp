@@ -1,5 +1,9 @@
 #include   "Client.h"
 
+Client::Client() : mUsername(), mEmail()
+{
+
+}
 
 Client::Client(string username, string email)
 {
@@ -73,6 +77,7 @@ int Client::packetCreator(unsigned char id, unsigned char *data, unsigned char *
         (*packet)[i] = rand() % 256;
     }
 
+
     //int to byte
     if(sizeof(size) == 4)
     {
@@ -85,7 +90,8 @@ int Client::packetCreator(unsigned char id, unsigned char *data, unsigned char *
         int pom = ( (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( (*packet)[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | ( (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH]);
           printf("sizePom: %d \n", pom);*/
     }
-    memcpy(&((*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size)]),data, size);
+
+    memcpy(&((*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size)]), data, size);
 
     return newSize;
 }

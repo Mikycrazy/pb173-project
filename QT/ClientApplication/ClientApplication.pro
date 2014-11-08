@@ -25,4 +25,5 @@ SOURCES += main.cpp \
 HEADERS += \
     Client.h \
     CryptoManager.h \
-    NetworkManager.h
+    NetworkManager.h \
+    catch.hpp

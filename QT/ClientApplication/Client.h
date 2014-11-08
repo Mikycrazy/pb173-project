@@ -39,6 +39,7 @@ public:
 	* @param username		uzivatelke jmeno
 	* @param email			email
 	*/
+    Client();
 	Client(std::string username, std::string email);
 	~Client();
 

@@ -1,4 +1,7 @@
-/*
+#define CATCH_CONFIG_MAIN
+#include "catch.hpp"
+#include "Client.h"
+
 TEST_CASE("SERVER")
 {
 
@@ -14,9 +17,15 @@ TEST_CASE("SERVER")
 }
 TEST_CASE("PACKET CREATING")
 {
+    Client c;
 	SECTION("login packet")
 	{
+        unsigned char* data = new unsigned char[10];
+        unsigned char* packet = NULL;
+        memset(data, 97, 10);
+        int size = c.packetCreator(LOGIN_REQUEST, data, &packet, 10);
 
+        REQUIRE(size == 25);
 	}
 	SECTION("logout packet")
 	{
@@ -57,4 +66,4 @@ TEST_CASE("RECIEVING DATA")
 	{
 
 	}
-}*/
+}
