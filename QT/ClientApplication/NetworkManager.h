@@ -69,6 +69,7 @@ public:
     * @param connectionID	id spojenia
     * @param data			data na odoslanie
     * @param size			velkost dat na odoslanie
+    *
     * @return				true ak sa odoslanie podarilo, inak false
     */
     bool sendData(int connectionID, const char* data, int size);
@@ -78,6 +79,7 @@ public:
     *
     * @param connectionID	id spojenia
     * @param data			prijate data
+    *
     * @return				velkost prijatych dat
     */
     int receiveData(int connectionID, unsigned char* data);

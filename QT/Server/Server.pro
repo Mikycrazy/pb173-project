@@ -22,4 +22,5 @@ SOURCES += main.cpp \
 
 HEADERS += \
     Server.h \
-    NetworkManager.h
+    NetworkManager.h \
+    User.h

@@ -12,6 +12,8 @@ const int LOGIN_REQUEST = 1;
 const int LOGIN_RESPONSE = 2;
 const int LOGOUT_REQUEST = 3;
 const int LOGOUT_RESPONSE = 4;
+const int GET_ONLINE_USER_LIST_REQUEST = 5;
+const int GET_ONLINE_USER_LIST_RESPONSE = 6;
 
 class Client
 {
@@ -65,6 +67,10 @@ public:
 	* Odesle pozadavek na odhlaseni na server.
 	*/
 	int logout();
+    /**
+    * Odesle pozadavek na list online uzivatelu na server
+    */
+    int getOnlineList();
 
 	/**
 	* Odesle pozadavek na vydani certifikatu uzivatele, na certifikacni autoritu
@@ -92,14 +98,15 @@ public:
 	int startCommunication(unsigned char* data);
 
     /**
-    * Zpracuje prisly packet, a data necha v paketu
+    * Zpracuje prisly packet, vyparsuje data a ulozi je do parametru data
     *
     * @param packet		prisli packet
     * @param data		sem se ulozi data obsazena v paketu
     *
-    * @return vrati id paketu
+    * @return vrati velikost dat
     */
-    int processData(unsigned char* packet, unsigned char** data, int *dataSize);
+    int processPacket(unsigned char* packet, unsigned char** data);
+
 
     /**
     * Zpracuje data a id pozadavku do podoby paketu k odeslani po siti
@@ -110,7 +117,7 @@ public:
     * @param size		delka dat
     */
 
-    int packetCreator(unsigned char id, unsigned char* data, unsigned char **packet, int size);
+    int createPacket(unsigned char id, unsigned char* data, unsigned char **packet, int size);
 
 private:
 
