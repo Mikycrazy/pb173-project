@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     client.sendData(1,"ahoj",4);*/
     Client c("pepa", "pepa@seznam.cz");
    // c.login();
-    unsigned char data[5];
+    /*unsigned char data[5];
     unsigned char *packet = NULL;
     for(int i = 0; i < 5; i++)
         data[i] = 'a';
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     printf("\n id: %d, datasize: %d \n",id, dataSize);
 
     for(int i = 0; i < dataSize; i++)
-       printf("%c",data[i]);
+       printf("%c",data[i]);*/
 
     return 0;
 }

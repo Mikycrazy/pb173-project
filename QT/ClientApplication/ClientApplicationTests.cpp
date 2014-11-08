@@ -23,7 +23,7 @@ TEST_CASE("PACKET CREATING")
         unsigned char* data = new unsigned char[10];
         unsigned char* packet = NULL;
         memset(data, 97, 10);
-        int size = c.packetCreator(LOGIN_REQUEST, data, &packet, 10);
+        int size = c.createPacket(LOGIN_REQUEST, data, &packet, 10);
 
         REQUIRE(size == 25);
 	}
