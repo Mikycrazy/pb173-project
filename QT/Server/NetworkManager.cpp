@@ -1,26 +1,24 @@
 #include "NetworkManager.h"
 
-int NetworkManager::startConnection(QString ipAddress, quint16 port)
+NetworkManager::NetworkManager(Server* server)
+    :mServerInstance(server) {}
+
+void NetworkManager::startListening(quint16 port)
 {
-   // connect(&mTcpClient, SIGNAL(connected()),this, SLOT(startTransfer()));
-    mTcpClient.connectToHost(mIPAddress, mPort);
-    return 0;
+    if (this->listen(QHostAddress::Any, port))
+    {
+        qDebug() << "Server started!";
+    }
+    else
+    {
+        qDebug() << "Server not started!";
+    }
 }
 
-bool NetworkManager::sendData(int connectionID, const char *data, int size)
+void NetworkManager::incomingConnection(qintptr handle)
 {
-    bool b = false;
-    mTcpClient.write(data,size);
+    qDebug() << "Client connected";
 
-    return b;
-}
-void NetworkManager::startListening( quint16 port)
-{
-
-    mTcpServer.listen(QHostAddress::Any, port);
-}
-int NetworkManager::acceptConnection()
-{
-    mPTcpClient = mTcpServer.nextPendingConnection();
-    return 0;
+    ConnectionHandler* connection = new ConnectionHandler(handle, mServerInstance);
+    connection->start();
 }

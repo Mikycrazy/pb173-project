@@ -1,3 +1,5 @@
+#ifdef UNIT_TEST
+
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "Server.h"
@@ -161,3 +163,5 @@ TEST_CASE("LOGIN/LOGOUT USERS")
 
 	}
 }
+
+#endif

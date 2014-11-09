@@ -61,7 +61,6 @@ void Server::sendOnlineList(User* user)
         s += mUsers[i]->getUsername() + ":";
         s += mUsers[i]->getIPAddress() + ";";
     }
-
     int dataSize = s.size();
     data = new unsigned char [dataSize];
     memcpy(data, s.c_str(), s.size());
@@ -73,8 +72,7 @@ void Server::sendOnlineList(User* user)
 int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **packet, int size)
 {
     int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size;
-    *packet = new unsigned char[newSize];
-    //casem pribude hash
+    *packet = new unsigned char[newSize];//casem pribude hash
 
     (*packet)[0] = id;
     //tady asi pak bude treba lepsi random
@@ -100,21 +98,25 @@ int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **
     return newSize;
 }
 
-int Server::processPacket(unsigned char* packet, unsigned char** data)
+void Server::processPacket(unsigned char* packet, int connectionID)
 {
+    qDebug() << "Received packet from connection" << connectionID;
+
     int id = 0;
     int dataSize = 0;
     //desifrovani zkontrolovani hashu atd. tady bude
     if(sizeof(int) == 4)
     {
         id = packet[0];
+        /* Niekde je tu chyba
         dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
-        *data = new unsigned char [dataSize];
-        memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
-
+        unsigned char *data = new unsigned char [dataSize];
+        memcpy((void*)(*data), &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
+        */
         switch(id)
         {
          case LOGIN_REQUEST:
+              qDebug() << "Got LOGIN_REQUEST packet";
               break;
          case LOGIN_RESPONSE:
               break;
@@ -131,6 +133,5 @@ int Server::processPacket(unsigned char* packet, unsigned char** data)
 
         }
     }
-    return dataSize;
 
 }

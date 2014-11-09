@@ -8,59 +8,36 @@
 #include <QtNetwork>
 #include <QObject>
 #include <QString>
+#include <QTcpServer>
 #include <QTcpSocket>
+#include <QAbstractSocket>
+#include "ConnectionHandler.h"
 
 using namespace std;
 
-class NetworkManager
+class NetworkManager : public QTcpServer
 {
-private:
-    QString  mIPAddress;
-    quint16  mPort;
-    vector<int> connections;
-    QTcpSocket mTcpClient;
-    QTcpSocket* mPTcpClient;
-    QTcpServer mTcpServer;
+    Q_OBJECT
 
+private:
+    vector<qintptr> mConnections;
+    QThreadPool *mPool;
+    Server *mServerInstance;
 
 public:
 
     /**
     * Konstruktor pre triedu NetworkManager.
-    * Nastavi ip a port na ktorom bude aplikacia ocakavat prichadzajuce spojenia
-    *
-    * @param address	server ip
-    * @param port		server port
     */
-    NetworkManager(QString address, quint16 port) : mIPAddress(address), mPort(port) {}
-    NetworkManager(){}
+    NetworkManager(Server* server);
     ~NetworkManager(){}
 
     /**
-    * Prijme prichadzajuce spojenie, prida ho do zoznamu spojeni a vrati jeho ID
+    * Zacne pocuvat na zadanom porte
     *
-    * @return        ID spojenia
-    * @param port    listening port
-    */
-    int acceptConnection();
-
-
-    /**
-    * Zacne poslouchat na portu 8888
-    *
+    * @param port   port na ktorom ma server pocuvat
     */
     void startListening(quint16 port);
-
-
-    /**
-    * Zahaji spojeni tcp spojeni s nastavenou adresou a portem
-    *
-    * @param address	server ip
-    * @param port		server port
-    * @return	ID spojenia
-    */
-    int startConnection(QString ipAddress, quint16 port);
-
 
     /**
     * Odosle data zadanemu spojeniu
@@ -70,16 +47,16 @@ public:
     * @param size			velkost dat na odoslanie
     * @return				true ak sa odoslanie podarilo, inak false
     */
-    bool sendData(int connectionID, const char* data, int size);
+    static bool sendData(int connectionID, const char* data, int size);
+
+protected:
 
     /**
-    * Prijme data od vybraneho spojenia
+    * Prijme prichadzajuce spojenie, prida ho do zoznamu spojeni a zacne komunikaciu
     *
-    * @param connectionID	id spojenia
-    * @param data			prijate data
-    * @return				velkost prijatych dat
+    * @param handle    id spojenia
     */
-    int receiveData(int connectionID, unsigned char* data);
+    void incomingConnection(qintptr handle);
 };
 
 #endif

@@ -19,10 +19,13 @@ TEMPLATE = app
 SOURCES += main.cpp \
     NetworkManager.cpp \
     Server.cpp \
-    ServerTest.cpp
+    ServerTest.cpp \
+    ConnectionHandler.cpp
 
 HEADERS += \
     Server.h \
     NetworkManager.h \
     User.h \
-    catch.hpp
+    catch.hpp \
+    Opcodes.h \
+    ConnectionHandler.h
