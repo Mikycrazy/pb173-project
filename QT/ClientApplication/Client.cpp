@@ -24,6 +24,7 @@ int Client::login()
        printf("%c",packet[i]);*/
 
     //bude nasledovat sifrovani a poslani pres sit
+
     this->mNetwork->sendData(packet, packetSize);
 
     mLoggedToServer = true;

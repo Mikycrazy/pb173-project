@@ -27,4 +27,5 @@ HEADERS += \
     CryptoManager.h \
     NetworkManager.h \
     catch.hpp \
-    Opcodes.h
+    Opcodes.h \
+    logger.h
