@@ -1,32 +1,42 @@
 #include "NetworkManager.h"
 
-int NetworkManager::startConnection(QString ipAddress, quint16 port)
+bool NetworkManager::startConnection(QString ipAddress, quint16 port)
 {
-   // connect(&mTcpClient, SIGNAL(connected()),this, SLOT(startTransfer()));
-    mTcpClient.connectToHost(mIPAddress, mPort);
-    return 0;
+    this->mSocket = new QTcpSocket();
+
+    connect(mSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
+    connect(mSocket, SIGNAL(readyRead()), this, SLOT(receiveData()));
+
+    qDebug() << "Connecting to" << ipAddress << "at port" << port;
+
+    mSocket->connectToHost(ipAddress, port);
+    if (!mSocket->waitForConnected(10000))
+    {
+        qDebug() << "Error: " << mSocket->errorString();
+        return false;
+    }
+    else
+    {
+        qDebug() << "Connected!";
+        return true;
+    }
 }
 
-bool NetworkManager::sendData(int connectionID, unsigned char *data, int size)
+bool NetworkManager::sendData(unsigned char *data, int size)
 {
-    bool b = false;
-    mTcpClient.write(reinterpret_cast<const char*>(data),size);
+    mSocket->write((const char*)data, size);
+    mSocket->flush();
 
-    return b;
-}
-void NetworkManager::startListening( quint16 port)
-{
-
-    mTcpServer.listen(QHostAddress::Any, port);
-}
-int NetworkManager::acceptConnection()
-{
-    mPTcpClient = mTcpServer.nextPendingConnection();
-    return 0;
+    return mSocket->waitForBytesWritten(10000);
 }
 
-int NetworkManager::receiveData(int connectionID, unsigned char *data)
+void NetworkManager::disconnected()
 {
-    int sizeData = 0;
-    return sizeData;
+    qDebug() << "Server disconnected!";
+}
+
+void NetworkManager::receiveData()
+{
+    QByteArray data = mSocket->readAll();
+    qDebug() << "Received data from server:" << data.data();
 }

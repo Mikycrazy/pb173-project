@@ -1,3 +1,5 @@
+#ifdef UNIT_TEST
+
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "Client.h"
@@ -333,3 +335,4 @@ TEST_CASE("RECIEVING DATA")
 	}
 }
 
+#endif

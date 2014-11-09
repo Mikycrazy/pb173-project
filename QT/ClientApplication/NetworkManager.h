@@ -8,81 +8,57 @@
 #include <QtNetwork>
 #include <QObject>
 #include <QString>
-#include <QTcpSocket>
 #include <QTcpServer>
+#include <QTcpSocket>
+#include <QAbstractSocket>
 
 using namespace std;
 
-class NetworkManager
+class NetworkManager : public QObject
 {
-private:
-    QString  mIPAddress;
-    quint16  mPort;
-    vector<int> connections;
-    QTcpSocket mTcpClient;
-    QTcpSocket* mPTcpClient;
-    QTcpServer mTcpServer;
+    Q_OBJECT
 
+private:
+    QTcpSocket* mSocket;
 
 public:
 
     /**
     * Konstruktor pre triedu NetworkManager.
-    * Nastavi ip a port na ktorom bude aplikacia ocakavat prichadzajuce spojenia
-    *
-    * @param address	server ip
-    * @param port		server port
     */
-    NetworkManager(QString address, quint16 port) : mIPAddress(address), mPort(port) {}
-    NetworkManager(){}
+    explicit NetworkManager()  {}
     ~NetworkManager(){}
-
-    /**
-    * Prijme prichadzajuce spojenie, prida ho do zoznamu spojeni a vrati jeho ID
-    *
-    * @return        ID spojenia
-    * @param port    listening port
-    */
-    int acceptConnection();
-
-
-    /**
-    * Zacne poslouchat na portu 8888
-    *
-    */
-    void startListening(quint16 port);
-
 
     /**
     * Zahaji spojeni tcp spojeni s nastavenou adresou a portem
     *
     * @param address	server ip
     * @param port		server port
-    * @return	ID spojenia
+    * @return           true ak sa spojenie podarilo
     */
-    int startConnection(QString ipAddress, quint16 port);
-
+    bool startConnection(QString ipAddress, quint16 port);
 
     /**
-    * Odosle data zadanemu spojeniu
+    * Odosle data serveru
     *
-    * @param connectionID	id spojenia
     * @param data			data na odoslanie
     * @param size			velkost dat na odoslanie
     *
     * @return				true ak sa odoslanie podarilo, inak false
     */
-    bool sendData(int connectionID, unsigned char* data, int size);
+    bool sendData(unsigned char* data, int size);
+
+public slots:
 
     /**
-    * Prijme data od vybraneho spojenia
-    *
-    * @param connectionID	id spojenia
-    * @param data			prijate data
-    *
-    * @return				velkost prijatych dat
+    * Vykona potrebne akcie v pripade odpojenia od servera
     */
-    int receiveData(int connectionID, unsigned char* data);
+    void disconnected();
+
+    /**
+    * Prijme data od servera a posunie na spracovanie
+    */
+    void receiveData();
 };
 
 #endif

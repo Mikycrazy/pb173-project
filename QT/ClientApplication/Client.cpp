@@ -1,17 +1,9 @@
-#include   "Client.h"
-
-Client::Client() : mUsername(), mEmail(), mLoggedToServer(false), mConnectedToClient(false)
-{
-
-}
+#include "Client.h"
 
 Client::Client(string username, string email) : mUsername(username), mEmail(email), mLoggedToServer(false), mConnectedToClient(false)
 {
-
-}
-Client::~Client()
-{
-
+    this->mNetwork = new NetworkManager();
+    this->mNetwork->startConnection("127.0.0.1", 13374);
 }
 
 int Client::login()
@@ -32,6 +24,7 @@ int Client::login()
        printf("%c",packet[i]);*/
 
     //bude nasledovat sifrovani a poslani pres sit
+    this->mNetwork->sendData(packet, packetSize);
 
     mLoggedToServer = true;
     delete[] data;

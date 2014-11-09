@@ -4,16 +4,10 @@
 #include <string.h>
 #include "CryptoManager.h"
 #include "NetworkManager.h"
-
+#include "Opcodes.h"
 
 const int ID_LENGHT = 1;
 const int RANDOM_BYTES_LENGTH = 10;
-const int LOGIN_REQUEST = 1;
-const int LOGIN_RESPONSE = 2;
-const int LOGOUT_REQUEST = 3;
-const int LOGOUT_RESPONSE = 4;
-const int GET_ONLINE_USER_LIST_REQUEST = 5;
-const int GET_ONLINE_USER_LIST_RESPONSE = 6;
 
 class Client
 {
@@ -33,6 +27,8 @@ private:
     QString mReceiverIP;
 	int mReceiverPort;
 
+    NetworkManager* mNetwork;
+
 public:
 	/**
 	* Konstruktor pro tridu Client.
@@ -41,7 +37,6 @@ public:
 	* @param username		uzivatelke jmeno
 	* @param email			email
 	*/
-    Client();
 	Client(std::string username, std::string email);
 	~Client();
 

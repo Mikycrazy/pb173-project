@@ -1,0 +1,11 @@
+#ifndef OPCODES_H
+#define OPCODES_H
+
+const int LOGIN_REQUEST = 0x01;
+const int LOGIN_RESPONSE = 0x02;
+const int LOGOUT_REQUEST = 0x03;
+const int LOGOUT_RESPONSE = 0x04;
+const int GET_ONLINE_USER_LIST_REQUEST = 0x05;
+const int GET_ONLINE_USER_LIST_RESPONSE = 0x06;
+
+#endif // OPCODES_H
