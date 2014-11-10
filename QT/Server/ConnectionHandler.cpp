@@ -16,9 +16,9 @@ void ConnectionHandler::run()
 void ConnectionHandler::readyRead()
 {
     QByteArray data = this->mSocket->readAll();
+    qDebug() << "Received data:" << data.toHex() << "size:" << data.length();
 
-    qDebug() << "Received data:" << data.toHex();
-    this->mServer->processPacket((unsigned char*)(data.data()), this->mSocketID);
+    this->mServer->processPacket((unsigned char*)(data.data()), data.length(), this->mSocketID);
 }
 
 void ConnectionHandler::disconnected()

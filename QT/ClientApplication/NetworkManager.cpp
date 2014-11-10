@@ -24,6 +24,8 @@ bool NetworkManager::startConnection(QString ipAddress, quint16 port)
 
 bool NetworkManager::sendData(unsigned char *data, int size)
 {
+    qDebug() << "Sending data of size" << size;
+
     mSocket->write((const char*)data, size);
     mSocket->flush();
 

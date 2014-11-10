@@ -9,12 +9,13 @@ Client::Client(string username, string email) : mUsername(username), mEmail(emai
 int Client::login()
 {
     unsigned char *data = NULL;
-    int dataSize = mUsername.size() + mEmail.size();
+    int dataSize = mUsername.size() + mEmail.size() + DATA_SPLITER.size();
     data = new unsigned char [dataSize];
     //printf("dataSize: %d \n", dataSize);
 
     memcpy(data, mUsername.c_str(), mUsername.size());
-    memcpy(&data[mUsername.size()], mEmail.c_str(), mEmail.size());
+    memcpy(&data[mUsername.size()], DATA_SPLITER.c_str(), DATA_SPLITER.size());
+    memcpy(&data[mUsername.size() + DATA_SPLITER.size()], mEmail.c_str(), mEmail.size());
 
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(LOGIN_REQUEST,data,&packet,dataSize);

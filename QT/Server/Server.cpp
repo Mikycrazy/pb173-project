@@ -2,7 +2,9 @@
 
 bool Server::loginUser(User* user)
 {
+    user->setOnline();
     mUsers.push_back(user);
+    qDebug() << "Logged user" << (user->getUsername().c_str());
 
     unsigned char *data = NULL;
     int dataSize = user->getUsername().size();
@@ -20,6 +22,7 @@ bool Server::loginUser(User* user)
 
     return true;
 }
+
 bool Server::logoutUser(User* user)
 {
     for(unsigned int i = 0; i < mUsers.size(); i++)
@@ -98,35 +101,43 @@ int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **
     return newSize;
 }
 
-void Server::processPacket(unsigned char* packet, int connectionID)
+void Server::processPacket(unsigned char* packet, int size, int connectionID)
 {
     qDebug() << "Received packet from connection" << connectionID;
 
     int id = 0;
     int dataSize = 0;
+
+    if (size < ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH)
+    {
+        qDebug() << "Received packet with invalid size:" << size;
+        return;
+    }
+
     //desifrovani zkontrolovani hashu atd. tady bude
     if(sizeof(int) == 4)
     {
         id = packet[0];
-        /* Niekde je tu chyba
         dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
+
+        if (dataSize + ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH != size || dataSize < 0)
+        {
+            qDebug() << "Received packet with invalid data size:" << dataSize << "- total packet size:" << size;
+            return;
+        }
+
         unsigned char *data = new unsigned char [dataSize];
-        memcpy((void*)(*data), &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
-        */
+        memcpy(data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
+
         switch(id)
         {
          case LOGIN_REQUEST:
               qDebug() << "Got LOGIN_REQUEST packet";
-              break;
-         case LOGIN_RESPONSE:
+              this->processLoginUserPacket(data, dataSize);
               break;
          case LOGOUT_REQUEST:
              break;
-         case LOGOUT_RESPONSE:
-             break;
         case  GET_ONLINE_USER_LIST_REQUEST:
-            break;
-        case GET_ONLINE_USER_LIST_RESPONSE:
             break;
          default:
              break;
@@ -134,4 +145,21 @@ void Server::processPacket(unsigned char* packet, int connectionID)
         }
     }
 
+}
+
+void Server::processLoginUserPacket(unsigned char *data, int size)
+{
+    QString stringData = "";
+    for (int i = 0; i < size; i++)
+        stringData.append(data[i]);
+    QStringList parts = stringData.split(';');
+
+    if (parts.length() != 2)
+    {
+        qDebug() << "Received invalid login request packet, number of parts:" << parts.length();
+        return;
+    }
+
+    User* newUser = new User(parts[0].toStdString(), parts[1].toStdString(), "", NULL);
+    this->loginUser(newUser);
 }

@@ -10,6 +10,7 @@ using namespace std;
 
 const int ID_LENGHT = 1;
 const int RANDOM_BYTES_LENGTH = 10;
+const int DATA_SIZE_LENGTH = 4;
 
 class Server
 {
@@ -32,9 +33,7 @@ public:
     * @param packet         prisli packet
     * @param connectionID   id spojenia
     */
-    void processPacket(unsigned char* packet, int connectionID);
-
-private:
+    void processPacket(unsigned char* packet, int size, int connectionID);
 
     /**
     * Prihlasenie pouzivatela
@@ -72,6 +71,8 @@ private:
     */
     bool sendConnectionRequest(User* from, User* to);
 
+private:
+
     /**
     * Zpracuje data a id pozadavku do podoby paketu k odeslani po siti
     *
@@ -81,6 +82,8 @@ private:
     * @param size		delka dat
     */
     int createPacket(unsigned char id, unsigned char* data, unsigned char **packet, int size);
+
+    void processLoginUserPacket(unsigned char* data, int size);
 };
 
 #endif

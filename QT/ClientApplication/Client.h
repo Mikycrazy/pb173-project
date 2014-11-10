@@ -8,6 +8,7 @@
 
 const int ID_LENGHT = 1;
 const int RANDOM_BYTES_LENGTH = 10;
+const std::string DATA_SPLITER = ";";
 
 class Client
 {
