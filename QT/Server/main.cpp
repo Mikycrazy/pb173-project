@@ -1,15 +1,12 @@
 #include <QCoreApplication>
-#include "NetworkManager.h"
+#include "Server.h"
 
 #ifndef UNIT_TEST
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    Server *server = new Server();
-
-    NetworkManager network(server);
-    network.startListening(13374);
+    Server *server = new Server(13374);
 
     return a.exec();
 }

@@ -2,17 +2,23 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string.h>
+#include <time.h>
 #include "CryptoManager.h"
 #include "NetworkManager.h"
 #include "Opcodes.h"
-#include "logger.h"
 
 const int ID_LENGHT = 1;
 const int RANDOM_BYTES_LENGTH = 10;
+const int DATA_SIZE_LENGTH = 4;
 const std::string DATA_SPLITER = ";";
 
-class Client
+const QString SERVER_ADDRESS = "127.0.0.1";
+const quint16 SERVER_PORT = 13374;
+
+class Client : public QObject
 {
+    Q_OBJECT
+
 private:
 	std::string mUsername;
 	std::string mEmail;
@@ -39,9 +45,8 @@ public:
 	* @param username		uzivatelke jmeno
 	* @param email			email
 	*/
-    Client() : mLoggedToServer(false), mConnectedToClient(false) { ; }
 	Client(std::string username, std::string email);
-    ~Client() ;
+    ~Client() {}
 
 	std::string Username() const { return mUsername; }
 	void Username(std::string username)	{ mUsername = username; }
@@ -96,17 +101,6 @@ public:
 	int startCommunication(unsigned char* data);
 
     /**
-    * Zpracuje prisly packet, vyparsuje data a ulozi je do parametru data
-    *
-    * @param packet		prisli packet
-    * @param data		sem se ulozi data obsazena v paketu
-    *
-    * @return vrati velikost dat
-    */
-    int processPacket(unsigned char* packet, unsigned char** data);
-
-
-    /**
     * Zpracuje data a id pozadavku do podoby paketu k odeslani po siti
     *
     * @param id         id paketu, jestli jde o login/logout nebo neco dalsiho
@@ -121,9 +115,15 @@ public:
 
     bool isConnected();
 
-private:
+public slots:
 
-
-
+    /**
+    * Zpracuje prisly packet
+    *
+    * @param packet		prisli packet
+    *
+    * @return vrati velikost dat
+    */
+    void processPacket(unsigned char* packet, int size);
 };
 

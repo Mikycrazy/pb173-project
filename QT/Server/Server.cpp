@@ -1,5 +1,14 @@
 #include "Server.h"
 
+Server::Server(quint16 port)
+{
+    srand(time(NULL));
+
+    this->mNetwork = new NetworkManager();
+    connect(this->mNetwork, SIGNAL(receivedData(int,unsigned char*,int)), this, SLOT(processPacket(int,unsigned char*,int)));
+    this->mNetwork->startListening(port);
+}
+
 bool Server::loginUser(User* user)
 {
     user->setOnline();
@@ -16,7 +25,7 @@ bool Server::loginUser(User* user)
     int packetSize = this->createPacket(LOGIN_RESPONSE,data,&packet,dataSize);
 
     //bude nasledovat sifrovani a poslani pres sit
-
+    this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
     delete[] data;
 
     return true;
@@ -40,7 +49,7 @@ bool Server::logoutUser(User* user)
              int packetSize = this->createPacket(LOGOUT_RESPONSE,data,&packet,dataSize);
 
              //bude nasledovat sifrovani a poslani pres sit
-
+             this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
              delete[] data;
 
              return true;
@@ -95,7 +104,7 @@ int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **
     return newSize;
 }
 
-void Server::processPacket(unsigned char* packet, int size, int connectionID)
+void Server::processPacket(int connectionID, unsigned char* packet, int size)
 {
     qDebug() << "Received packet from connection" << connectionID;
 
@@ -127,9 +136,11 @@ void Server::processPacket(unsigned char* packet, int size, int connectionID)
         {
          case LOGIN_REQUEST:
               qDebug() << "Got LOGIN_REQUEST packet";
-              this->processLoginUserPacket(data, dataSize);
+              this->processLoginUserPacket(connectionID, data, dataSize);
               break;
          case LOGOUT_REQUEST:
+             qDebug() << "Got LOGOUT_REQUEST packet";
+             this->processLogoutUserPacket(connectionID, data, dataSize);
              break;
         case  GET_ONLINE_USER_LIST_REQUEST:
             break;
@@ -141,7 +152,7 @@ void Server::processPacket(unsigned char* packet, int size, int connectionID)
 
 }
 
-void Server::processLoginUserPacket(unsigned char *data, int size)
+void Server::processLoginUserPacket(int connectionID, unsigned char *data, int size)
 {
     QString stringData = "";
     for (int i = 0; i < size; i++)
@@ -154,6 +165,23 @@ void Server::processLoginUserPacket(unsigned char *data, int size)
         return;
     }
 
-    User* newUser = new User(parts[0].toStdString(), parts[1].toStdString(), "", NULL);
+    User* newUser = new User(parts[0].toStdString(), parts[1].toStdString(), "", NULL, connectionID);
     this->loginUser(newUser);
+}
+
+void Server::processLogoutUserPacket(int connectionID, unsigned char *data, int size)
+{
+    QString stringData = "";
+    for (int i = 0; i < size; i++)
+        stringData.append(data[i]);
+    QStringList parts = stringData.split(';');
+
+    if (parts.length() != 2)
+    {
+        qDebug() << "Received invalid logout request packet, number of parts:" << parts.length();
+        return;
+    }
+
+    User* user = new User(parts[0].toStdString(), parts[1].toStdString(), "", NULL, connectionID);
+    this->logoutUser(user);
 }

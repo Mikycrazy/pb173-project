@@ -2,11 +2,6 @@
 
 void ConnectionHandler::run()
 {
-    if (!mSocketID) return;
-
-    mSocket = new QTcpSocket();
-    mSocket->setSocketDescriptor(this->mSocketID);
-
     connect(mSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
     connect(mSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
 
@@ -18,7 +13,7 @@ void ConnectionHandler::readyRead()
     QByteArray data = this->mSocket->readAll();
     qDebug() << "Received data:" << data.toHex() << "size:" << data.length();
 
-    this->mServer->processPacket((unsigned char*)(data.data()), data.length(), this->mSocketID);
+    emit this->networkReceivedData(mSocketID, (unsigned char*)(data.data()), data.length());
 }
 
 void ConnectionHandler::disconnected()

@@ -59,6 +59,9 @@ public slots:
     * Prijme data od servera a posunie na spracovanie
     */
     void receiveData();
+
+signals:
+    void networkReceivedData(unsigned char* data, int size);
 };
 
 #endif

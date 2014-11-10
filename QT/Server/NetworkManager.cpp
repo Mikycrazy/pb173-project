@@ -1,7 +1,8 @@
 #include "NetworkManager.h"
 
-NetworkManager::NetworkManager(Server* server)
-    :mServerInstance(server) {}
+NetworkManager::NetworkManager()
+{
+}
 
 void NetworkManager::startListening(quint16 port)
 {
@@ -19,6 +20,25 @@ void NetworkManager::incomingConnection(qintptr handle)
 {
     qDebug() << "Client connected";
 
-    ConnectionHandler* connection = new ConnectionHandler(handle, mServerInstance);
+    QTcpSocket* socket = new QTcpSocket();
+    socket->setSocketDescriptor(handle);
+    mConnections[handle] = socket;
+
+    ConnectionHandler* connection = new ConnectionHandler(handle, socket);
+    connect(connection, SIGNAL(networkReceivedData(int,unsigned char*,int)), this, SLOT(networkReceivedData(int,unsigned char*,int)));
     connection->start();
+}
+
+void NetworkManager::networkReceivedData(int connection, unsigned char* data, int size)
+{
+    emit this->receivedData(connection, data, size);
+}
+
+bool NetworkManager::sendData(int connectionID, const unsigned char* data, int size)
+{
+    QTcpSocket* socket = mConnections[connectionID];
+    socket->write((const char*)data, size);
+    socket->flush();
+
+    return true;
 }

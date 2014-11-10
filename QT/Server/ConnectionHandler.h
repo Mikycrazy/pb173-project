@@ -6,15 +6,14 @@
 #include <QTcpSocket>
 #include <QAbstractSocket>
 #include <QThread>
-#include "Server.h"
 
 class ConnectionHandler : public QThread
 {
     Q_OBJECT
 
 public:
-    ConnectionHandler(qintptr socketID, Server* server)
-        : mSocketID(socketID), mServer(server) {}
+    ConnectionHandler(qintptr id, QTcpSocket* socket)
+        : mSocketID(id), mSocket(socket) {}
 
     void run();
 
@@ -32,8 +31,11 @@ public slots:
 
 private:
     qintptr mSocketID;
-    Server* mServer;
     QTcpSocket* mSocket;
+
+signals:
+    void networkReceivedData(int connection, unsigned char* data, int size);
+
 };
 
 #endif // CONNECTIONHANDLER_H

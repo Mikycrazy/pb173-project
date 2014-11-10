@@ -20,16 +20,15 @@ class NetworkManager : public QTcpServer
     Q_OBJECT
 
 private:
-    vector<qintptr> mConnections;
+    map<qintptr, QTcpSocket*> mConnections;
     QThreadPool *mPool;
-    Server *mServerInstance;
 
 public:
 
     /**
     * Konstruktor pre triedu NetworkManager.
     */
-    NetworkManager(Server* server);
+    NetworkManager();
     ~NetworkManager(){}
 
     /**
@@ -47,7 +46,7 @@ public:
     * @param size			velkost dat na odoslanie
     * @return				true ak sa odoslanie podarilo, inak false
     */
-    static bool sendData(int connectionID, const char* data, int size);
+    bool sendData(int connectionID, const unsigned char* data, int size);
 
 protected:
 
@@ -57,6 +56,12 @@ protected:
     * @param handle    id spojenia
     */
     void incomingConnection(qintptr handle);
+
+signals:
+    void receivedData(int connection, unsigned char* data, int size);
+
+public slots:
+    void networkReceivedData(int connection, unsigned char* data, int size);
 };
 
 #endif

@@ -2,15 +2,12 @@
 
 Client::Client(string username, string email) : mUsername(username), mEmail(email), mLoggedToServer(false), mConnectedToClient(false)
 {
+    srand(time(NULL));
+
     this->mNetwork = new NetworkManager();
-    this->mNetwork->startConnection("127.0.0.1", 13374);
+    this->mNetwork->startConnection(SERVER_ADDRESS, SERVER_PORT);
 
-    Logger::getLogger()->Log("message");
-}
-
-Client::~Client()
-{
-
+    connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
 }
 
 int Client::login()
@@ -27,10 +24,8 @@ int Client::login()
     int packetSize = this->createPacket(LOGIN_REQUEST,data,&packet,dataSize);
 
     //bude nasledovat sifrovani a poslani pres sit
-
     this->mNetwork->sendData(packet, packetSize);
 
-    mLoggedToServer = true;
     delete[] data;
     return 0;
 }
@@ -40,12 +35,12 @@ int Client::logout()
         return 1;
 
     unsigned char *data = NULL;
-    int dataSize = mUsername.size() + mEmail.size();
+    int dataSize = mUsername.size() + mEmail.size() + DATA_SPLITER.size();
     data = new unsigned char [dataSize];
 
-
     memcpy(data, mUsername.c_str(), mUsername.size());
-    memcpy(&data[mUsername.size()], mEmail.c_str(), mEmail.size());
+    memcpy(&data[mUsername.size()], DATA_SPLITER.c_str(), DATA_SPLITER.size());
+    memcpy(&data[mUsername.size() + DATA_SPLITER.size()], mEmail.c_str(), mEmail.size());
 
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(LOGOUT_REQUEST,data,&packet,dataSize);
@@ -105,42 +100,55 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
     return newSize;
 }
 
-int Client::processPacket(unsigned char* packet, unsigned char** data)
+void Client::processPacket(unsigned char* packet, int size)
 {
-    if(packet == NULL)
-        return -1;
-
     int id = 0;
     int dataSize = 0;
+
+    if (size < ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH)
+    {
+        qDebug() << "Received packet with invalid size:" << size;
+        return;
+    }
+
     //desifrovani zkontrolovani hashu atd. tady bude
     if(sizeof(int) == 4)
     {
         id = packet[0];
         dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
-        *data = new unsigned char [dataSize];
-        memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
+
+        if (dataSize + ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH != size || dataSize < 0)
+        {
+            qDebug() << "Received packet with invalid data size:" << dataSize << "- total packet size:" << size;
+            return;
+        }
+
+        unsigned char *data = new unsigned char [dataSize];
+        memcpy(data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
 
         switch(id)
         {
-         case LOGIN_REQUEST:
-              break;
          case LOGIN_RESPONSE:
-            if(mUsername.compare((const char*)*data))
+            if(mUsername.compare((const char*)data))
+            {
                 mLoggedToServer = true;
-              break;
-         case LOGOUT_REQUEST:
-             break;
+                qDebug() << "Login successful";
+            }
+            break;
          case LOGOUT_RESPONSE:
-            if(mUsername.compare((const char*)*data))
+            if(mUsername.compare((const char*)data))
+            {
                 mLoggedToServer = false;
-             break;
+                qDebug() << "Logout successful";
+            }
+            break;
         case GET_ONLINE_USER_LIST_REQUEST:
             for (int i = 0; i < dataSize; i++)
             {
-                if((*data)[i] == ';')
-                    std::cout << std::endl;
+                if(data[i] == ';')
+                    qDebug() << "";
                 else
-                    std::cout << (*data)[i];
+                    qDebug() << data[i];
             }
             break;
         case GET_ONLINE_USER_LIST_RESPONSE:
@@ -151,8 +159,6 @@ int Client::processPacket(unsigned char* packet, unsigned char** data)
 
         }
     }
-    return dataSize;
-
 }
 
 bool Client::isLogged()

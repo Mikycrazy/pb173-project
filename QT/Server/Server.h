@@ -3,8 +3,10 @@
 
 #include "User.h"
 #include "Opcodes.h"
+#include "NetworkManager.h"
 #include <vector>
 #include <QDebug>
+#include <time.h>
 
 using namespace std;
 
@@ -12,28 +14,23 @@ const int ID_LENGHT = 1;
 const int RANDOM_BYTES_LENGTH = 10;
 const int DATA_SIZE_LENGTH = 4;
 
-class Server
+class Server : QObject
 {
+    Q_OBJECT
+
 private:
     vector<User*> mUsers;
     unsigned char* mPrivateKey;
     unsigned char* mPublicKey;
+    NetworkManager* mNetwork;
 
 public:
 
     /**
     * Konstruktor pre triedu Server.
     */
-    Server(){}
-    ~Server();
-
-    /**
-    * Zpracuje prisly packet, vyparsuje data a vykona potrebne akce
-    *
-    * @param packet         prisli packet
-    * @param connectionID   id spojenia
-    */
-    void processPacket(unsigned char* packet, int size, int connectionID);
+    Server(quint16 port);
+    ~Server() {}
 
     /**
     * Prihlasenie pouzivatela
@@ -71,6 +68,16 @@ public:
     */
     bool sendConnectionRequest(User* from, User* to);
 
+public slots:
+
+    /**
+    * Zpracuje prisly packet, vyparsuje data a vykona potrebne akce
+    *
+    * @param packet         prisli packet
+    * @param connectionID   id spojenia
+    */
+    void processPacket(int connectionID, unsigned char* packet, int size);
+
 private:
 
     /**
@@ -83,7 +90,9 @@ private:
     */
     int createPacket(unsigned char id, unsigned char* data, unsigned char **packet, int size);
 
-    void processLoginUserPacket(unsigned char* data, int size);
+    void processLoginUserPacket(int connectionID, unsigned char *data, int size);
+
+    void processLogoutUserPacket(int connectionID, unsigned char *data, int size);
 };
 
 #endif

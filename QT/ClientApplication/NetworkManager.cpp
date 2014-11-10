@@ -40,5 +40,7 @@ void NetworkManager::disconnected()
 void NetworkManager::receiveData()
 {
     QByteArray data = mSocket->readAll();
-    qDebug() << "Received data from server:" << data.data();
+    qDebug() << "Received data from server:" << data.toHex();
+
+    emit this->networkReceivedData((unsigned char*)data.data(), data.length());
 }
