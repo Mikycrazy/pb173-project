@@ -13,6 +13,7 @@ bool Server::loginUser(User* user)
 {
     user->setOnline();
     mUsers.push_back(user);
+    Logger::getLogger()->Log("Logged user" + user->getUsername());
     qDebug() << "Logged user" << (user->getUsername().c_str());
 
     unsigned char *data = NULL;
@@ -106,6 +107,7 @@ int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **
 
 void Server::processPacket(int connectionID, unsigned char* packet, int size)
 {
+    Logger::getLogger()->Log("Received packet from connection" + connectionID);
     qDebug() << "Received packet from connection" << connectionID;
 
     int id = 0;
@@ -113,6 +115,7 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
 
     if (size < ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH)
     {
+        Logger::getLogger()->Log("Received packet with invalid size:" + size);
         qDebug() << "Received packet with invalid size:" << size;
         return;
     }
@@ -125,6 +128,9 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
 
         if (dataSize + ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH != size || dataSize < 0)
         {
+            string s = "Received packet with invalid data size:" + dataSize;
+            s +=  "- total packet size:" + size;
+            Logger::getLogger()->Log(s);
             qDebug() << "Received packet with invalid data size:" << dataSize << "- total packet size:" << size;
             return;
         }
@@ -135,14 +141,17 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
         switch(id)
         {
          case LOGIN_REQUEST:
+              Logger::getLogger()->Log("Got LOGIN_REQUEST packet");
               qDebug() << "Got LOGIN_REQUEST packet";
               this->processLoginUserPacket(connectionID, data, dataSize);
               break;
          case LOGOUT_REQUEST:
+             Logger::getLogger()->Log("Got LOGOUT_REQUEST packet");
              qDebug() << "Got LOGOUT_REQUEST packet";
              this->processLogoutUserPacket(connectionID, data, dataSize);
              break;
         case  GET_ONLINE_USER_LIST_REQUEST:
+            Logger::getLogger()->Log("Got GET_ONLINE_USER_LIST_REQUEST packet");
             break;
          default:
              break;
@@ -161,6 +170,7 @@ void Server::processLoginUserPacket(int connectionID, unsigned char *data, int s
 
     if (parts.length() != 2)
     {
+        Logger::getLogger()->Log("Received invalid login request packet, number of parts:" + parts.length());
         qDebug() << "Received invalid login request packet, number of parts:" << parts.length();
         return;
     }
@@ -178,6 +188,7 @@ void Server::processLogoutUserPacket(int connectionID, unsigned char *data, int 
 
     if (parts.length() != 2)
     {
+        Logger::getLogger()->Log("Received invalid login request packet, number of parts:" + parts.length());
         qDebug() << "Received invalid logout request packet, number of parts:" << parts.length();
         return;
     }

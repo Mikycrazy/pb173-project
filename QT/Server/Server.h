@@ -7,6 +7,7 @@
 #include <vector>
 #include <QDebug>
 #include <time.h>
+#include "logger.h"
 
 using namespace std;
 

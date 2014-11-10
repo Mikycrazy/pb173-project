@@ -22,7 +22,7 @@ int Client::login()
 
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(LOGIN_REQUEST,data,&packet,dataSize);
-
+    Logger::getLogger()->Log("Client:"+ mUsername +" send LOGIN_REQUEST");
     //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(packet, packetSize);
 
@@ -47,6 +47,7 @@ int Client::logout()
 
     //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(packet, packetSize);
+    Logger::getLogger()->Log("Client:"+ mUsername +" send LOGOUT_REQUEST");
 
     delete[] data;
     return 0;
@@ -68,6 +69,7 @@ int Client::getOnlineList()
 
     //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(packet, packetSize);
+    Logger::getLogger()->Log("Client:"+ mUsername +" send GET_ONLINE_USER_LIST_REQUEST");
 
     delete[] data;
     return 0;
@@ -107,6 +109,8 @@ void Client::processPacket(unsigned char* packet, int size)
 
     if (size < ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH)
     {
+
+        Logger::getLogger()->Log("Received packet with invalid size:" + size);
         qDebug() << "Received packet with invalid size:" << size;
         return;
     }
@@ -119,6 +123,13 @@ void Client::processPacket(unsigned char* packet, int size)
 
         if (dataSize + ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH != size || dataSize < 0)
         {
+            /*stringstream s;
+            s << "Received packet with invalid data size:" << dataSize << "- total packet size:" << size;*/
+            //string log = "Received packet with invalid data size:" + "a";
+           // log += "aa";
+            string s = "Received packet with invalid data size:" + dataSize;
+            s +=  "- total packet size:" + size;
+            Logger::getLogger()->Log(s);
             qDebug() << "Received packet with invalid data size:" << dataSize << "- total packet size:" << size;
             return;
         }
@@ -132,17 +143,21 @@ void Client::processPacket(unsigned char* packet, int size)
             if(mUsername.compare((const char*)data))
             {
                 mLoggedToServer = true;
+                Logger::getLogger()->Log("Login successful");
                 qDebug() << "Login successful";
+
             }
             break;
          case LOGOUT_RESPONSE:
             if(mUsername.compare((const char*)data))
             {
                 mLoggedToServer = false;
+                Logger::getLogger()->Log("Logout successful");
                 qDebug() << "Logout successful";
             }
             break;
         case GET_ONLINE_USER_LIST_REQUEST:
+            Logger::getLogger()->Log("GET_ONLINE_USER_LIST_REQUEST");
             for (int i = 0; i < dataSize; i++)
             {
                 if(data[i] == ';')
@@ -152,7 +167,7 @@ void Client::processPacket(unsigned char* packet, int size)
             }
             break;
         case GET_ONLINE_USER_LIST_RESPONSE:
-
+            Logger::getLogger()->Log("GET_ONLINE_USER_LIST_RESPONSE");
             break;
          default:
              break;

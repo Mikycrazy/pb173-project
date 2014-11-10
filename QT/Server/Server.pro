@@ -20,7 +20,8 @@ SOURCES += main.cpp \
     NetworkManager.cpp \
     Server.cpp \
     ServerTest.cpp \
-    ConnectionHandler.cpp
+    ConnectionHandler.cpp \
+    logger.cpp
 
 HEADERS += \
     Server.h \
@@ -28,4 +29,5 @@ HEADERS += \
     User.h \
     catch.hpp \
     Opcodes.h \
-    ConnectionHandler.h
+    ConnectionHandler.h \
+    logger.h
