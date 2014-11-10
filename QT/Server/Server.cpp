@@ -9,7 +9,6 @@ bool Server::loginUser(User* user)
     unsigned char *data = NULL;
     int dataSize = user->getUsername().size();
     data = new unsigned char [dataSize];
-    //printf("dataSize: %d \n", dataSize);
 
     memcpy(data, user->getUsername().c_str(), user->getUsername().size());
 
@@ -34,7 +33,6 @@ bool Server::logoutUser(User* user)
              unsigned char *data = NULL;
              int dataSize = user->getUsername().size();
              data = new unsigned char [dataSize];
-             //printf("dataSize: %d \n", dataSize);
 
              memcpy(data, user->getUsername().c_str(), user->getUsername().size());
 
@@ -91,10 +89,6 @@ int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **
         (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] = (size & 0x0000ff00) >> 8;
         (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 2] = (size & 0x00ff0000) >> 16;
         (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] = (size & 0xff000000) >> 24;
-
-        /* inverzni operace byte[4] to int
-        int pom = ( (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( (*packet)[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | ( (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH]);
-          printf("sizePom: %d \n", pom);*/
     }
     memcpy(&((*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size)]),data, size);
 
