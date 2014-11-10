@@ -7,11 +7,8 @@ Logger* Logger::getLogger()
 {
     if(mpThis == NULL){
         mpThis = new Logger();
-        mFile.open("m_sFileName.txt", std::ios::out | std::ios::app );
-
-        std::cout << "File created" << std::endl;
+        mFile.open("log.txt", std::ios::out | std::ios::app );
     }
-
     return mpThis;
 }
 
@@ -21,5 +18,6 @@ void Logger::Log(const std::string& log)
 
     char* dt = ctime(&now);
 
+    mFile << " - " << dt << "\t";
     mFile << log << std::endl;
 }
