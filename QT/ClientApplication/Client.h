@@ -5,6 +5,7 @@
 #include "CryptoManager.h"
 #include "NetworkManager.h"
 #include "Opcodes.h"
+#include "logger.h"
 
 const int ID_LENGHT = 1;
 const int RANDOM_BYTES_LENGTH = 10;
@@ -38,8 +39,9 @@ public:
 	* @param username		uzivatelke jmeno
 	* @param email			email
 	*/
+    Client() : mLoggedToServer(false), mConnectedToClient(false) { ; }
 	Client(std::string username, std::string email);
-	~Client();
+    ~Client() ;
 
 	std::string Username() const { return mUsername; }
 	void Username(std::string username)	{ mUsername = username; }

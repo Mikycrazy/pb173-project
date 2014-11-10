@@ -2,34 +2,28 @@
 #define LOGGER_H
 
 #include <fstream>
+#include <iostream>
+#include <string>
 #include <ctime>
 
 class Logger
 {
-private:
-    std::ofstream mFile;
 public:
-    Logger(const char* filename)
-    {
-        mFile.open(filename);
+    void Log(const std::string& log);
 
-        if(mFile.is_open())
-        {
-            mFile << "Log file created" << std::endl;
-        }
-    }
+    static Logger* getLogger();
+private:
 
-    ~Logger();
+    Logger() {}
+    Logger( const Logger&){}
+    Logger& operator=(const Logger& ){ return *this;}
 
-    friend Logger &operator << (Logger &logger, const char* log)
-    {
-        time_t now = time(0);
+    ~Logger() {}
 
-        char* dt = ctime(&now);
+    static const std::string mFileName;
+    static std::ofstream mFile;
+    static Logger* mpThis;
 
-        this->mFile << " - " << dt << ":\t";
-        this->mFile << log << std::endl;
-    }
 };
 
 #endif // LOGGER_H

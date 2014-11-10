@@ -4,6 +4,13 @@ Client::Client(string username, string email) : mUsername(username), mEmail(emai
 {
     this->mNetwork = new NetworkManager();
     this->mNetwork->startConnection("127.0.0.1", 13374);
+
+    Logger::getLogger()->Log("message");
+}
+
+Client::~Client()
+{
+
 }
 
 int Client::login()
@@ -100,6 +107,9 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
 
 int Client::processPacket(unsigned char* packet, unsigned char** data)
 {
+    if(packet == NULL)
+        return -1;
+
     int id = 0;
     int dataSize = 0;
     //desifrovani zkontrolovani hashu atd. tady bude
@@ -126,10 +136,11 @@ int Client::processPacket(unsigned char* packet, unsigned char** data)
              break;
         case GET_ONLINE_USER_LIST_REQUEST:
             for (int i = 0; i < dataSize; i++)
-            {   if(*data[i] == ';')
+            {
+                if((*data)[i] == ';')
                     std::cout << std::endl;
                 else
-                    std::cout << *data[i];
+                    std::cout << (*data)[i];
             }
             break;
         case GET_ONLINE_USER_LIST_RESPONSE:

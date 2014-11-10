@@ -46,11 +46,13 @@ OBJECTS_DIR   = debug
 SOURCES       = ..\ClientApplication\main.cpp \
 		..\ClientApplication\ClientApplicationTests.cpp \
 		..\ClientApplication\NetworkManager.cpp \
-		..\ClientApplication\Client.cpp debug\moc_NetworkManager.cpp
+		..\ClientApplication\Client.cpp \
+		..\ClientApplication\logger.cpp debug\moc_NetworkManager.cpp
 OBJECTS       = debug\main.obj \
 		debug\ClientApplicationTests.obj \
 		debug\NetworkManager.obj \
 		debug\Client.obj \
+		debug\logger.obj \
 		debug\moc_NetworkManager.obj
 
 DIST          = 
@@ -154,7 +156,7 @@ dist:
 	$(ZIP) ClientApplication.zip $(SOURCES) $(DIST) ..\ClientApplication\ClientApplication.pro C:\Qt\5.3\msvc2013_64\mkspecs\features\spec_pre.prf C:\Qt\5.3\msvc2013_64\mkspecs\common\shell-win32.conf C:\Qt\5.3\msvc2013_64\mkspecs\qconfig.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_axbase.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_axbase_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_axcontainer.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_axcontainer_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_axserver.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_axserver_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_bluetooth.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_bluetooth_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_bootstrap_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_clucene_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_core.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_core_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_declarative.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_declarative_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_designer.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_enginio.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_enginio_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_gui.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_help.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_help_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_multimedia.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_multimedia_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_multimediawidgets.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_network.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_network_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_nfc.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_nfc_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_opengl.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_openglextensions.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_openglextensions_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_platformsupport_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_positioning.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_positioning_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_qml.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_quick.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_script.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_script_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_scripttools.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_scripttools_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_sensors.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_sensors_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_serialport.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_serialport_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_sql.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_svg.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_testlib.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_uitools.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_webkit.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_webkit_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_webkitwidgets.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_webkitwidgets_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_websockets.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_websockets_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_widgets.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_winextras.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_winextras_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_xml.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_xmlpatterns.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_xmlpatterns_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\features\qt_functions.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\qt_config.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\win32\qt_config.prf C:\Qt\5.3\msvc2013_64\mkspecs\win32-msvc2013\qmake.conf C:\Qt\5.3\msvc2013_64\mkspecs\features\spec_post.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\exclusive_builds.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\default_pre.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\win32\default_pre.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\resolve_config.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\exclusive_builds_post.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\default_post.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\build_pass.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\win32\console.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\win32\rtti.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\precompile_header.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\warn_on.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\qt.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\resources.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\moc.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\testcase_targets.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\exceptions.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\yacc.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\lex.prf ..\ClientApplication\ClientApplication.pro C:/Qt/5.3/msvc2013_64/lib/Qt5Networkd.prl C:/Qt/5.3/msvc2013_64/lib/Qt5Cored.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES YACCSOURCES YACCSOURCES LEXSOURCES 
 
 clean: compiler_clean 
-	-$(DEL_FILE) debug\main.obj debug\ClientApplicationTests.obj debug\NetworkManager.obj debug\Client.obj debug\moc_NetworkManager.obj
+	-$(DEL_FILE) debug\main.obj debug\ClientApplicationTests.obj debug\NetworkManager.obj debug\Client.obj debug\logger.obj debug\moc_NetworkManager.obj
 	-$(DEL_FILE) debug\ClientApplication.exp debug\ClientApplication.ilk debug\ClientApplication.idb debug\ClientApplication.exe.embed.manifest debug\ClientApplication.exe_manifest.rc debug\ClientApplication.exe_manifest.res
 
 distclean: clean 
@@ -408,7 +410,7 @@ debug\moc_NetworkManager.cpp: C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetwork 
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
 		..\ClientApplication\NetworkManager.h
-	C:\Qt\5.3\msvc2013_64\bin\moc.exe $(DEFINES) -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/Qt/5.3/msvc2013_64/mkspecs/win32-msvc2013 -IC:/Users/Lofik/Desktop/pb173/pb173-project/QT/ClientApplication -IC:/Qt/5.3/msvc2013_64/include -IC:/Qt/5.3/msvc2013_64/include/QtNetwork -IC:/Qt/5.3/msvc2013_64/include/QtCore -I. ..\ClientApplication\NetworkManager.h -o debug\moc_NetworkManager.cpp
+	C:\Qt\5.3\msvc2013_64\bin\moc.exe $(DEFINES) -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/Qt/5.3/msvc2013_64/mkspecs/win32-msvc2013 -ID:/Skola/PB173_C++/Project-video-communication/QT/ClientApplication -IC:/Qt/5.3/msvc2013_64/include -IC:/Qt/5.3/msvc2013_64/include/QtNetwork -IC:/Qt/5.3/msvc2013_64/include/QtCore -I. ..\ClientApplication\NetworkManager.h -o debug\moc_NetworkManager.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -660,7 +662,8 @@ debug\main.obj: ..\ClientApplication\main.cpp C:\Qt\5.3\msvc2013_64\include\QtCo
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
 		..\ClientApplication\Client.h \
 		..\ClientApplication\CryptoManager.h \
-		..\ClientApplication\Opcodes.h
+		..\ClientApplication\Opcodes.h \
+		..\ClientApplication\logger.h
 
 debug\ClientApplicationTests.obj: ..\ClientApplication\ClientApplicationTests.cpp ..\ClientApplication\catch.hpp \
 		..\ClientApplication\Client.h \
@@ -898,7 +901,8 @@ debug\ClientApplicationTests.obj: ..\ClientApplication\ClientApplicationTests.cp
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
-		..\ClientApplication\Opcodes.h
+		..\ClientApplication\Opcodes.h \
+		..\ClientApplication\logger.h
 
 debug\NetworkManager.obj: ..\ClientApplication\NetworkManager.cpp ..\ClientApplication\NetworkManager.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetwork \
@@ -1369,7 +1373,10 @@ debug\Client.obj: ..\ClientApplication\Client.cpp ..\ClientApplication\Client.h 
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
-		..\ClientApplication\Opcodes.h
+		..\ClientApplication\Opcodes.h \
+		..\ClientApplication\logger.h
+
+debug\logger.obj: ..\ClientApplication\logger.cpp ..\ClientApplication\logger.h
 
 debug\moc_NetworkManager.obj: debug\moc_NetworkManager.cpp 
 

@@ -20,7 +20,8 @@ TEMPLATE = app
 SOURCES += main.cpp \
     ClientApplicationTests.cpp \
     NetworkManager.cpp \
-    Client.cpp
+    Client.cpp \
+    logger.cpp
 
 HEADERS += \
     Client.h \

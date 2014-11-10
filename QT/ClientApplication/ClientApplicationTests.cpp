@@ -5,39 +5,23 @@
 #include "catch.hpp"
 #include "Client.h"
 
+const char IP_SERVER[] = "127.0.0.1";
+const int PORT_SERVER = 13374;
+
 TEST_CASE("SERVER")
 {
 
 	SECTION("is avaible")
 	{
-        unsigned char* packet = NULL;
-        unsigned char* data2 = NULL;
+        NetworkManager manager;
 
-        Client c("pepa", "pepa@seznam.cz");
-        c.login();
-
-        NetworkManager receiver;
-        c.createPacket(1, data2, &packet, 0);
-
-        receiver.
-
-        int size = c.processPacket(packet, &data2);
-
-        REQUIRE(size == 1);
-
-        if(size == 1)
-        {
-            REQUIRE(data2[0] == 1);
-        }
-
-        REQUIRE(c.isLogged());
+        REQUIRE(manager.startConnection(IP_SERVER, PORT_SERVER));
 	}
 	SECTION("is not avaible")
 	{
-        Client c("pepa", "pepa@seznam.cz");
-        REQUIRE_FALSE(c.login());
+        NetworkManager manager;
 
-        REQUIRE_FALSE(c.isLogged());
+        REQUIRE_FALSE(manager.startConnection("254.1.1.1", 8888));
 	}
 
 }
@@ -74,7 +58,7 @@ TEST_CASE("PACKET CREATING")
         delete data;
         delete packet;
         delete data2;
-	}
+    }
     SECTION("Create login packet with zero data ")
     {
         const int DATA_LENGTH = 0;
@@ -122,7 +106,7 @@ TEST_CASE("PACKET CREATING")
         delete data;
         delete packet;
         delete data2;
-	}
+    }
     SECTION("Create logout packet with long data")
     {
         const int DATA_LENGTH = 1024;
@@ -193,17 +177,16 @@ TEST_CASE("SENDING DATA")
         const int DATA_LENGTH = 10;
         unsigned char* data = new unsigned char[DATA_LENGTH];
         unsigned char* data2 = NULL;
+        int size = 0;
 
         NetworkManager sender;
 
-        sender.startConnection("127.0.0.1", 8888);
-        sender.sendData(1, data, DATA_LENGTH);
+        sender.startConnection(IP_SERVER, PORT_SERVER);
+        sender.sendData(data, DATA_LENGTH);
 
         NetworkManager receiver;
 
-        receiver.startListening(8888);
-        receiver.acceptConnection();
-        int size = receiver.receiveData(1, data2);
+        REQUIRE(size == DATA_LENGTH);
 
         if(size == DATA_LENGTH)
         {
@@ -236,17 +219,14 @@ TEST_CASE("RECIEVING DATA")
 
         NetworkManager server;
 
-        server.startConnection("127.0.0.1", 8888);
-        server.sendData(1, data, DATA_LENGTH);
+        server.startConnection(IP_SERVER, PORT_SERVER);
+        server.sendData(data, DATA_LENGTH);
 
 
         NetworkManager receiver;
 
-        receiver.startListening(8888);
-        receiver.acceptConnection();
-        receiver.receiveData(1, packet);
-
         int size = c.processPacket(packet, &data2);
+
         REQUIRE(size == 1);
 
         if(size == 1)
@@ -268,15 +248,11 @@ TEST_CASE("RECIEVING DATA")
 
         NetworkManager server;
 
-        server.startConnection("127.0.0.1", 8888);
-        server.sendData(1, data, DATA_LENGTH);
+        server.startConnection(IP_SERVER, PORT_SERVER);
+        server.sendData(data, DATA_LENGTH);
 
 
         NetworkManager receiver;
-
-        receiver.startListening(8888);
-        receiver.acceptConnection();
-        receiver.receiveData(1, packet);
 
         int size = c.processPacket(packet, &data2);
         REQUIRE(size == 1);
@@ -306,18 +282,14 @@ TEST_CASE("RECIEVING DATA")
 
         NetworkManager server;
 
-        server.startConnection("127.0.0.1", 8888);
-        server.sendData(1, data, DATA_LENGTH);
+        server.startConnection(IP_SERVER, PORT_SERVER);
+        server.sendData(data, DATA_LENGTH);
 
 
         NetworkManager receiver;
 
-        receiver.startListening(8888);
-        receiver.acceptConnection();
-        receiver.receiveData(1, packet);
-
         int size = c.processPacket(packet, &data2);
-
+        std::cout << DATA_LENGTH << std::endl;
         REQUIRE(size == DATA_LENGTH);
 
         if(size == DATA_LENGTH)
