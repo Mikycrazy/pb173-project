@@ -1,7 +1,9 @@
 #include <QCoreApplication>
 #include "Server.h"
 
+#define UNIT_TEST
 #ifndef UNIT_TEST
+
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
@@ -10,4 +12,5 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
+
 #endif

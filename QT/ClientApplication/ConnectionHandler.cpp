@@ -4,7 +4,7 @@ void ConnectionHandler::run()
 {
     connect(mSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
     connect(mSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    qDebug() << "Connection handler started";
+    qDebug() << "Handler started!";
     exec();
 }
 

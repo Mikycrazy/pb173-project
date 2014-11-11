@@ -9,6 +9,11 @@ Server::Server(quint16 port)
     this->mNetwork->startListening(port);
 }
 
+Server::Server()
+{
+    this->mNetwork = new NetworkManager();
+}
+
 bool Server::loginUser(User* user)
 {
     user->setOnline();
@@ -195,4 +200,23 @@ void Server::processLogoutUserPacket(int connectionID, unsigned char *data, int 
 
     User* user = new User(parts[0].toStdString(), parts[1].toStdString(), "", NULL, connectionID);
     this->logoutUser(user);
+}
+
+int Server::processPacket(unsigned char* packet, unsigned char** data)
+{
+    if(packet == NULL)
+        return -1;
+
+    int id = 0;
+    int dataSize = 0;
+
+    if(sizeof(int) == 4)
+    {
+        id = packet[0];
+        dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
+        *data = new unsigned char [dataSize];
+         memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
+
+        return dataSize;
+    }
 }

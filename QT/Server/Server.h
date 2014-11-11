@@ -30,6 +30,7 @@ public:
     /**
     * Konstruktor pre triedu Server.
     */
+    Server();
     Server(quint16 port);
     ~Server() {}
 
@@ -79,7 +80,7 @@ public slots:
     */
     void processPacket(int connectionID, unsigned char* packet, int size);
 
-private:
+public:
 
     /**
     * Zpracuje data a id pozadavku do podoby paketu k odeslani po siti
@@ -91,9 +92,14 @@ private:
     */
     int createPacket(unsigned char id, unsigned char* data, unsigned char **packet, int size);
 
+    int processPacket(unsigned char* packet, unsigned char** data);
+
     void processLoginUserPacket(int connectionID, unsigned char *data, int size);
 
     void processLogoutUserPacket(int connectionID, unsigned char *data, int size);
+
+    vector<User*> const& getUsers() const { return mUsers; }
+
 };
 
 #endif

@@ -1,10 +1,10 @@
-#include "NetworkManager.h"
+#include "testservernetworkmanager.h"
 
-NetworkManager::NetworkManager()
+TestServerNetworkManager::TestServerNetworkManager()
 {
 }
 
-void NetworkManager::startListening(quint16 port)
+void TestServerNetworkManager::startListening(quint16 port)
 {
     if (this->listen(QHostAddress::Any, port))
     {
@@ -16,7 +16,7 @@ void NetworkManager::startListening(quint16 port)
     }
 }
 
-void NetworkManager::incomingConnection(qintptr handle)
+void TestServerNetworkManager::incomingConnection(qintptr handle)
 {
     qDebug() << "Client connected";
 
@@ -29,16 +29,13 @@ void NetworkManager::incomingConnection(qintptr handle)
     connection->start();
 }
 
-void NetworkManager::networkReceivedData(int connection, unsigned char* data, int size)
+void TestServerNetworkManager::networkReceivedData(int connection, unsigned char* data, int size)
 {
     emit this->receivedData(connection, data, size);
 }
 
-bool NetworkManager::sendData(int connectionID, const unsigned char* data, int size)
+bool TestServerNetworkManager::sendData(int connectionID, const unsigned char* data, int size)
 {
-    if(connectionID == -1)
-        return false;
-
     QTcpSocket* socket = mConnections[connectionID];
     socket->write((const char*)data, size);
     socket->flush();

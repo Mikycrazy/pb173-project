@@ -176,6 +176,25 @@ void Client::processPacket(unsigned char* packet, int size)
     }
 }
 
+int Client::processPacket(unsigned char* packet, unsigned char** data)
+{
+    if(packet == NULL)
+        return -1;
+
+    int id = 0;
+    int dataSize = 0;
+
+    if(sizeof(int) == 4)
+    {
+        id = packet[0];
+        dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
+        *data = new unsigned char [dataSize];
+         memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
+
+        return dataSize;
+    }
+}
+
 bool Client::isLogged()
 {
     return mLoggedToServer;

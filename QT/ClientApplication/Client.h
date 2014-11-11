@@ -1,4 +1,8 @@
 #pragma once
+
+#ifndef CLIENT_H
+#define CLIENT_H
+
 #include <stdlib.h>
 #include <iostream>
 #include <string.h>
@@ -46,6 +50,7 @@ public:
 	* @param username		uzivatelke jmeno
 	* @param email			email
 	*/
+    Client() : mLoggedToServer(false), mConnectedToClient(false) {}
 	Client(std::string username, std::string email);
     ~Client() {}
 
@@ -112,6 +117,8 @@ public:
 
     int createPacket(unsigned char id, unsigned char* data, unsigned char **packet, int size);
 
+    int processPacket(unsigned char* packet, unsigned char** data);
+
     bool isLogged();
 
     bool isConnected();
@@ -127,4 +134,6 @@ public slots:
     */
     void processPacket(unsigned char* packet, int size);
 };
+
+#endif // CLIENT_H
 
