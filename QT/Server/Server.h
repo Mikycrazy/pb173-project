@@ -14,6 +14,7 @@ using namespace std;
 const int ID_LENGHT = 1;
 const int RANDOM_BYTES_LENGTH = 10;
 const int DATA_SIZE_LENGTH = 4;
+const std::string DATA_SPLITER = ";";
 
 class Server : QObject
 {
@@ -30,7 +31,6 @@ public:
     /**
     * Konstruktor pre triedu Server.
     */
-    Server();
     Server(quint16 port);
     ~Server() {}
 
@@ -68,7 +68,14 @@ public:
     * @param from	ukazatel na objekt uzivatela ktory ziada o vytvorenie spojenia
     * @param to		ukazatel na objekt uzivatela ktoremu je zaslana ziadost
     */
-    bool sendConnectionRequest(User* from, User* to);
+    bool sendConnectionRequest(User* from, User* to, unsigned char* data, int size);
+    /**
+    * Odoslanie ziadosti o nadviazanie spojenia medzi dvoma uzivatelmi
+    *
+    * @param from	ukazatel na objekt uzivatela ktory ziada o vytvorenie spojenia
+    * @param to		ukazatel na objekt uzivatela ktoremu je zaslana ziadost
+    */
+    bool sendConnectionResponse(User* from, User* to, unsigned char* data, int size);
 
 public slots:
 
@@ -80,7 +87,7 @@ public slots:
     */
     void processPacket(int connectionID, unsigned char* packet, int size);
 
-public:
+private:
 
     /**
     * Zpracuje data a id pozadavku do podoby paketu k odeslani po siti
@@ -92,14 +99,9 @@ public:
     */
     int createPacket(unsigned char id, unsigned char* data, unsigned char **packet, int size);
 
-    int processPacket(unsigned char* packet, unsigned char** data);
-
     void processLoginUserPacket(int connectionID, unsigned char *data, int size);
 
     void processLogoutUserPacket(int connectionID, unsigned char *data, int size);
-
-    vector<User*> const& getUsers() const { return mUsers; }
-
 };
 
 #endif

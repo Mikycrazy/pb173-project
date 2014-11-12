@@ -3,6 +3,7 @@
 bool NetworkManager::startConnection(QString ipAddress, quint16 port)
 {
     this->mSocket = new QTcpSocket();
+
     connect(mSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
     connect(mSocket, SIGNAL(readyRead()), this, SLOT(receiveData()));
 

@@ -75,6 +75,114 @@ int Client::getOnlineList()
     return 0;
 }
 
+int Client::connectToClient(int connectionID)
+{
+    if(!mLoggedToServer)
+        return 1;
+
+    unsigned char *data = NULL;
+    int dataSize = sizeof(dataSize) + AES_KEY_LENGTH/2;
+    data = new unsigned char [dataSize];
+    //int to byte
+    if(sizeof(connectionID) == 4)
+    {
+        data[0] = connectionID & 0x000000ff;
+        data[1] = (connectionID & 0x0000ff00) >> 8;
+        data[2] = (connectionID & 0x00ff0000) >> 16;
+        data[3] = (connectionID & 0xff000000) >> 24;
+    }
+
+    //generovani klice
+    for(int i = sizeof(connectionID); i < dataSize; i++)
+    {
+        data[i] = rand() % 256;
+    }
+
+    unsigned char *packet = NULL;
+    int packetSize = this->createPacket(CLIENT_COMUNICATION_REQUEST,data,&packet,dataSize);
+
+    //bude nasledovat sifrovani a poslani pres sit
+    this->mNetwork->sendData(packet, packetSize);
+    Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_REQUEST");
+
+    delete[] data;
+    return 0;
+}
+
+
+int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
+{
+     qDebug() << "enter acceptConection";
+    //if(!mLoggedToServer)
+       // return 1;
+
+    unsigned char *data = NULL;
+    int dataSize = 1 + sizeof(dataSize) + AES_KEY_LENGTH;
+    data = new unsigned char [dataSize];
+    qDebug() << "datasize: " <<  dataSize;
+    data[0] = 1;
+    //int to byte
+    if(sizeof(connectionID) == 4)
+    {
+        data[1] = connectionID & 0x000000ff;
+        data[2] = (connectionID & 0x0000ff00) >> 8;
+        data[3] = (connectionID & 0x00ff0000) >> 16;
+        data[4] = (connectionID & 0xff000000) >> 24;
+    }
+
+    memcpy( &(data[5]), recievedKey,AES_IV_LENGTH/2);
+    //generovani klice
+    for(int i = 1 + sizeof(connectionID) + AES_IV_LENGTH/2; i < dataSize; i++)
+    {
+        data[i] = rand() % 256;
+    }
+
+    unsigned char *packet = NULL;
+    int packetSize = this->createPacket(CLIENT_COMUNICATION_RESPONSE,data,&packet,dataSize);
+
+    //bude nasledovat sifrovani a poslani pres sit
+    this->mNetwork->sendData(packet, packetSize);
+    Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_RESPONSE");
+
+    delete[] data;
+    return 0;
+
+}
+
+int Client::refuseConnection(int connectionID)
+{
+    qDebug() << "enter refuseConnection";
+   //if(!mLoggedToServer)
+      // return 1;
+
+   unsigned char *data = NULL;
+   int dataSize = 1 + sizeof(dataSize);
+   data = new unsigned char [dataSize];
+   qDebug() << "datasize: " <<  dataSize;
+   data[0] = 0;
+
+   data[0] = 1;
+   //int to byte
+   if(sizeof(connectionID) == 4)
+   {
+       data[1] = connectionID & 0x000000ff;
+       data[2] = (connectionID & 0x0000ff00) >> 8;
+       data[3] = (connectionID & 0x00ff0000) >> 16;
+       data[4] = (connectionID & 0xff000000) >> 24;
+   }
+
+   unsigned char *packet = NULL;
+   int packetSize = this->createPacket(CLIENT_COMUNICATION_RESPONSE,data,&packet,dataSize);
+
+   //bude nasledovat sifrovani a poslani pres sit
+   this->mNetwork->sendData(packet, packetSize);
+   Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_RESPONSE");
+
+   delete[] data;
+
+   return 0;
+}
+
 int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **packet, int size)
 {
     int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size;
@@ -173,25 +281,6 @@ void Client::processPacket(unsigned char* packet, int size)
              break;
 
         }
-    }
-}
-
-int Client::processPacket(unsigned char* packet, unsigned char** data)
-{
-    if(packet == NULL)
-        return -1;
-
-    int id = 0;
-    int dataSize = 0;
-
-    if(sizeof(int) == 4)
-    {
-        id = packet[0];
-        dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
-        *data = new unsigned char [dataSize];
-         memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
-
-        return dataSize;
     }
 }
 

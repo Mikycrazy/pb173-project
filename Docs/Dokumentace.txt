@@ -9,3 +9,8 @@ pakety budou vypadat:
 4-logout response
 5-getOnlineUsersList request
 6-getOnlineUsersList response
+7-clientComunicationRequest - posle se na server s ID clienta(conescton id) se kterym chci 
+8-serverComunicationRequest - server posle na ID klienta request
+9-clientComunicationResponse - prijmuti/zamitnuti komunikace (pozdeji se budou psilat klice)
+10-serverComunicationResponse - prijmuti/zamitnuti komunikace, prida se ip druheho klienta (pozdeji se budou psilat klice)
+11

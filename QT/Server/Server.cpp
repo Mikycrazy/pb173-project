@@ -9,10 +9,6 @@ Server::Server(quint16 port)
     this->mNetwork->startListening(port);
 }
 
-Server::Server()
-{
-    this->mNetwork = new NetworkManager();
-}
 
 bool Server::loginUser(User* user)
 {
@@ -41,7 +37,7 @@ bool Server::logoutUser(User* user)
 {
     for(unsigned int i = 0; i < mUsers.size(); i++)
     {
-         if(user->getUsername().compare(mUsers[i]->getUsername()))
+         if(user->getConnectionID() == mUsers[i]->getConnectionID())
          {
              mUsers.erase(mUsers.begin() + i);
 
@@ -56,6 +52,9 @@ bool Server::logoutUser(User* user)
 
              //bude nasledovat sifrovani a poslani pres sit
              this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
+
+             Logger::getLogger()->Log("Logout user" + user->getUsername());
+             qDebug() << "Logout user" << (user->getUsername().c_str());
              delete[] data;
 
              return true;
@@ -85,6 +84,48 @@ void Server::sendOnlineList(User* user)
     int packetSize = this->createPacket(GET_ONLINE_USER_LIST_RESPONSE,data,&packet,dataSize);
 }
 
+bool Server::sendConnectionRequest(User *from, User *to, unsigned char *data, int size)
+{
+    unsigned char *newData = NULL;
+    int newDataSize = from->getIPAddress().size() + DATA_SPLITER.size() + size;
+    data = new unsigned char [newDataSize];
+
+
+    memcpy(newData, from->getIPAddress().c_str(), from->getIPAddress().size());
+    memcpy(&newData[from->getIPAddress().size()], DATA_SPLITER.c_str(), DATA_SPLITER.size());
+    memcpy(&newData[from->getIPAddress().size() + DATA_SPLITER.size()],data, size);
+
+    unsigned char *packet = NULL;
+    int packetSize = this->createPacket(SERVER_COMUNICATION_REQUEST,newData,&packet,newDataSize);
+
+    //bude nasledovat sifrovani a poslani pres sit
+    this->mNetwork->sendData(to->getConnectionID(), packet, packetSize);
+    delete[] data;
+
+    return true;
+}
+
+bool Server::sendConnectionResponse(User *from, User *to, unsigned char *data, int size)
+{
+    unsigned char *newData = NULL;
+    int newDataSize = from->getIPAddress().size() + DATA_SPLITER.size() + size;
+    data = new unsigned char [newDataSize];
+
+
+    memcpy(newData, from->getIPAddress().c_str(), from->getIPAddress().size());
+    memcpy(&newData[from->getIPAddress().size()], DATA_SPLITER.c_str(), DATA_SPLITER.size());
+    memcpy(&newData[from->getIPAddress().size() + DATA_SPLITER.size()],data, size);
+
+    unsigned char *packet = NULL;
+    int packetSize = this->createPacket(SERVER_COMUNICATION_RESPONSE,newData,&packet,newDataSize);
+
+    //bude nasledovat sifrovani a poslani pres sit
+    this->mNetwork->sendData(to->getConnectionID(), packet, packetSize);
+    delete[] data;
+
+    return true;
+}
+
 int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **packet, int size)
 {
     int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size;
@@ -109,6 +150,8 @@ int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **
 
     return newSize;
 }
+
+
 
 void Server::processPacket(int connectionID, unsigned char* packet, int size)
 {
@@ -200,23 +243,4 @@ void Server::processLogoutUserPacket(int connectionID, unsigned char *data, int 
 
     User* user = new User(parts[0].toStdString(), parts[1].toStdString(), "", NULL, connectionID);
     this->logoutUser(user);
-}
-
-int Server::processPacket(unsigned char* packet, unsigned char** data)
-{
-    if(packet == NULL)
-        return -1;
-
-    int id = 0;
-    int dataSize = 0;
-
-    if(sizeof(int) == 4)
-    {
-        id = packet[0];
-        dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
-        *data = new unsigned char [dataSize];
-         memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
-
-        return dataSize;
-    }
 }

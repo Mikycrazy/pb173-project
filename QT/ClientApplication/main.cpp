@@ -3,7 +3,7 @@
 #include "Client.h"
 #include "Windows.h"
 
-#define UNIT_TEST
+
 #ifndef UNIT_TEST
 int main(int argc, char *argv[])
 {
@@ -11,13 +11,19 @@ int main(int argc, char *argv[])
 
     Client* client = new Client("test", "test@test");
 
-    client->login();
+    //client->login();
+
+    unsigned char key[64];
+    client->acceptConnection(1,key);
+
+
+    /*
     while(!client->isLogged())
     {
         Sleep(10);
         qApp->processEvents();
     }
-    client->logout();
+    client->logout();*/
 
     return a.exec();
 }

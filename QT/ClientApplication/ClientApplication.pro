@@ -21,10 +21,7 @@ SOURCES += main.cpp \
     ClientApplicationTests.cpp \
     NetworkManager.cpp \
     Client.cpp \
-    logger.cpp \
-    testserver.cpp \
-    testservernetworkmanager.cpp \
-    ConnectionHandler.cpp
+    logger.cpp
 
 HEADERS += \
     Client.h \
@@ -32,7 +29,4 @@ HEADERS += \
     NetworkManager.h \
     catch.hpp \
     Opcodes.h \
-    logger.h \
-    testserver.h \
-    testservernetworkmanager.h \
-    ConnectionHandler.h
+    logger.h

@@ -2,14 +2,19 @@
 
 void ConnectionHandler::run()
 {
+    qDebug() << "ConnectionHandler enter";
     connect(mSocket, SIGNAL(readyRead()), this, SLOT(readyRead()));
+    qDebug() << "ConnectionHandler connect 1";
     connect(mSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    qDebug() << "Connection handler started";
+    qDebug() << "ConnectionHandler connect 2";
+
     exec();
+    qDebug() << "ConnectionHandler exec";
 }
 
 void ConnectionHandler::readyRead()
 {
+    qDebug() << "Ready read enter";
     QByteArray data = this->mSocket->readAll();
     qDebug() << "Received data:" << data.toHex() << "size:" << data.length();
 
@@ -19,7 +24,7 @@ void ConnectionHandler::readyRead()
 void ConnectionHandler::disconnected()
 {
     qDebug() << "Client disconnected";
-    this->deleteLater();
+    //this->deleteLater();
 
     exit(0);
 }

@@ -1,8 +1,4 @@
 #pragma once
-
-#ifndef CLIENT_H
-#define CLIENT_H
-
 #include <stdlib.h>
 #include <iostream>
 #include <string.h>
@@ -50,7 +46,6 @@ public:
 	* @param username		uzivatelke jmeno
 	* @param email			email
 	*/
-    Client() : mLoggedToServer(false), mConnectedToClient(false) {}
 	Client(std::string username, std::string email);
     ~Client() {}
 
@@ -95,9 +90,23 @@ public:
 	/**
 	* Odesle pozadavek ke komunikaci ke klientovi
 	*
-	* @param username		uzivatelske jmeno 
+    * @param connectionID		connectionID
 	*/
-	int connectToClient(std::string username);
+    int connectToClient(int connectionID);
+
+    /**
+    * Odesle kladnou odpoved na pozadavek ke komunikaci ke klientovi
+    *
+    * @param connectionID		connectionID
+    */
+    int acceptConnection(int connectionID, unsigned char* recievedKey);
+
+    /**
+    * Odesle zapornou odpoved na pozadavek ke komunikaci ke klientovi
+    *
+    * @param connectionID		connectionID
+    */
+    int refuseConnection(int connectionID);
 
 	/**
 	* Zahaji komunikaci s klientem
@@ -117,8 +126,6 @@ public:
 
     int createPacket(unsigned char id, unsigned char* data, unsigned char **packet, int size);
 
-    int processPacket(unsigned char* packet, unsigned char** data);
-
     bool isLogged();
 
     bool isConnected();
@@ -134,6 +141,4 @@ public slots:
     */
     void processPacket(unsigned char* packet, int size);
 };
-
-#endif // CLIENT_H
 

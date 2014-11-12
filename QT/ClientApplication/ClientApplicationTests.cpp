@@ -1,32 +1,30 @@
-
+#define UNIT_TEST
 #ifndef UNIT_TEST
 
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "Client.h"
-#include "testserver.h"
 
 const char IP_SERVER[] = "127.0.0.1";
 const int PORT_SERVER = 13374;
-/*
+
 TEST_CASE("SERVER")
 {
-    SECTION("is not avaible")
-    {
-        NetworkManager manager;
-        REQUIRE_FALSE(manager.startConnection(IP_SERVER, PORT_SERVER));
-    }
-    SECTION("is avaible")
+
+	SECTION("is avaible")
 	{
-        TestServer* server = new TestServer(13374);
         NetworkManager manager;
 
         REQUIRE(manager.startConnection(IP_SERVER, PORT_SERVER));
+	}
+	SECTION("is not avaible")
+	{
+        NetworkManager manager;
 
-        delete server;
-    }
+        REQUIRE_FALSE(manager.startConnection("254.1.1.1", 8888));
+	}
+
 }
-
 TEST_CASE("PACKET CREATING")
 {
     Client c;
@@ -172,7 +170,6 @@ TEST_CASE("PACKET CREATING")
         delete data2;
 	}
 }
-*/
 TEST_CASE("SENDING DATA")
 {
     SECTION("Send data to myself and expect to receive same data")
@@ -182,15 +179,12 @@ TEST_CASE("SENDING DATA")
         unsigned char* data2 = NULL;
         int size = 0;
 
+        NetworkManager sender;
 
-        TestServer* server = new TestServer(13374);
-        std::cout << "Server Started" << std::endl;
+        sender.startConnection(IP_SERVER, PORT_SERVER);
+        sender.sendData(data, DATA_LENGTH);
 
-        NetworkManager manager;
-        manager.startConnection(IP_SERVER, PORT_SERVER);
-        manager.sendData(data, DATA_LENGTH);
-
-        data2 = server->getData();
+        NetworkManager receiver;
 
         REQUIRE(size == DATA_LENGTH);
 
@@ -208,31 +202,65 @@ TEST_CASE("SENDING DATA")
 
         delete data;
         delete data2;
-        delete server;
 	}
 }
-/*
+
 TEST_CASE("RECIEVING DATA")
 {
 	SECTION("login succesful")
 	{
-        Client* client = new Client("test", "test@test");
+        const int DATA_LENGTH = 1;
+        unsigned char* data = new unsigned char[DATA_LENGTH];
+        unsigned char* data2 = NULL;
+        unsigned char* packet = NULL;
 
-        TestServer* server = new TestServer(13374);
+        Client c;
+        c.createPacket(LOGIN_RESPONSE, data, &packet, DATA_LENGTH);
 
-        client->login();
+        NetworkManager server;
 
-        REQUIRE(client->isLogged());
+        server.startConnection(IP_SERVER, PORT_SERVER);
+        server.sendData(data, DATA_LENGTH);
+
+
+        NetworkManager receiver;
+
+        int size = c.processPacket(packet, &data2);
+
+        REQUIRE(size == 1);
+
+        if(size == 1)
+        {
+            REQUIRE(data2[0] == 1);
+        }
 	}
 	SECTION("login not succesful")
 	{
-        Client* client = new Client("", "test@test");
+        const int DATA_LENGTH = 1;
+        unsigned char* data = new unsigned char[DATA_LENGTH];
+        unsigned char* data2 = NULL;
+        unsigned char* packet = NULL;
 
-        TestServer* server = new TestServer(13374);
+        memset(data, 70, DATA_LENGTH);
 
-        client->login();
+        Client c;
+        c.createPacket(LOGIN_RESPONSE, data, &packet, DATA_LENGTH);
 
-        REQUIRE_FALSE(client->isLogged());
+        NetworkManager server;
+
+        server.startConnection(IP_SERVER, PORT_SERVER);
+        server.sendData(data, DATA_LENGTH);
+
+
+        NetworkManager receiver;
+
+        int size = c.processPacket(packet, &data2);
+        REQUIRE(size == 1);
+
+        if(size == 1)
+        {
+            REQUIRE(data2[0] == 1);
+        }
 	}
     SECTION("Denied to send request list of users when not logged in")
 	{
@@ -250,19 +278,21 @@ TEST_CASE("RECIEVING DATA")
         memcpy(data, tmp, DATA_LENGTH);
 
         Client c;
-        int size = c.createPacket(GET_ONLINE_USER_LIST_RESPONSE, data, &packet, DATA_LENGTH);
+        c.createPacket(GET_ONLINE_USER_LIST_RESPONSE, data, &packet, DATA_LENGTH);
 
-        TestServer* server = new TestServer(13374);
+        NetworkManager server;
 
-        NetworkManager manager;
-        manager.startConnection(IP_SERVER, PORT_SERVER);
-        manager.sendData(packet, size);
+        server.startConnection(IP_SERVER, PORT_SERVER);
+        server.sendData(data, DATA_LENGTH);
 
-        int size2 = c.processPacket(packet, &data2);
+
+        NetworkManager receiver;
+
+        int size = c.processPacket(packet, &data2);
         std::cout << DATA_LENGTH << std::endl;
-        REQUIRE(size2 == DATA_LENGTH);
+        REQUIRE(size == DATA_LENGTH);
 
-        if(size2 == DATA_LENGTH)
+        if(size == DATA_LENGTH)
         {
             bool match = true;
             for(int i = 0; i < DATA_LENGTH; i++)
@@ -275,5 +305,5 @@ TEST_CASE("RECIEVING DATA")
         }
 	}
 }
-*/
+
 #endif

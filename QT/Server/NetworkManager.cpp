@@ -36,9 +36,6 @@ void NetworkManager::networkReceivedData(int connection, unsigned char* data, in
 
 bool NetworkManager::sendData(int connectionID, const unsigned char* data, int size)
 {
-    if(connectionID == -1)
-        return false;
-
     QTcpSocket* socket = mConnections[connectionID];
     socket->write((const char*)data, size);
     socket->flush();
