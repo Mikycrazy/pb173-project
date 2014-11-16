@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     ClientApplicationTests.cpp \
     NetworkManager.cpp \
     Client.cpp \
-    logger.cpp
+    logger.cpp \
+    myserver.cpp
 
 HEADERS += \
     Client.h \
@@ -29,4 +30,11 @@ HEADERS += \
     NetworkManager.h \
     catch.hpp \
     Opcodes.h \
-    logger.h
+    logger.h \
+    myserver.h
+
+
+unix|win32: LIBS += -L$$PWD/polarssl-1.3.8/lib/ -lPolarSSL
+
+INCLUDEPATH += $$PWD/polarssl-1.3.8/include
+DEPENDPATH += $$PWD/polarssl-1.3.8/include

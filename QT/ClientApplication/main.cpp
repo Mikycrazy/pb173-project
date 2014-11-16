@@ -2,8 +2,9 @@
 #include "NetworkManager.h"
 #include "Client.h"
 #include "Windows.h"
+#include "polarssl/aes.h"
 
-
+#define UNIT_TEST
 #ifndef UNIT_TEST
 int main(int argc, char *argv[])
 {
@@ -12,6 +13,8 @@ int main(int argc, char *argv[])
     Client* client = new Client("test", "test@test");
 
     //client->login();
+
+
 
     unsigned char key[64];
     client->acceptConnection(1,key);

@@ -20,4 +20,5 @@ void Logger::Log(const std::string& log)
 
     mFile << " - " << dt << "\t";
     mFile << log << std::endl;
+
 }

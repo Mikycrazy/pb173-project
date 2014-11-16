@@ -21,7 +21,8 @@ SOURCES += main.cpp \
     Server.cpp \
     ServerTest.cpp \
     ConnectionHandler.cpp \
-    logger.cpp
+    logger.cpp \
+    mytcpclient.cpp
 
 HEADERS += \
     Server.h \
@@ -30,4 +31,5 @@ HEADERS += \
     catch.hpp \
     Opcodes.h \
     ConnectionHandler.h \
-    logger.h
+    logger.h \
+    mytcpclient.h

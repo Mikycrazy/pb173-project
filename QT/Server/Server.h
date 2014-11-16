@@ -26,11 +26,14 @@ private:
     unsigned char* mPublicKey;
     NetworkManager* mNetwork;
 
+
+
 public:
 
     /**
     * Konstruktor pre triedu Server.
     */
+    Server();
     Server(quint16 port);
     ~Server() {}
 
@@ -77,6 +80,19 @@ public:
     */
     bool sendConnectionResponse(User* from, User* to, unsigned char* data, int size);
 
+    int processPacket(unsigned char* packet, unsigned char** data);
+
+    /**
+    * Zpracuje data a id pozadavku do podoby paketu k odeslani po siti
+    *
+    * @param id         id paketu, jestli jde o login/logout nebo neco dalsiho
+    * @param data		data
+    * @param packet		sem se ulozi packet, ktery je pripraven k odeslani
+    * @param size		delka dat
+    */
+    int createPacket(unsigned char id, unsigned char* data, unsigned char **packet, int size);
+
+    vector<User*> const& getUsers() const { return mUsers; }
 public slots:
 
     /**
@@ -88,16 +104,6 @@ public slots:
     void processPacket(int connectionID, unsigned char* packet, int size);
 
 private:
-
-    /**
-    * Zpracuje data a id pozadavku do podoby paketu k odeslani po siti
-    *
-    * @param id         id paketu, jestli jde o login/logout nebo neco dalsiho
-    * @param data		data
-    * @param packet		sem se ulozi packet, ktery je pripraven k odeslani
-    * @param size		delka dat
-    */
-    int createPacket(unsigned char id, unsigned char* data, unsigned char **packet, int size);
 
     void processLoginUserPacket(int connectionID, unsigned char *data, int size);
 

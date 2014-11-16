@@ -38,6 +38,9 @@ private:
 
     NetworkManager* mNetwork;
 
+    unsigned char* mLastReicevedData;
+    int mLastReicevedDataSize;
+
 public:
 	/**
 	* Konstruktor pro tridu Client.
@@ -126,9 +129,17 @@ public:
 
     int createPacket(unsigned char id, unsigned char* data, unsigned char **packet, int size);
 
+    int processPacket(unsigned char* packet, unsigned char** data);
+
     bool isLogged();
 
     bool isConnected();
+
+    void sendData(unsigned char *data, int size);
+
+    unsigned char* getLastData() {return mLastReicevedData; }
+
+    int getLastDataSize() { return mLastReicevedDataSize; }
 
 public slots:
 

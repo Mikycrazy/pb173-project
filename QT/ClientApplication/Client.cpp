@@ -4,6 +4,10 @@ Client::Client(string username, string email) : mUsername(username), mEmail(emai
 {
     srand(time(NULL));
 
+    mLastReicevedDataSize = 10;
+    mLastReicevedData = new unsigned char [10];
+    memset(mLastReicevedData, 97, 10);
+
     this->mNetwork = new NetworkManager();
     this->mNetwork->startConnection(SERVER_ADDRESS, SERVER_PORT);
 
@@ -243,7 +247,9 @@ void Client::processPacket(unsigned char* packet, int size)
         }
 
         unsigned char *data = new unsigned char [dataSize];
+        //mLastReicevedData = new unsigned char [dataSize];
         memcpy(data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
+        //memcpy(mLastReicevedData, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
 
         switch(id)
         {
@@ -284,6 +290,24 @@ void Client::processPacket(unsigned char* packet, int size)
     }
 }
 
+int Client::processPacket(unsigned char* packet, unsigned char** data)
+{
+    if(packet == NULL)
+     return -1;
+
+    int id = 0;
+    int dataSize = 0;
+
+    if(sizeof(int) == 4)
+    {
+        id = packet[0];
+        dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
+        *data = new unsigned char [dataSize];
+        memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
+    }
+    return dataSize;
+}
+
 bool Client::isLogged()
 {
     return mLoggedToServer;
@@ -292,4 +316,9 @@ bool Client::isLogged()
 bool Client::isConnected()
 {
     return mConnectedToClient;
+}
+
+void Client::sendData(unsigned char *data, int size)
+{
+    this->mNetwork->sendData(data, size);
 }

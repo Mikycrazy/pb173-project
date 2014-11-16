@@ -24,7 +24,6 @@ void ConnectionHandler::readyRead()
 void ConnectionHandler::disconnected()
 {
     qDebug() << "Client disconnected";
-    //this->deleteLater();
 
     exit(0);
 }
