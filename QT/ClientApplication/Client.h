@@ -141,6 +141,8 @@ public:
 
     int getLastDataSize() { return mLastReicevedDataSize; }
 
+    int sendDataToClient(QHostAddress address, quint16 port, unsigned char* data, int size);
+
 public slots:
 
     /**

@@ -1,5 +1,5 @@
 
-#ifndef UNIT_TEST
+#ifdef UNIT_TEST
 
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"

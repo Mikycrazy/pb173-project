@@ -10,7 +10,10 @@
 #include <QString>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <QUdpSocket>
 #include <QAbstractSocket>
+
+#define UDP_PORT 13375
 
 using namespace std;
 
@@ -20,6 +23,7 @@ class NetworkManager : public QObject
 
 private:
     QTcpSocket* mSocket;
+    QUdpSocket* mUdpSocket;
 
 public:
 
@@ -48,6 +52,8 @@ public:
     */
     bool sendData(unsigned char* data, int size);
 
+    bool sendUdpData(QHostAddress receiver, quint16 port, unsigned char* data, int size);
+
 public slots:
 
     /**
@@ -59,6 +65,8 @@ public slots:
     * Prijme data od servera a posunie na spracovanie
     */
     void receiveData();
+
+    void receiveUdpData();
 
 signals:
     void networkReceivedData(unsigned char* data, int size);

@@ -187,6 +187,18 @@ int Client::refuseConnection(int connectionID)
    return 0;
 }
 
+int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* data, int size)
+{
+    unsigned char *packet = NULL;
+    int packetSize = this->createPacket(CLIENT_COMMUNICATION_DATA,data,&packet,size);
+
+    //bude nasledovat sifrovani a poslani pres sit
+    this->mNetwork->sendUdpData(address, port, packet, packetSize);
+    Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_DATA");
+
+    return 0;
+}
+
 int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **packet, int size)
 {
     int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size;
@@ -251,6 +263,7 @@ void Client::processPacket(unsigned char* packet, int size)
         memcpy(data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
         //memcpy(mLastReicevedData, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
 
+        QByteArray bdata((const char*)data, dataSize);
         switch(id)
         {
          case LOGIN_RESPONSE:
@@ -282,6 +295,9 @@ void Client::processPacket(unsigned char* packet, int size)
             break;
         case GET_ONLINE_USER_LIST_RESPONSE:
             Logger::getLogger()->Log("GET_ONLINE_USER_LIST_RESPONSE");
+            break;
+        case CLIENT_COMMUNICATION_DATA:
+            qDebug() << "Received UDP data:" << bdata;
             break;
          default:
              break;
