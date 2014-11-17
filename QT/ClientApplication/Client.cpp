@@ -85,7 +85,7 @@ int Client::connectToClient(int connectionID)
         return 1;
 
     unsigned char *data = NULL;
-    int dataSize = sizeof(dataSize) + AES_KEY_LENGTH/2;
+    int dataSize = sizeof(connectionID) + AES_KEY_LENGTH/2;
     data = new unsigned char [dataSize];
     //int to byte
     if(sizeof(connectionID) == 4)
@@ -121,7 +121,7 @@ int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
        // return 1;
 
     unsigned char *data = NULL;
-    int dataSize = 1 + sizeof(dataSize) + AES_KEY_LENGTH;
+    int dataSize = 1 + sizeof(dataSize) + AES_KEY_LENGTH + AES_IV_LENGTH;
     data = new unsigned char [dataSize];
     qDebug() << "datasize: " <<  dataSize;
     data[0] = 1;
@@ -134,12 +134,21 @@ int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
         data[4] = (connectionID & 0xff000000) >> 24;
     }
 
-    memcpy( &(data[5]), recievedKey,AES_IV_LENGTH/2);
+    memcpy( &(data[5]), recievedKey,AES_KEY_LENGTH/2);
     //generovani klice
-    for(int i = 1 + sizeof(connectionID) + AES_IV_LENGTH/2; i < dataSize; i++)
-    {
+    for(int i = 1 + sizeof(connectionID) + AES_KEY_LENGTH/2; i < 1 + sizeof(connectionID) + AES_KEY_LENGTH; i++)
         data[i] = rand() % 256;
-    }
+
+
+    mAESkey = new unsigned char[AES_KEY_LENGTH];
+    memcpy(mAESkey,  &(data[5]), AES_KEY_LENGTH);
+
+    // generovani IV
+    for(int i = 1 + sizeof(connectionID) + AES_KEY_LENGTH; i < dataSize; i++)
+        data[i] = rand() % 256;
+
+    mAESIV = new unsigned char[AES_IV_LENGTH];
+    memcpy(mAESkey,  &(data[1 + sizeof(connectionID) + AES_KEY_LENGTH]), AES_KEY_LENGTH);
 
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(CLIENT_COMUNICATION_RESPONSE,data,&packet,dataSize);
@@ -262,7 +271,7 @@ void Client::processPacket(unsigned char* packet, int size)
         //mLastReicevedData = new unsigned char [dataSize];
         memcpy(data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
         //memcpy(mLastReicevedData, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
-
+        int accept = 0;
         QByteArray bdata((const char*)data, dataSize);
         switch(id)
         {
@@ -295,7 +304,26 @@ void Client::processPacket(unsigned char* packet, int size)
             break;
         case GET_ONLINE_USER_LIST_RESPONSE:
             Logger::getLogger()->Log("GET_ONLINE_USER_LIST_RESPONSE");
+             qDebug() << "Received online list:" << bdata;
             break;
+        case SERVER_COMUNICATION_REQUEST:
+             Logger::getLogger()->Log("SERVER_COMUNICATION_REQUEST");
+                acceptConnection(processServerCommunicationRequest(data,dataSize),&data[4]);
+                break;
+        case SERVER_COMUNICATION_RESPONSE:
+             Logger::getLogger()->Log(" SERVER_COMUNICATION_RESPONSE");
+                accept = processServerCommunicationResponse(data,dataSize);
+                //druhy klient zamitnul spojeni
+                if(!accept)
+                {
+
+                }
+                //druhy klient prijal spojeni
+                else
+                {
+
+                }
+                break;
         case CLIENT_COMMUNICATION_DATA:
             qDebug() << "Received UDP data:" << bdata;
             break;
@@ -303,7 +331,42 @@ void Client::processPacket(unsigned char* packet, int size)
              break;
 
         }
+        delete[] data;
     }
+}
+
+int Client::processServerCommunicationRequest(unsigned char *data, int size)
+{
+    int connectionID = 0;
+    if(size > 3)
+    {
+        connectionID = ( data[3] << 24) | ( data[2] << 16) | (data[1] << 8) | ( data[0]);
+
+    }
+    return connectionID;
+}
+int Client::processServerCommunicationResponse(unsigned char *data, int size)
+{
+    char accept = data[0];
+    if(accept == 1)
+    {
+        int connectionID  = 0;
+        if(size > 3)
+            connectionID  = ( data[4] << 24) | ( data[3] << 16) | (data[2] << 8) | ( data[1]);
+        int i, j;
+        for(i = 5, j = 0; i < size; i++,j++)
+        {
+            if(data[i] == ';')
+                break;
+            mAESkey[j] = data[i];
+        }
+        for(j = 0; i < size; i++,j++)
+            mAESIV[j] = data[i];
+
+
+    }
+
+    return accept;
 }
 
 int Client::processPacket(unsigned char* packet, unsigned char** data)

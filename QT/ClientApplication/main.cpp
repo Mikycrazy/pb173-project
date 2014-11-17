@@ -2,7 +2,7 @@
 #include "NetworkManager.h"
 #include "Client.h"
 #include "Windows.h"
-#include "polarssl/aes.h"
+//#include "polarssl/aes.h"
 
 //#define UNIT_TEST
 #ifndef UNIT_TEST
@@ -15,7 +15,8 @@ int main(int argc, char *argv[])
     //client->login();
 
     unsigned char key[64];
-    client->acceptConnection(1,key);
+    client->getOnlineList();
+    //client->acceptConnection(1,key);
 
     QHostAddress address("127.0.0.1");
     unsigned char data[5] = {'a', 'b', 'c', 'd', 'e'};

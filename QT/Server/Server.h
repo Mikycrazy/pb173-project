@@ -108,6 +108,21 @@ private:
     void processLoginUserPacket(int connectionID, unsigned char *data, int size);
 
     void processLogoutUserPacket(int connectionID, unsigned char *data, int size);
+
+    /**
+    * Zpracuje prisly packet, vyparsuje data a vykona potrebne akce
+    *   vraci connection id
+    */
+    int processClientComunicationRequest(unsigned char *data, int size);
+
+
+    /**
+    * Zpracuje prisly packet, vyparsuje data a vykona potrebne akce
+    *   vraci connection id
+    */
+    int processClientComunicationResponse(unsigned char *data, int size);
+
+    User* getUserFromConnectionID(int connectionID);
 };
 
 #endif

@@ -25,6 +25,7 @@ private:
 	std::string mEmail;
 
 	unsigned char* mAESkey;
+    unsigned char* mAESIV;
 	unsigned char* mPublicRSAKey;
 	unsigned char* mPrivateRSAKey;
 
@@ -142,6 +143,11 @@ public:
     int getLastDataSize() { return mLastReicevedDataSize; }
 
     int sendDataToClient(QHostAddress address, quint16 port, unsigned char* data, int size);
+
+private:
+    int processServerCommunicationRequest(unsigned char *data, int size);
+
+    int processServerCommunicationResponse(unsigned char *data, int size);
 
 public slots:
 

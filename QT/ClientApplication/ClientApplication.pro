@@ -22,7 +22,8 @@ SOURCES += main.cpp \
     NetworkManager.cpp \
     Client.cpp \
     logger.cpp \
-    myserver.cpp
+    myserver.cpp \
+    CryptoManager.cpp
 
 HEADERS += \
     Client.h \
@@ -34,7 +35,7 @@ HEADERS += \
     myserver.h
 
 
-unix|win32: LIBS += -L$$PWD/polarssl-1.3.8/lib/ -lPolarSSL
+
 
 INCLUDEPATH += $$PWD/polarssl-1.3.8/include
 DEPENDPATH += $$PWD/polarssl-1.3.8/include
