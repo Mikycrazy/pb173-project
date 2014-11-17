@@ -13,6 +13,7 @@ class MyServer : public QObject
 public:
     MyServer();
     QByteArray getLastData() {return *mData;}
+    void Stop();
 signals:
 
 public slots:

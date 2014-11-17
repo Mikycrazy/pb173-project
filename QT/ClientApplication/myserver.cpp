@@ -18,6 +18,12 @@ MyServer::MyServer()
     mData = new QByteArray(10,'a');
 }
 
+void MyServer::Stop()
+{
+    mServer->close();
+}
+
+
 QByteArray reverse(const QByteArray& array)
 {
     QByteArray reverse;

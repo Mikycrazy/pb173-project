@@ -183,7 +183,6 @@ TEST_CASE("RESPONDING")
     }
 }
 
-
 TEST_CASE("PROSSESSING RECEIVED DATA")
 {
     Server server(PORT_SERVER + 5);
@@ -274,10 +273,9 @@ TEST_CASE("PROSSESSING RECEIVED DATA")
         client.startConnection(IP_SERVER, PORT_SERVER + 5);
         client.sendData(packet, getpacketSize);
 
-        REQUIRE(client.getLastDataSize() == GET_ONLINE_USER_LIST_RESPONSE);
+        REQUIRE(client.getLastDataType() == GET_ONLINE_USER_LIST_RESPONSE);
     }
 }
-
 
 TEST_CASE("LOGIN/LOGOUT USERS")
 {
@@ -316,6 +314,152 @@ TEST_CASE("LOGIN/LOGOUT USERS")
         int size = server.getUsers().size();
         userCount -= 5;
         REQUIRE(size == userCount);
+    }
+}
+
+TEST_CASE("LOGIN/LOGOUT USERS and through NETWORK and GETTING ONLINE LIST")
+{
+    Server server(PORT_SERVER + 15);
+
+    SECTION("Login one user and get online list")
+    {
+        const int DATA_LENGTH = 10;
+        unsigned char* data = new unsigned char[DATA_LENGTH];
+        unsigned char* data2 = NULL;
+        memset(data, 97, DATA_LENGTH);
+
+        unsigned char *loginpacket = NULL;
+        int loginpacketSize = server.createPacket(LOGIN_REQUEST,data,&loginpacket,DATA_LENGTH);
+
+        unsigned char *getpacket = NULL;
+        int getpacketSize = server.createPacket(GET_ONLINE_USER_LIST_REQUEST,data,&getpacket,DATA_LENGTH);
+
+        MyTcpClient client;
+        client.startConnection(IP_SERVER, PORT_SERVER + 15);
+        client.sendData(loginpacket, loginpacketSize);
+        client.sendData(getpacket, getpacketSize);
+
+        data2 = client.getLastData();
+
+        REQUIRE(client.getLastDataType() == GET_ONLINE_USER_LIST_RESPONSE);
+        REQUIRE(client.getLastDataSize() > 0);
+
+        if(client.getLastDataSize() > 0)
+        {
+            int count = 0;
+            for(int i = 0; i < client.getLastDataSize(); i++)
+            {
+                if(data2[i] == ';')
+                    count++;
+            }
+
+            REQUIRE(count == 1);
+        }
+
+    }
+    SECTION("Login more users and get online list")
+    {
+        User* user = new User("test", "test@test.com", "127.0.0.1", NULL, -1);
+        for(int i = 0; i < 5; i++)
+            server.loginUser(user);
+
+        const int DATA_LENGTH = 10;
+        unsigned char* data = new unsigned char[DATA_LENGTH];
+        unsigned char* data2 = NULL;
+        memset(data, 97, DATA_LENGTH);
+
+        unsigned char *getpacket = NULL;
+        int getpacketSize = server.createPacket(GET_ONLINE_USER_LIST_REQUEST,data,&getpacket,DATA_LENGTH);
+
+        MyTcpClient client;
+        client.startConnection(IP_SERVER, PORT_SERVER + 15);
+        client.sendData(getpacket, getpacketSize);
+
+        data2 = client.getLastData();
+
+        REQUIRE(client.getLastDataType() == GET_ONLINE_USER_LIST_RESPONSE);
+        REQUIRE(client.getLastDataSize() > 0);
+
+        if(client.getLastDataSize() > 0)
+        {
+            int count = 0;
+            for(int i = 0; i < client.getLastDataSize(); i++)
+            {
+                if(data2[i] == ';')
+                    count++;
+            }
+
+            REQUIRE(count == 11);
+        }
+
+    }
+}
+
+TEST_CASE("CLIENT TO CLIENT")
+{
+    Server server(PORT_SERVER + 20);
+    SECTION("Resending request packet to client right")
+    {
+        const int DATA_LENGTH = 10;
+        unsigned char* data = new unsigned char[DATA_LENGTH];
+        unsigned char* data2 = new unsigned char[DATA_LENGTH];
+
+        memset(data, 97, DATA_LENGTH);
+        memset(data, 98, DATA_LENGTH);
+
+        unsigned char *loginpacket1 = NULL;
+        int loginpacket1Size = server.createPacket(LOGIN_REQUEST,data,&loginpacket1,DATA_LENGTH);
+
+        unsigned char *loginpacket2 = NULL;
+        int loginpacket2Size = server.createPacket(LOGIN_REQUEST,data,&loginpacket2,DATA_LENGTH);
+
+        MyTcpClient client1;
+        client1.startConnection(IP_SERVER, PORT_SERVER + 20);
+
+        MyTcpClient client2;
+        client2.startConnection(IP_SERVER, PORT_SERVER + 20);
+
+        client1.sendData(loginpacket1, loginpacket1Size);
+        client2.sendData(loginpacket2, loginpacket2Size);
+
+        unsigned char *compacket = NULL;
+        int compacketSize = server.createPacket(CLIENT_COMUNICATION_REQUEST,data2,&compacket,DATA_LENGTH);
+
+        client1.sendData(compacket, compacketSize);
+
+        REQUIRE(client2.getLastDataType() == SERVER_COMUNICATION_REQUEST);
+    }
+
+    SECTION("Resending response packet to client right")
+    {
+        const int DATA_LENGTH = 10;
+        unsigned char* data = new unsigned char[DATA_LENGTH];
+        unsigned char* data2 = new unsigned char[DATA_LENGTH];
+
+        memset(data, 97, DATA_LENGTH);
+        memset(data, 98, DATA_LENGTH);
+
+        unsigned char *loginpacket1 = NULL;
+        int loginpacket1Size = server.createPacket(LOGIN_REQUEST,data,&loginpacket1,DATA_LENGTH);
+
+        unsigned char *loginpacket2 = NULL;
+        int loginpacket2Size = server.createPacket(LOGIN_REQUEST,data,&loginpacket2,DATA_LENGTH);
+
+        MyTcpClient client1;
+        client1.startConnection(IP_SERVER, PORT_SERVER + 20);
+
+        MyTcpClient client2;
+        client2.startConnection(IP_SERVER, PORT_SERVER + 20);
+
+        client1.sendData(loginpacket1, loginpacket1Size);
+        client2.sendData(loginpacket2, loginpacket2Size);
+
+        unsigned char *compacket = NULL;
+        int compacketSize = server.createPacket(CLIENT_COMUNICATION_RESPONSE,data,&compacket,DATA_LENGTH);
+
+        client1.sendData(compacket, compacketSize);
+
+        REQUIRE(client1.getLastDataType() == SERVER_COMUNICATION_RESPONSE);
     }
 }
 

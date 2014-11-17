@@ -1,5 +1,5 @@
-
-#ifdef UNIT_TEST
+#define UNIT_TEST
+#ifndef UNIT_TEST
 
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"
@@ -10,7 +10,7 @@
 const char IP_SERVER[] = "127.0.0.1";
 const int PORT_SERVER = 13374;
 
-/*
+
 TEST_CASE("SERVER")
 {
 
@@ -26,7 +26,7 @@ TEST_CASE("SERVER")
         NetworkManager manager;
         REQUIRE(manager.startConnection(IP_SERVER, PORT_SERVER));
 
-        delete server;
+        server.Stop();
     }
 
 }
@@ -175,7 +175,7 @@ TEST_CASE("PACKET CREATING")
         delete data2;
 	}
 }
-*/
+
 TEST_CASE("SENDING DATA")
 {
     SECTION("Send data to myself and expect to receive same data")
@@ -205,7 +205,6 @@ TEST_CASE("SENDING DATA")
 
             REQUIRE(match);
         }
-
         delete data;
 	}
 }
@@ -304,29 +303,40 @@ TEST_CASE("RECIEVING DATA")
 	}
 }
 
-TEST_CASE("SENDING DATA TO CLIENT")
+
+TEST_CASE("CLIENT TO CLIENT")
 {
 
-    SECTION("Able to connect to client")
+    SECTION("Send data to client")
+    {
+        Client* client = new Client("test", "test@test");
+        unsigned char* data2 = NULL;
+        QHostAddress address("127.0.0.1");
+        unsigned char data[5] = {'a', 'b', 'c', 'd', 'e'};
+
+        client->sendDataToClient(address, 13375, data, 5);
+
+        int size2 = client->getLastDataSize();
+        data2 = client->getLastData();
+
+        REQUIRE(size2 == 5);
+
+        if(size2 == 5)
+        {
+            bool match = true;
+            for(int i = 0; i < 5; i++)
+            {
+                if(data[i] != data2[i])
+                    match = false;
+            }
+
+            REQUIRE(match);
+        }
+    }
+    SECTION("Send ecrypted data to client")
     {
 
     }
-
-    SECTION("Not able to to connect to client")
-    {
-
-    }
-
-    SECTION("Exchanging Data")
-    {
-
-    }
-
-}
-
-TEST_CASE("REICEVING DATA FROM CLIENT")
-{
-
 }
 
 #endif

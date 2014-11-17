@@ -50,6 +50,7 @@ public:
 	* @param username		uzivatelke jmeno
 	* @param email			email
 	*/
+    Client() : mLoggedToServer(false), mConnectedToClient(false) { ; }
 	Client(std::string username, std::string email);
     ~Client() {}
 
