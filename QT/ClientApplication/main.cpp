@@ -12,23 +12,27 @@ int main(int argc, char *argv[])
 
     Client* client = new Client("test", "test@test");
 
-    //client->login();
+    client->login();
 
     unsigned char key[64];
-    client->getOnlineList();
-    //client->acceptConnection(1,key);
+
 
     QHostAddress address("127.0.0.1");
     unsigned char data[5] = {'a', 'b', 'c', 'd', 'e'};
-    client->sendDataToClient(address, 13375, data, 5);
+    //client->sendDataToClient(address, 13375, data, 5);
 
-    /*
+
     while(!client->isLogged())
     {
         Sleep(10);
         qApp->processEvents();
+        client->getOnlineList();
     }
-    client->logout();*/
+    Sleep(10);
+    std::cout <<  client->OnlineList().size() << std::endl;
+   // int conID = client->OnlineList()[0]->getConnectionID();
+   // client->connectToClient(conID);
+    //client->logout();
 
     return a.exec();
 }

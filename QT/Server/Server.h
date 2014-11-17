@@ -8,6 +8,7 @@
 #include <QDebug>
 #include <time.h>
 #include "logger.h"
+#include <sstream>
 
 using namespace std;
 

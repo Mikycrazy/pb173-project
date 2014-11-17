@@ -272,6 +272,7 @@ void Client::processPacket(unsigned char* packet, int size)
         memcpy(data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
         //memcpy(mLastReicevedData, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
         int accept = 0;
+        int i = 0;
         QByteArray bdata((const char*)data, dataSize);
         switch(id)
         {
@@ -305,10 +306,15 @@ void Client::processPacket(unsigned char* packet, int size)
         case GET_ONLINE_USER_LIST_RESPONSE:
             Logger::getLogger()->Log("GET_ONLINE_USER_LIST_RESPONSE");
              qDebug() << "Received online list:" << bdata;
+            processGetOnlineListResponse(data, dataSize);
+            //tohle tadz pak nebude ale ted nwm kam to dat
+             this->connectToClient(this->OnlineList()[0]->getConnectionID());
+
             break;
         case SERVER_COMUNICATION_REQUEST:
              Logger::getLogger()->Log("SERVER_COMUNICATION_REQUEST");
                 acceptConnection(processServerCommunicationRequest(data,dataSize),&data[4]);
+
                 break;
         case SERVER_COMUNICATION_RESPONSE:
              Logger::getLogger()->Log(" SERVER_COMUNICATION_RESPONSE");
@@ -367,6 +373,23 @@ int Client::processServerCommunicationResponse(unsigned char *data, int size)
     }
 
     return accept;
+}
+int Client::processGetOnlineListResponse(unsigned char *data, int size)
+{
+    QString stringData = "";
+    for (int i = 0; i < size; i++)
+        stringData.append(data[i]);
+
+    QStringList parts = stringData.split(';');
+
+
+    for(int i = 0; i < parts.size();i++)
+    {
+       QStringList u = parts[i].split(':');
+       if(u.size() > 2)
+            mOnlineList.push_back(new User(u[0].toStdString(),"" , "", NULL, std::stoi(u[1].toStdString())));
+    }
+    return 0;
 }
 
 int Client::processPacket(unsigned char* packet, unsigned char** data)

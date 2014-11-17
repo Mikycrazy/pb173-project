@@ -72,22 +72,29 @@ bool Server::logoutUser(User* user)
 void Server::sendOnlineList(User* user)
 {
     unsigned char *data = NULL;
+    std::stringstream ss;
     string s;
-
-
 
     for(unsigned int i = 0; i < mUsers.size(); i++)
     {
-        s += mUsers[i]->getUsername() + ":";
-        s += mUsers[i]->getConnectionID() + ":";
-        s += mUsers[i]->getIPAddress() + ";";
+        ss << mUsers[i]->getUsername() + ":";
+        ss << mUsers[i]->getConnectionID() << ":";
+        ss << mUsers[i]->getIPAddress() + ";";
+        std::cout << ss.str() << std::endl;
+        std::cout << mUsers[i]->getConnectionID() << std::endl;
+
     }
+    s = ss.str();
     int dataSize = s.size();
     data = new unsigned char [dataSize];
     memcpy(data, s.c_str(), s.size());
+    Logger::getLogger()->Log("send GET_ONLINE_USER_LIST_RESPONSE packet ");
+    Logger::getLogger()->Log(s);
 
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(GET_ONLINE_USER_LIST_RESPONSE,data,&packet,dataSize);
+
+    this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
 }
 
 bool Server::sendConnectionRequest(User *from, User *to, unsigned char *data, int size)
@@ -124,6 +131,7 @@ bool Server::sendConnectionResponse(User *from, User *to, unsigned char *data, i
 */
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(SERVER_COMUNICATION_RESPONSE,data,&packet,size);
+
 
     //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(to->getConnectionID(), packet, packetSize);

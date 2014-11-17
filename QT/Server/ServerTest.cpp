@@ -1,3 +1,4 @@
+#define UNIT_TEST
 #ifndef UNIT_TEST
 #define CATCH_CONFIG_MAIN
 #include <vector>

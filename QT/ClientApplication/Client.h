@@ -7,6 +7,8 @@
 #include "NetworkManager.h"
 #include "Opcodes.h"
 #include "logger.h"
+#include "User.h"
+#include <vector>
 
 const int ID_LENGHT = 1;
 const int RANDOM_BYTES_LENGTH = 10;
@@ -29,6 +31,8 @@ private:
 	unsigned char* mPublicRSAKey;
 	unsigned char* mPrivateRSAKey;
 
+    std::vector<User*> mOnlineList;
+
 	unsigned char* mCertificate;
 
 	bool mLoggedToServer;
@@ -43,6 +47,7 @@ private:
     int mLastReicevedDataSize;
 
 public:
+
 	/**
 	* Konstruktor pro tridu Client.
 	* Nastavi username a email novemu clientovi.
@@ -59,6 +64,9 @@ public:
 
 	std::string Email() const	{ return mEmail; }
 	void Email(std::string email) { mEmail = email; }
+
+    std::vector<User*> OnlineList() const	{ return mOnlineList; }
+    void Email( std::vector<User*> onlineList) { mOnlineList = onlineList; }
 
 	/**
 	* Vygenerovani novych rsa klicu.
@@ -146,6 +154,8 @@ public:
     int sendDataToClient(QHostAddress address, quint16 port, unsigned char* data, int size);
 
 private:
+    int processGetOnlineListResponse(unsigned char *data, int size);
+
     int processServerCommunicationRequest(unsigned char *data, int size);
 
     int processServerCommunicationResponse(unsigned char *data, int size);
