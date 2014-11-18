@@ -268,9 +268,11 @@ void Client::processPacket(unsigned char* packet, int size)
         }
 
         unsigned char *data = new unsigned char [dataSize];
-        //mLastReicevedData = new unsigned char [dataSize];
+        mLastReicevedData = new unsigned char [dataSize];
         memcpy(data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
-        //memcpy(mLastReicevedData, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
+        memcpy(mLastReicevedData, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
+        mLastReicevedDataSize = dataSize;
+
         int accept = 0;
         int i = 0;
         QByteArray bdata((const char*)data, dataSize);

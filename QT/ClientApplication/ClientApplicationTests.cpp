@@ -240,6 +240,9 @@ TEST_CASE("RECIEVING DATA")
 
             REQUIRE(match);
         }
+
+        delete data;
+        delete packet;
     }
 	SECTION("login not succesful")
 	{
@@ -269,6 +272,8 @@ TEST_CASE("RECIEVING DATA")
 
             REQUIRE(match);
         }
+
+        delete data;
 	}
 	SECTION("request list of users when logged in")
 	{
@@ -300,6 +305,9 @@ TEST_CASE("RECIEVING DATA")
 
             REQUIRE(match);
         }
+
+        delete data;
+        delete packet;
 	}
 }
 
@@ -332,6 +340,8 @@ TEST_CASE("CLIENT TO CLIENT")
 
             REQUIRE(match);
         }
+
+        delete client;
     }
     SECTION("Send ecrypted data to client")
     {
