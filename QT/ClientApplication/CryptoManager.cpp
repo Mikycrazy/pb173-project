@@ -4,6 +4,8 @@
 CryptoManager::CryptoManager()
 {
     aes_init(&mAes);
+
+    mKeystreamStart = -1;
 }
 
 int CryptoManager::addPadding(std::string& input_text)
@@ -142,6 +144,9 @@ void CryptoManager::generateCtrKeystream()
     {
         aes_crypt_ecb(&aes, AES_ENCRYPT, nonce_counter, (unsigned char*)(mKeystream + mKeystreamEnd));
 
+        if (mKeystreamStart == -1)
+            mKeystreamStart = 0;
+
         for(int i = CTR_PART_LENGTH; i > 0; i--)
             if(++nonce_counter[i - 1] != 0)
                 break;
@@ -157,13 +162,26 @@ void CryptoManager::generateCtrKeystream()
 
 void CryptoManager::getKeystream(unsigned char* stream, int length, int from)
 {
-    std::chrono::milliseconds sleepTime(50);
+    std::chrono::milliseconds sleepTime(10);
 
     while(mKeystreamEnd - mKeystreamStart > 0 && mKeystreamEnd - mKeystreamStart <= length)
         std::this_thread::sleep_for(sleepTime);
 
-    memcpy(stream, mKeystream + (from == -1 ? mKeystreamStart : from), length);
+    int start = from == -1 ? mKeystreamStart : from;
+    if (start + length < KEYSTREAM_SIZE)
+    {
+        memcpy(stream, mKeystream + start, length);
 
-    if (from == -1)
-        mKeystreamStart += length;
+        if (from == -1)
+            mKeystreamStart += length;
+    }
+    else
+    {
+        int endDiff = KEYSTREAM_SIZE - start;
+        memcpy(stream, mKeystream + start, endDiff);
+        memcpy(stream + endDiff, mKeystream, length - endDiff);
+
+        if (from == -1)
+            mKeystreamStart = length - endDiff;
+    }
 }
