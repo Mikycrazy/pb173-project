@@ -208,6 +208,33 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
     return 0;
 }
 
+int Client::sendDataToClient(QHostAddress address, quint16 port, string filename)
+{
+    std::ifstream t;
+    int length;
+    int dataSize = 1024;
+    t.open(filename);  // open input file
+    if(t.is_open())
+    {
+        t.seekg(0, std::ios::end);    // go to the end
+        length = t.tellg();           // report location (this is the length)
+        t.seekg(0, std::ios::beg);    // go back to the beginning
+        unsigned char *buffer = new unsigned char[length];    // allocate memory for a buffer of appropriate dimension
+        t.read((char *)buffer, length);       // read the whole file into the buffer
+        t.close();
+
+        for(int i = 0; i < length; i+=dataSize)
+        {
+            if(length - i < dataSize)
+                dataSize = length - i;
+            sendDataToClient(address, port, &buffer[i], dataSize);
+
+        }
+    }
+      return 0;
+}
+
+
 int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **packet, int size)
 {
     int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size;

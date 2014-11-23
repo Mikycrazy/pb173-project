@@ -13,6 +13,7 @@
 const int ID_LENGHT = 1;
 const int RANDOM_BYTES_LENGTH = 10;
 const int DATA_SIZE_LENGTH = 4;
+const int CYPHER_BLOCK_LENGTH = 16;
 const std::string DATA_SPLITER = ";";
 
 const QString SERVER_ADDRESS = "127.0.0.1";
@@ -42,6 +43,7 @@ private:
 	int mReceiverPort;
 
     NetworkManager* mNetwork;
+    CryptoManager* mCrypto;
 
     unsigned char* mLastReicevedData;
     int mLastReicevedDataSize;
@@ -152,6 +154,8 @@ public:
     int getLastDataSize() { return mLastReicevedDataSize; }
 
     int sendDataToClient(QHostAddress address, quint16 port, unsigned char* data, int size);
+
+    int sendDataToClient(QHostAddress address, quint16 port, std::string filename);
 
 private:
     int processGetOnlineListResponse(unsigned char *data, int size);
