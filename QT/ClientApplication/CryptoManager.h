@@ -1,22 +1,26 @@
 #pragma once
 #include <string>
+#include <stdlib.h>
+#include <iostream>
+#include <sstream>
+#include "Crypto/polarssl/aes.h"
+#include "Crypto/polarssl/sha256.h"
+
 
 
 const int AES_KEY_LENGTH = 128;
 const int AES_IV_LENGTH = 16;
+const int HASH_LENGHT = 32;
 
 class CryptoManager
 {
 private:
-	/*
-	Až s Crypto Knihovnou
-	aes_context mAes;
+    aes_context mAes;
 	sha256_context mSha;
-	pk_context mRsa;
-	*/
+    //pk_context mRsa;
 public:
-	CryptoManager();
-	~CryptoManager();
+    CryptoManager();
+    ~CryptoManager() { ; }
 
 	/**
 	* zasifruje plainData
@@ -29,7 +33,7 @@ public:
 	* @param size			delka dat
 
 	*/
-	int encryptAES(unsigned char* plainData, unsigned char* encryptedData, unsigned char* key, unsigned char* IV, int size);
+    int encryptAES(unsigned char* plainData, unsigned char* encryptedData, unsigned char *key, unsigned char *IV, int size);
 
 	/**
 	* desifruje encryptedData
@@ -114,7 +118,11 @@ public:
 	*/
 	void getPublicKey(const std::string& name, unsigned char* publicKey);
 
+    std::string PrepairCounterForEncryption(int counter);
+
+    int XORData(unsigned char* input, unsigned char *output, int size, unsigned char* key);
+
 private:
-	int addPadding(unsigned char* data, int size);
+    int addPadding(std::string &input_text);
 	int removePadding(unsigned char* data, int size);
 };
