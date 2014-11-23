@@ -10,6 +10,20 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
+    unsigned char key[16];
+    unsigned char nonce_counter[16] = {0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,250};
+
+    CryptoManager manager;
+    manager.startCtrCalculation(key, nonce_counter);
+    Sleep(1000);
+
+    unsigned char stream[50];
+    manager.getKeystream(stream, 50);
+    manager.getKeystream(stream, 50);
+    manager.getKeystream(stream, 50);
+
+    for (int i = 0; i < 50; i++) std::cout << (int)(stream[i]) << " ";
+
     //Client* client = new Client("test", "test@test");
 
     //client->login();
@@ -33,7 +47,7 @@ int main(int argc, char *argv[])
    // int conID = client->OnlineList()[0]->getConnectionID();
    // client->connectToClient(conID);
     //client->logout();
-
+/*
     CryptoManager manager;
     unsigned char key[16] = "0";
     unsigned char iv[16] = { 0xb6, 0x58, 0x9f, 0xc6, 0xab, 0x0d, 0xc8, 0x2c, 0xf1, 0x20, 0x99, 0xd1, 0xc2, 0xd4, 0x0a, 0xb9 };
@@ -76,7 +90,7 @@ int main(int argc, char *argv[])
 
 
     }
-
+*/
     return a.exec();
 }
 #endif

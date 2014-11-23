@@ -3,14 +3,16 @@
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
+#include <thread>
 #include "Crypto/polarssl/aes.h"
 #include "Crypto/polarssl/sha256.h"
 
 
-
 const int AES_KEY_LENGTH = 128;
 const int AES_IV_LENGTH = 16;
+const int CTR_PART_LENGTH = 16;
 const int HASH_LENGHT = 32;
+const int KEYSTREAM_SIZE = 10000 * 16;
 
 class CryptoManager
 {
@@ -18,6 +20,11 @@ private:
     aes_context mAes;
 	sha256_context mSha;
     //pk_context mRsa;
+    std::thread* mKeystreamThread;
+    char mKeystream[KEYSTREAM_SIZE];
+    char mCounterStart[CTR_PART_LENGTH];
+    int mKeystreamStart, mKeystreamEnd;
+    char mAesKey[AES_KEY_LENGTH / 8];
 public:
     CryptoManager();
     ~CryptoManager() { ; }
@@ -122,7 +129,11 @@ public:
 
     int XORData(unsigned char* input, unsigned char *output, int size, unsigned char* key);
 
+    void startCtrCalculation(unsigned char* key, unsigned char* counter);
+    void getKeystream(unsigned char* stream, int length, int from = -1);
+
 private:
     int addPadding(std::string &input_text);
 	int removePadding(unsigned char* data, int size);
+    void generateCtrKeystream();
 };

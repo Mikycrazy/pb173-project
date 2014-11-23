@@ -121,4 +121,49 @@ int cpyStringToUnsignedCharArray(std::string str, unsigned char * array)
     return 0;
 }
 
+void CryptoManager::startCtrCalculation(unsigned char* key, unsigned char* counter)
+{
+    memcpy(mAesKey, key, AES_KEY_LENGTH / 8);
+    memcpy(mCounterStart, counter, CTR_PART_LENGTH);
+    mKeystreamThread = new std::thread(&CryptoManager::generateCtrKeystream, this);
+}
 
+void CryptoManager::generateCtrKeystream()
+{
+    aes_context aes;
+    unsigned char nonce_counter[CTR_PART_LENGTH];
+    std::chrono::milliseconds sleepTime(50);
+
+    mKeystreamStart = mKeystreamEnd = 0;
+    aes_setkey_enc(&aes, (const unsigned char*)mAesKey, AES_KEY_LENGTH);
+    memcpy(nonce_counter, mCounterStart, CTR_PART_LENGTH);
+
+    while (true)
+    {
+        aes_crypt_ecb(&aes, AES_ENCRYPT, nonce_counter, (unsigned char*)(mKeystream + mKeystreamEnd));
+
+        for(int i = CTR_PART_LENGTH; i > 0; i--)
+            if(++nonce_counter[i - 1] != 0)
+                break;
+
+        mKeystreamEnd += CTR_PART_LENGTH;
+        if (mKeystreamEnd == KEYSTREAM_SIZE)
+            mKeystreamEnd = 0;
+
+        while(mKeystreamStart - mKeystreamEnd >= 0 && mKeystreamStart - mKeystreamEnd <= CTR_PART_LENGTH)
+            std::this_thread::sleep_for(sleepTime);
+    }
+}
+
+void CryptoManager::getKeystream(unsigned char* stream, int length, int from)
+{
+    std::chrono::milliseconds sleepTime(50);
+
+    while(mKeystreamEnd - mKeystreamStart > 0 && mKeystreamEnd - mKeystreamStart <= length)
+        std::this_thread::sleep_for(sleepTime);
+
+    memcpy(stream, mKeystream + (from == -1 ? mKeystreamStart : from), length);
+
+    if (from == -1)
+        mKeystreamStart += length;
+}
