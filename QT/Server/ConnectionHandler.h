@@ -35,6 +35,7 @@ private:
 
 signals:
     void networkReceivedData(int connection, unsigned char* data, int size);
+    void clientDisconnected(int connection);
 
 };
 
