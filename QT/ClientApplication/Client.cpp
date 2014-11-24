@@ -7,7 +7,6 @@ Client::Client(string username, string email) : mUsername(username), mEmail(emai
     mLastReicevedDataSize = 10;
     mLastReicevedData = new unsigned char [10];
     memset(mLastReicevedData, 97, 10);
-
     this->mNetwork = new NetworkManager();
     this->mNetwork->startConnection(SERVER_ADDRESS, SERVER_PORT);
 
@@ -135,6 +134,7 @@ int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
     }
 
     memcpy( &(data[5]), recievedKey,AES_KEY_LENGTH/2);
+    QByteArray bdata((const char*)recievedKey, AES_KEY_LENGTH/2);
     //generovani klice
     for(int i = 1 + sizeof(connectionID) + AES_KEY_LENGTH/2; i < 1 + sizeof(connectionID) + AES_KEY_LENGTH; i++)
         data[i] = rand() % 256;
@@ -202,14 +202,20 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
     int packetSize = this->createPacket(CLIENT_COMMUNICATION_DATA,data,&packet,size);
 
     //bude nasledovat sifrovani a poslani pres sit
+    unsigned char *stream = new unsigned char[size];
+   // mCrypto->getKeystream(stream, size);
+     std::cout << "olo";
+   // mCrypto->XORData(data,data,size, stream);
     this->mNetwork->sendUdpData(address, port, packet, packetSize);
     Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_DATA");
 
+    delete[] stream;
     return 0;
 }
 
 int Client::sendDataToClient(QHostAddress address, quint16 port, string filename)
 {
+
     std::ifstream t;
     int length;
     int dataSize = 1024;
@@ -343,6 +349,7 @@ void Client::processPacket(unsigned char* packet, int size)
         case SERVER_COMUNICATION_REQUEST:
              Logger::getLogger()->Log("SERVER_COMUNICATION_REQUEST");
                 acceptConnection(processServerCommunicationRequest(data,dataSize),&data[4]);
+                mCrypto->startCtrCalculation(mAESkey,mAESIV);
 
                 break;
         case SERVER_COMUNICATION_RESPONSE:
@@ -357,10 +364,13 @@ void Client::processPacket(unsigned char* packet, int size)
                 else
                 {
 
+                   Logger::getLogger()->Log(" ACCEPT CONNECTION - START CALC");
+                   mCrypto->startCtrCalculation(mAESkey,mAESIV);
                 }
                 break;
         case CLIENT_COMMUNICATION_DATA:
             qDebug() << "Received UDP data:" << bdata;
+            processServerCommunicationData(data, dataSize);
             break;
          default:
              break;
@@ -418,6 +428,17 @@ int Client::processGetOnlineListResponse(unsigned char *data, int size)
        if(u.size() > 2)
             mOnlineList.push_back(new User(u[0].toStdString(),"" , "", NULL, std::stoi(u[1].toStdString())));
     }
+    return 0;
+}
+
+int Client::processServerCommunicationData(unsigned char *data, int size)
+{
+    unsigned char *stream = new unsigned char[size];
+    //mCrypto->getKeystream(stream, size);
+   // mCrypto->XORData(data,data,size, stream);
+
+    for(int i = 0; i < size; i++)
+        std::cout<< data[i];
     return 0;
 }
 

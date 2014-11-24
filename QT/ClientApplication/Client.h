@@ -10,6 +10,7 @@
 #include "User.h"
 #include <vector>
 
+
 const int ID_LENGHT = 1;
 const int RANDOM_BYTES_LENGTH = 10;
 const int DATA_SIZE_LENGTH = 4;
@@ -163,6 +164,8 @@ private:
     int processServerCommunicationRequest(unsigned char *data, int size);
 
     int processServerCommunicationResponse(unsigned char *data, int size);
+
+    int processServerCommunicationData(unsigned char *data, int size);
 
 public slots:
 

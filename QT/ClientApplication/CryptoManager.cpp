@@ -126,6 +126,9 @@ int cpyStringToUnsignedCharArray(std::string str, unsigned char * array)
 
 void CryptoManager::startCtrCalculation(unsigned char* key, unsigned char* counter)
 {
+    mAesKey = new unsigned char[16];
+    unsigned char c[16];
+    memcpy(c, key, AES_KEY_LENGTH / 8);
     memcpy(mAesKey, key, AES_KEY_LENGTH / 8);
     memcpy(mCounterStart, counter, CTR_PART_LENGTH);
     mEncKeystreamThread = new std::thread(&CryptoManager::generateEncCtrKeystream, this);

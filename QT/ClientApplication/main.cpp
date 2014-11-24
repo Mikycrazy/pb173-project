@@ -9,7 +9,7 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-
+/*
     unsigned char key[16];
     unsigned char nonce_counter[16] = {0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,250};
 
@@ -29,6 +29,25 @@ int main(int argc, char *argv[])
 
     manager.getDecKeystream(stream, 50);
     for (int i = 0; i < 50; i++) std::cout << (int)(stream[i]) << " ";
+    */
+
+    Client* client = new Client("test", "test@test");
+
+    client->login();
+
+    Sleep(500);
+    Client* client2 = new Client("test2", "test2@test2");
+
+    client2->login();
+
+    while(!client2->isLogged())
+    {
+    Sleep(10);
+    qApp->processEvents();
+    client2->getOnlineList();
+    }
+    int conID = client->OnlineList()[0]->getConnectionID();
+    client2->connectToClient(conID);
 
     //Client* client = new Client("test", "test@test");
 

@@ -26,7 +26,7 @@ private:
     char mCounterStart[CTR_PART_LENGTH];
     int mEncKeystreamStart, mEncKeystreamEnd;
     int mDecKeystreamStart, mDecKeystreamEnd;
-    char mAesKey[AES_KEY_LENGTH / 8];
+    unsigned char *mAesKey;
 public:
     CryptoManager();
     ~CryptoManager() { ; }
