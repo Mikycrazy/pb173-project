@@ -59,11 +59,9 @@ protected:
 
 signals:
     void receivedData(int connection, unsigned char* data, int size);
-    void clientDisconnected(int connection);
 
 public slots:
     void networkReceivedData(int connection, unsigned char* data, int size);
-    void networkClientDisconnected(int connection);
 };
 
 #endif

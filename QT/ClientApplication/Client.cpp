@@ -7,11 +7,10 @@ Client::Client(string username, string email) : mUsername(username), mEmail(emai
     mLastReicevedDataSize = 10;
     mLastReicevedData = new unsigned char [10];
     memset(mLastReicevedData, 97, 10);
-
     this->mNetwork = new NetworkManager();
     this->mNetwork->startConnection(SERVER_ADDRESS, SERVER_PORT);
 
-    this->mCrypto = new CryptoManager();
+    mCrypto = new CryptoManager();
 
     connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
 }
@@ -28,7 +27,6 @@ int Client::login()
 
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(LOGIN_REQUEST,data,&packet,dataSize);
-
     Logger::getLogger()->Log("Client:"+ mUsername +" send LOGIN_REQUEST");
     //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(packet, packetSize);
@@ -138,7 +136,7 @@ int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
     }
 
     memcpy( &(data[5]), recievedKey,AES_KEY_LENGTH/2);
-    QByteArray bdata((const char*)recievedKey, AES_KEY_LENGTH/2);
+
     //generovani klice
     for(int i = 1 + sizeof(connectionID) + AES_KEY_LENGTH/2; i < 1 + sizeof(connectionID) + AES_KEY_LENGTH; i++)
         data[i] = rand() % 256;
@@ -157,6 +155,7 @@ int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(CLIENT_COMUNICATION_RESPONSE,data,&packet,dataSize);
 
+    QByteArray bdata((const char*)mAESkey, AES_KEY_LENGTH);
     //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(packet, packetSize);
     Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_RESPONSE");
@@ -203,13 +202,16 @@ int Client::refuseConnection(int connectionID)
 int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* data, int size)
 {
     unsigned char *packet = NULL;
+
+    unsigned char *stream = new unsigned char[size];
+    mCrypto->getEncKeystream(stream, size);
+     std::cout << "olo";
+    mCrypto->XORData(data,data,size, stream);
+
     int packetSize = this->createPacket(CLIENT_COMMUNICATION_DATA,data,&packet,size);
 
     //bude nasledovat sifrovani a poslani pres sit
-    unsigned char *stream = new unsigned char[size];
-   // mCrypto->getKeystream(stream, size);
-     std::cout << "olo";
-   // mCrypto->XORData(data,data,size, stream);
+
     this->mNetwork->sendUdpData(address, port, packet, packetSize);
     Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_DATA");
 
@@ -249,12 +251,14 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
 {
     int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size;
     *packet = new unsigned char[newSize];//casem pribude hash
+
     (*packet)[0] = id;
     //tady asi pak bude treba lepsi random
     for(int i = ID_LENGHT; i < ID_LENGHT + RANDOM_BYTES_LENGTH; i++)
     {
         (*packet)[i] = rand() % 256;
     }
+
 
     //int to byte
     if(sizeof(size) == 4)
@@ -274,7 +278,7 @@ void Client::processPacket(unsigned char* packet, int size)
 {
     int id = 0;
     int dataSize = 0;
-
+    mReceiverIP = "127.0.0.1";
     if (size < ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH)
     {
 
@@ -303,7 +307,6 @@ void Client::processPacket(unsigned char* packet, int size)
         }
 
         unsigned char *data = new unsigned char [dataSize];
-        delete[] mLastReicevedData;
         mLastReicevedData = new unsigned char [dataSize];
         memcpy(data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
         memcpy(mLastReicevedData, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
@@ -312,6 +315,9 @@ void Client::processPacket(unsigned char* packet, int size)
         int accept = 0;
         int i = 0;
         QByteArray bdata((const char*)data, dataSize);
+        unsigned char testData[5];
+        for(i = 0; i < 5; i++)
+            testData[i] = 'a';
         switch(id)
         {
          case LOGIN_RESPONSE:
@@ -346,12 +352,15 @@ void Client::processPacket(unsigned char* packet, int size)
              qDebug() << "Received online list:" << bdata;
             processGetOnlineListResponse(data, dataSize);
             //tohle tadz pak nebude ale ted nwm kam to dat
-            this->connectToClient(this->OnlineList()[0]->getConnectionID());
+             this->connectToClient(this->OnlineList()[0]->getConnectionID());
 
             break;
         case SERVER_COMUNICATION_REQUEST:
              Logger::getLogger()->Log("SERVER_COMUNICATION_REQUEST");
                 acceptConnection(processServerCommunicationRequest(data,dataSize),&data[4]);
+                mCrypto->startCtrCalculation(mAESkey,mAESIV);
+               // mNetwork->receiveUdpData();
+
                 break;
         case SERVER_COMUNICATION_RESPONSE:
              Logger::getLogger()->Log(" SERVER_COMUNICATION_RESPONSE");
@@ -366,7 +375,9 @@ void Client::processPacket(unsigned char* packet, int size)
                 {
 
                    Logger::getLogger()->Log(" ACCEPT CONNECTION - START CALC");
-                   mCrypto->startCtrCalculation(mAESkey, mAESIV);
+                   mCrypto->startCtrCalculation(mAESkey,mAESIV);
+                   this->sendDataToClient(mReceiverIP, 13375,testData,5);
+
                 }
                 break;
         case CLIENT_COMMUNICATION_DATA:
@@ -435,8 +446,8 @@ int Client::processGetOnlineListResponse(unsigned char *data, int size)
 int Client::processServerCommunicationData(unsigned char *data, int size)
 {
     unsigned char *stream = new unsigned char[size];
-    //mCrypto->getKeystream(stream, size);
-   // mCrypto->XORData(data,data,size, stream);
+    mCrypto->getDecKeystream(stream, size);
+    mCrypto->XORData(data,data,size, stream);
 
     for(int i = 0; i < size; i++)
         std::cout<< data[i];

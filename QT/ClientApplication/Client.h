@@ -40,7 +40,7 @@ private:
 	bool mLoggedToServer;
 	bool mConnectedToClient;
 
-    QString mReceiverIP;
+    QHostAddress mReceiverIP;
 	int mReceiverPort;
 
     NetworkManager* mNetwork;

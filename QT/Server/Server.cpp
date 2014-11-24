@@ -6,7 +6,6 @@ Server::Server(quint16 port)
 
     this->mNetwork = new NetworkManager();
     connect(this->mNetwork, SIGNAL(receivedData(int,unsigned char*,int)), this, SLOT(processPacket(int,unsigned char*,int)));
-    connect(this->mNetwork, SIGNAL(clientDisconnected(int)), this, SLOT(logoutUser(int)));
     this->mNetwork->startListening(port);
 }
 
@@ -59,7 +58,7 @@ bool Server::logoutUser(User* user)
              //bude nasledovat sifrovani a poslani pres sit
              this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
 
-             Logger::getLogger()->Log("Logout user " + user->getUsername());
+             Logger::getLogger()->Log("Logout user" + user->getUsername());
              qDebug() << "Logout user" << (user->getUsername().c_str());
              delete[] data;
 
@@ -68,20 +67,6 @@ bool Server::logoutUser(User* user)
          }
     }
     return false;
-}
-
-void Server::logoutUser(int connectionID)
-{
-    for(unsigned int i = 0; i < mUsers.size(); i++)
-    {
-         if(connectionID == mUsers[i]->getConnectionID())
-         {
-             Logger::getLogger()->Log("Logout user " + mUsers[i]->getUsername() + " (disconnected)");
-             qDebug() << "Logout user" << (mUsers[i]->getUsername().c_str()) << "(disconnected)";
-
-             mUsers.erase(mUsers.begin() + i);
-         }
-    }
 }
 
 void Server::sendOnlineList(User* user)

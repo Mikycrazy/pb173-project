@@ -56,21 +56,30 @@ int main(int argc, char *argv[])
     for (int i = 0; i < 50; i++) std::cout << (int)(stream[i]) << " ";
     */
 
-    /*Client* client = new Client("test", "test@test");
+    Client* client = new Client("test", "test@test");
 
     client->login();
 
-    Sleep(500);*/
+    Sleep(500);
     Client* client2 = new Client("test2", "test2@test2");
 
     client2->login();
 
     while(!client2->isLogged())
     {
-        Sleep(10);
-        qApp->processEvents();
-        client2->getOnlineList();
+    Sleep(10);
+    qApp->processEvents();
+    client2->getOnlineList();
     }
+    bool b = true;
+    while(client2->isLogged())
+    {
+    Sleep(100);
+    qApp->processEvents();
+
+    }
+   // int conID = client2->OnlineList()[0]->getConnectionID();
+   // client2->connectToClient(conID);
 
     //Client* client = new Client("test", "test@test");
 

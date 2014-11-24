@@ -1,5 +1,5 @@
-#define UNIT_TEST
-#ifndef UNIT_TEST
+//#define UNIT_TEST
+#ifdef UNIT_TEST
 #define CATCH_CONFIG_MAIN
 #include <vector>
 #include "catch.hpp"
@@ -12,8 +12,7 @@ const int PORT_SERVER = 13374;
 std::string getLastLine(std::ifstream& in)
 {
     std::string line;
-    while (in >> std::ws && std::getline(in, line))
-        ;
+    while (in >> std::ws && std::getline(in, line));
 
     return line;
 }
@@ -31,6 +30,7 @@ TEST_CASE("LOGGING")
         if (file)
         {
             line = getLastLine(file);
+
         }
         else
             std::cout << "Unable to open file.\n";
@@ -370,7 +370,7 @@ TEST_CASE("LOGIN/LOGOUT USERS and through NETWORK and GETTING ONLINE LIST")
                     count++;
             }
 
-            REQUIRE(count == 0);
+            REQUIRE(count == 1);
         }
 
         delete data;

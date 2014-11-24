@@ -26,18 +26,12 @@ void NetworkManager::incomingConnection(qintptr handle)
 
     ConnectionHandler* connection = new ConnectionHandler(handle, socket);
     connect(connection, SIGNAL(networkReceivedData(int,unsigned char*,int)), this, SLOT(networkReceivedData(int,unsigned char*,int)));
-    connect(connection, SIGNAL(clientDisconnected(int)), this, SLOT(networkClientDisconnected(int)));
     connection->start();
 }
 
 void NetworkManager::networkReceivedData(int connection, unsigned char* data, int size)
 {
     emit this->receivedData(connection, data, size);
-}
-
-void NetworkManager::networkClientDisconnected(int connection)
-{
-    emit this->clientDisconnected(connection);
 }
 
 bool NetworkManager::sendData(int connectionID, const unsigned char* data, int size)
