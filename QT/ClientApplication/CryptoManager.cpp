@@ -136,7 +136,7 @@ void CryptoManager::generateCtrKeystream()
     unsigned char nonce_counter[CTR_PART_LENGTH];
     std::chrono::milliseconds sleepTime(50);
 
-    mKeystreamStart = mKeystreamEnd = 0;
+    mKeystreamEnd = 0;
     aes_setkey_enc(&aes, (const unsigned char*)mAesKey, AES_KEY_LENGTH);
     memcpy(nonce_counter, mCounterStart, CTR_PART_LENGTH);
 
