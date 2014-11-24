@@ -164,5 +164,6 @@ HEADERS += \
     Crypto/polarssl/x509_crl.h \
     Crypto/polarssl/x509_crt.h \
     Crypto/polarssl/x509_csr.h \
-    Crypto/polarssl/xtea.h
+    Crypto/polarssl/xtea.h \
+    User.h
 

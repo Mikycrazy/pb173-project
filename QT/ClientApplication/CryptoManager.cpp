@@ -98,14 +98,12 @@ int CryptoManager::XORData(unsigned char* input, unsigned char *output, int size
     return 0;
 }
 
-int CryptoManager::computeHash(unsigned char* data, unsigned char* hash, int size)
+int CryptoManager::computeHash(unsigned char* data, unsigned char hash[32], int size)
 {
-    /*sha256_starts(ctx, 0);
-    sha256_update(ctx, buffer, buffer_size);
-    sha256_finish(ctx, hash);
+    sha256_starts(&mSha, 0);
+    sha256_update(&mSha, data, size);
+    sha256_finish(&mSha, hash);
 
-    hash[32] = 0;
-*/
     return 0;
 }
 

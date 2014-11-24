@@ -381,5 +381,4 @@ TEST_CASE("KEYSTREAM")
 
     }
 }
-
 #endif

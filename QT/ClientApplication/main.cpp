@@ -9,7 +9,32 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-/*
+
+    if(argc == 2)
+    {
+        if(!strcmp(argv[1], "-l"))
+        {
+            Client* client2 = new Client("test2", "test2@test2");
+
+            client2->login();
+        }
+        else if(!strcmp(argv[1], "-c"))
+        {
+            Client* client2 = new Client("test2", "test2@test2");
+
+            client2->login();
+
+            while(!client2->isLogged())
+            {
+                Sleep(10);
+                qApp->processEvents();
+                client2->getOnlineList();
+            }
+        }
+    }
+
+
+    /*
     unsigned char key[16];
     unsigned char nonce_counter[16] = {0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,250};
 
@@ -64,7 +89,7 @@ int main(int argc, char *argv[])
         Sleep(10);
         qApp->processEvents();
         client->getOnlineList();
-    }*/
+    }
     //Sleep(10);
     //std::cout <<  client->OnlineList().size() << std::endl;
    // int conID = client->OnlineList()[0]->getConnectionID();

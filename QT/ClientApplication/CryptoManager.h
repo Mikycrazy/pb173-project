@@ -117,7 +117,7 @@ public:
 	* @param hash
 	* @param size
 	*/
-	int computeHash(unsigned char* data, unsigned char* hash, int size);
+    int computeHash(unsigned char* data, unsigned char hash[], int size);
 
 	/**
 	* ziska public key daneho uzivatele
