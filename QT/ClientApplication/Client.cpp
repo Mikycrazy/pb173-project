@@ -152,6 +152,8 @@ int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
     mAESIV = new unsigned char[AES_IV_LENGTH];
     memcpy(mAESkey,  &(data[1 + sizeof(connectionID) + AES_KEY_LENGTH]), AES_KEY_LENGTH);
 
+    mCrypto->computeHash(mAESkey,mAESkey,AES_KEY_LENGTH);
+
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(CLIENT_COMUNICATION_RESPONSE,data,&packet,dataSize);
 
@@ -201,12 +203,14 @@ int Client::refuseConnection(int connectionID)
 
 int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* data, int size)
 {
+
     unsigned char *packet = NULL;
 
     unsigned char *stream = new unsigned char[size];
     mCrypto->getEncKeystream(stream, size);
-     std::cout << "olo";
     mCrypto->XORData(data,data,size, stream);
+
+
 
     int packetSize = this->createPacket(CLIENT_COMMUNICATION_DATA,data,&packet,size);
 
@@ -214,6 +218,16 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
 
     this->mNetwork->sendUdpData(address, port, packet, packetSize);
     Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_DATA");
+
+    std::cout <<  std::endl;
+    std::cout <<"data Cyp: ";
+    for(int i = 0; i < size; i++)
+        std::cout<< data[i];
+    std::cout <<  std::endl;
+     std::cout <<"stream: ";
+    for(int i = 0; i < size; i++)
+         std::cout<< stream[i];
+    std::cout <<  std::endl;
 
     delete[] stream;
     return 0;
@@ -359,6 +373,12 @@ void Client::processPacket(unsigned char* packet, int size)
              Logger::getLogger()->Log("SERVER_COMUNICATION_REQUEST");
                 acceptConnection(processServerCommunicationRequest(data,dataSize),&data[4]);
                 mCrypto->startCtrCalculation(mAESkey,mAESIV);
+                std::cout << "aesKey: ";
+                for(int i = 0; i < 16; i++)
+                    std::cout<< mAESkey[i];
+                std::cout << std::endl << "aesIV: ";
+                for(int i = 0; i < 16; i++)
+                    std::cout<< mAESIV[i];
                // mNetwork->receiveUdpData();
 
                 break;
@@ -375,13 +395,25 @@ void Client::processPacket(unsigned char* packet, int size)
                 {
 
                    Logger::getLogger()->Log(" ACCEPT CONNECTION - START CALC");
+                   mCrypto->computeHash(mAESkey,mAESkey,AES_KEY_LENGTH);
+
+
                    mCrypto->startCtrCalculation(mAESkey,mAESIV);
+                   std::cout << "aesKey: ";
+                   for(int i = 0; i < 16; i++)
+                       std::cout<< mAESkey[i];
+                   std::cout << std::endl << "aesIV: ";
+                   for(int i = 0; i < 16; i++)
+                       std::cout<< mAESIV[i];
                    this->sendDataToClient(mReceiverIP, 13375,testData,5);
 
                 }
                 break;
         case CLIENT_COMMUNICATION_DATA:
-            qDebug() << "Received UDP data:" << bdata;
+            qDebug() << "Received UDP data: " << bdata;
+            std::cout << "dataCyp: ";
+            for(int i = 0; i < dataSize; i++)
+                std::cout<< data[i];
             processServerCommunicationData(data, dataSize);
             break;
          default:
@@ -449,8 +481,15 @@ int Client::processServerCommunicationData(unsigned char *data, int size)
     mCrypto->getDecKeystream(stream, size);
     mCrypto->XORData(data,data,size, stream);
 
+    std::cout <<  std::endl;
+    std::cout <<"data: ";
     for(int i = 0; i < size; i++)
         std::cout<< data[i];
+    std::cout <<  std::endl;
+     std::cout <<"stream: ";
+    for(int i = 0; i < size; i++)
+         std::cout<< stream[i];
+    std::cout <<  std::endl;
     return 0;
 }
 

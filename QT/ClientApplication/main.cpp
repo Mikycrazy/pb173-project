@@ -32,8 +32,8 @@ int main(int argc, char *argv[])
             }
         }
     }
-
-
+    else
+    {
     /*
     unsigned char key[16];
     unsigned char nonce_counter[16] = {0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,250};
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
         Sleep(10);
         qApp->processEvents();
         client->getOnlineList();
-    }
+    }*/
     //Sleep(10);
     //std::cout <<  client->OnlineList().size() << std::endl;
    // int conID = client->OnlineList()[0]->getConnectionID();
@@ -148,6 +148,7 @@ int main(int argc, char *argv[])
 
     }
 */
+    }
     return a.exec();
 }
 #endif
