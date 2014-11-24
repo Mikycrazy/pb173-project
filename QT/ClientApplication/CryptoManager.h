@@ -21,15 +21,15 @@ private:
 	sha256_context mSha;
     //pk_context mRsa;
     std::thread *mEncKeystreamThread, *mDecKeystreamThread;
-    char mEncKeystream[KEYSTREAM_SIZE];
-    char mDecKeystream[KEYSTREAM_SIZE];
+    char* mEncKeystream;
+    char* mDecKeystream;
     char mCounterStart[CTR_PART_LENGTH];
     int mEncKeystreamStart, mEncKeystreamEnd;
     int mDecKeystreamStart, mDecKeystreamEnd;
     unsigned char *mAesKey;
 public:
     CryptoManager();
-    ~CryptoManager() { ; }
+    ~CryptoManager();
 
 	/**
 	* zasifruje plainData

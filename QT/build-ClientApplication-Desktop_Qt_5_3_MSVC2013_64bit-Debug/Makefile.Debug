@@ -48,26 +48,152 @@ SOURCES       = ..\ClientApplication\main.cpp \
 		..\ClientApplication\NetworkManager.cpp \
 		..\ClientApplication\Client.cpp \
 		..\ClientApplication\logger.cpp \
-		..\ClientApplication\testserver.cpp \
-		..\ClientApplication\testservernetworkmanager.cpp \
-		..\ClientApplication\ConnectionHandler.cpp debug\moc_Client.cpp \
+		..\ClientApplication\myserver.cpp \
+		..\ClientApplication\CryptoManager.cpp \
+		..\ClientApplication\Crypto\rsa.c \
+		..\ClientApplication\Crypto\sha256.c \
+		..\ClientApplication\Crypto\aesni.c \
+		..\ClientApplication\Crypto\arc4.c \
+		..\ClientApplication\Crypto\asn1parse.c \
+		..\ClientApplication\Crypto\asn1write.c \
+		..\ClientApplication\Crypto\base64.c \
+		..\ClientApplication\Crypto\bignum.c \
+		..\ClientApplication\Crypto\blowfish.c \
+		..\ClientApplication\Crypto\camellia.c \
+		..\ClientApplication\Crypto\ccm.c \
+		..\ClientApplication\Crypto\certs.c \
+		..\ClientApplication\Crypto\cipher.c \
+		..\ClientApplication\Crypto\cipher_wrap.c \
+		..\ClientApplication\Crypto\ctr_drbg.c \
+		..\ClientApplication\Crypto\debug.c \
+		..\ClientApplication\Crypto\des.c \
+		..\ClientApplication\Crypto\dhm.c \
+		..\ClientApplication\Crypto\ecdh.c \
+		..\ClientApplication\Crypto\ecdsa.c \
+		..\ClientApplication\Crypto\ecp.c \
+		..\ClientApplication\Crypto\ecp_curves.c \
+		..\ClientApplication\Crypto\error.c \
+		..\ClientApplication\Crypto\gcm.c \
+		..\ClientApplication\Crypto\havege.c \
+		..\ClientApplication\Crypto\hmac_drbg.c \
+		..\ClientApplication\Crypto\md.c \
+		..\ClientApplication\Crypto\md2.c \
+		..\ClientApplication\Crypto\md4.c \
+		..\ClientApplication\Crypto\md5.c \
+		..\ClientApplication\Crypto\md_wrap.c \
+		..\ClientApplication\Crypto\memory_buffer_alloc.c \
+		..\ClientApplication\Crypto\net.c \
+		..\ClientApplication\Crypto\oid.c \
+		..\ClientApplication\Crypto\padlock.c \
+		..\ClientApplication\Crypto\pbkdf2.c \
+		..\ClientApplication\Crypto\pem.c \
+		..\ClientApplication\Crypto\pk.c \
+		..\ClientApplication\Crypto\pk_wrap.c \
+		..\ClientApplication\Crypto\pkcs11.c \
+		..\ClientApplication\Crypto\pkcs12.c \
+		..\ClientApplication\Crypto\pkcs5.c \
+		..\ClientApplication\Crypto\pkparse.c \
+		..\ClientApplication\Crypto\pkwrite.c \
+		..\ClientApplication\Crypto\platform.c \
+		..\ClientApplication\Crypto\ripemd160.c \
+		..\ClientApplication\Crypto\sha1.c \
+		..\ClientApplication\Crypto\sha512.c \
+		..\ClientApplication\Crypto\ssl_cache.c \
+		..\ClientApplication\Crypto\ssl_ciphersuites.c \
+		..\ClientApplication\Crypto\ssl_cli.c \
+		..\ClientApplication\Crypto\ssl_srv.c \
+		..\ClientApplication\Crypto\ssl_tls.c \
+		..\ClientApplication\Crypto\threading.c \
+		..\ClientApplication\Crypto\timing.c \
+		..\ClientApplication\Crypto\version.c \
+		..\ClientApplication\Crypto\version_features.c \
+		..\ClientApplication\Crypto\x509.c \
+		..\ClientApplication\Crypto\x509_create.c \
+		..\ClientApplication\Crypto\x509_crl.c \
+		..\ClientApplication\Crypto\x509_crt.c \
+		..\ClientApplication\Crypto\x509_csr.c \
+		..\ClientApplication\Crypto\x509write_crt.c \
+		..\ClientApplication\Crypto\x509write_csr.c \
+		..\ClientApplication\Crypto\xtea.c \
+		..\ClientApplication\Crypto\aes.c debug\moc_Client.cpp \
 		debug\moc_NetworkManager.cpp \
-		debug\moc_testserver.cpp \
-		debug\moc_testservernetworkmanager.cpp \
-		debug\moc_ConnectionHandler.cpp
+		debug\moc_myserver.cpp
 OBJECTS       = debug\main.obj \
 		debug\ClientApplicationTests.obj \
 		debug\NetworkManager.obj \
 		debug\Client.obj \
 		debug\logger.obj \
-		debug\testserver.obj \
-		debug\testservernetworkmanager.obj \
-		debug\ConnectionHandler.obj \
+		debug\myserver.obj \
+		debug\CryptoManager.obj \
+		debug\rsa.obj \
+		debug\sha256.obj \
+		debug\aesni.obj \
+		debug\arc4.obj \
+		debug\asn1parse.obj \
+		debug\asn1write.obj \
+		debug\base64.obj \
+		debug\bignum.obj \
+		debug\blowfish.obj \
+		debug\camellia.obj \
+		debug\ccm.obj \
+		debug\certs.obj \
+		debug\cipher.obj \
+		debug\cipher_wrap.obj \
+		debug\ctr_drbg.obj \
+		debug\debug.obj \
+		debug\des.obj \
+		debug\dhm.obj \
+		debug\ecdh.obj \
+		debug\ecdsa.obj \
+		debug\ecp.obj \
+		debug\ecp_curves.obj \
+		debug\error.obj \
+		debug\gcm.obj \
+		debug\havege.obj \
+		debug\hmac_drbg.obj \
+		debug\md.obj \
+		debug\md2.obj \
+		debug\md4.obj \
+		debug\md5.obj \
+		debug\md_wrap.obj \
+		debug\memory_buffer_alloc.obj \
+		debug\net.obj \
+		debug\oid.obj \
+		debug\padlock.obj \
+		debug\pbkdf2.obj \
+		debug\pem.obj \
+		debug\pk.obj \
+		debug\pk_wrap.obj \
+		debug\pkcs11.obj \
+		debug\pkcs12.obj \
+		debug\pkcs5.obj \
+		debug\pkparse.obj \
+		debug\pkwrite.obj \
+		debug\platform.obj \
+		debug\ripemd160.obj \
+		debug\sha1.obj \
+		debug\sha512.obj \
+		debug\ssl_cache.obj \
+		debug\ssl_ciphersuites.obj \
+		debug\ssl_cli.obj \
+		debug\ssl_srv.obj \
+		debug\ssl_tls.obj \
+		debug\threading.obj \
+		debug\timing.obj \
+		debug\version.obj \
+		debug\version_features.obj \
+		debug\x509.obj \
+		debug\x509_create.obj \
+		debug\x509_crl.obj \
+		debug\x509_crt.obj \
+		debug\x509_csr.obj \
+		debug\x509write_crt.obj \
+		debug\x509write_csr.obj \
+		debug\xtea.obj \
+		debug\aes.obj \
 		debug\moc_Client.obj \
 		debug\moc_NetworkManager.obj \
-		debug\moc_testserver.obj \
-		debug\moc_testservernetworkmanager.obj \
-		debug\moc_ConnectionHandler.obj
+		debug\moc_myserver.obj
 
 DIST          = 
 QMAKE_TARGET  = ClientApplication
@@ -95,6 +221,26 @@ DESTDIR_TARGET = debug\ClientApplication.exe
 <<
 
 {debug}.c{debug\}.obj::
+	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{..\ClientApplication\Crypto}.cpp{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{..\ClientApplication\Crypto}.cc{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{..\ClientApplication\Crypto}.cxx{debug\}.obj::
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -Fodebug\ @<<
+	$<
+<<
+
+{..\ClientApplication\Crypto}.c{debug\}.obj::
 	$(CC) -c $(CFLAGS) $(INCPATH) -Fodebug\ @<<
 	$<
 <<
@@ -170,7 +316,7 @@ dist:
 	$(ZIP) ClientApplication.zip $(SOURCES) $(DIST) ..\ClientApplication\ClientApplication.pro C:\Qt\5.3\msvc2013_64\mkspecs\features\spec_pre.prf C:\Qt\5.3\msvc2013_64\mkspecs\common\shell-win32.conf C:\Qt\5.3\msvc2013_64\mkspecs\qconfig.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_axbase.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_axbase_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_axcontainer.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_axcontainer_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_axserver.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_axserver_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_bluetooth.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_bluetooth_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_bootstrap_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_clucene_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_concurrent.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_concurrent_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_core.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_core_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_declarative.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_declarative_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_designer.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_designer_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_designercomponents_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_enginio.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_enginio_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_gui.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_gui_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_help.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_help_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_multimedia.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_multimedia_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_multimediawidgets.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_multimediawidgets_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_network.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_network_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_nfc.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_nfc_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_opengl.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_opengl_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_openglextensions.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_openglextensions_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_platformsupport_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_positioning.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_positioning_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_printsupport.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_printsupport_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_qml.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_qml_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_qmldevtools_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_qmltest.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_qmltest_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_quick.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_quick_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_quickparticles_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_quickwidgets.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_quickwidgets_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_script.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_script_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_scripttools.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_scripttools_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_sensors.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_sensors_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_serialport.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_serialport_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_sql.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_sql_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_svg.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_svg_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_testlib.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_testlib_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_uitools.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_uitools_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_webkit.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_webkit_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_webkitwidgets.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_webkitwidgets_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_websockets.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_websockets_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_widgets.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_widgets_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_winextras.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_winextras_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_xml.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_xml_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_xmlpatterns.pri C:\Qt\5.3\msvc2013_64\mkspecs\modules\qt_lib_xmlpatterns_private.pri C:\Qt\5.3\msvc2013_64\mkspecs\features\qt_functions.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\qt_config.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\win32\qt_config.prf C:\Qt\5.3\msvc2013_64\mkspecs\win32-msvc2013\qmake.conf C:\Qt\5.3\msvc2013_64\mkspecs\features\spec_post.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\exclusive_builds.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\default_pre.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\win32\default_pre.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\resolve_config.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\exclusive_builds_post.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\default_post.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\build_pass.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\win32\console.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\win32\rtti.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\precompile_header.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\warn_on.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\qt.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\resources.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\moc.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\testcase_targets.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\exceptions.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\yacc.prf C:\Qt\5.3\msvc2013_64\mkspecs\features\lex.prf ..\ClientApplication\ClientApplication.pro C:/Qt/5.3/msvc2013_64/lib/Qt5Networkd.prl C:/Qt/5.3/msvc2013_64/lib/Qt5Cored.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES YACCSOURCES YACCSOURCES LEXSOURCES 
 
 clean: compiler_clean 
-	-$(DEL_FILE) debug\main.obj debug\ClientApplicationTests.obj debug\NetworkManager.obj debug\Client.obj debug\logger.obj debug\testserver.obj debug\testservernetworkmanager.obj debug\ConnectionHandler.obj debug\moc_Client.obj debug\moc_NetworkManager.obj debug\moc_testserver.obj debug\moc_testservernetworkmanager.obj debug\moc_ConnectionHandler.obj
+	-$(DEL_FILE) debug\main.obj debug\ClientApplicationTests.obj debug\NetworkManager.obj debug\Client.obj debug\logger.obj debug\myserver.obj debug\CryptoManager.obj debug\rsa.obj debug\sha256.obj debug\aesni.obj debug\arc4.obj debug\asn1parse.obj debug\asn1write.obj debug\base64.obj debug\bignum.obj debug\blowfish.obj debug\camellia.obj debug\ccm.obj debug\certs.obj debug\cipher.obj debug\cipher_wrap.obj debug\ctr_drbg.obj debug\debug.obj debug\des.obj debug\dhm.obj debug\ecdh.obj debug\ecdsa.obj debug\ecp.obj debug\ecp_curves.obj debug\error.obj debug\gcm.obj debug\havege.obj debug\hmac_drbg.obj debug\md.obj debug\md2.obj debug\md4.obj debug\md5.obj debug\md_wrap.obj debug\memory_buffer_alloc.obj debug\net.obj debug\oid.obj debug\padlock.obj debug\pbkdf2.obj debug\pem.obj debug\pk.obj debug\pk_wrap.obj debug\pkcs11.obj debug\pkcs12.obj debug\pkcs5.obj debug\pkparse.obj debug\pkwrite.obj debug\platform.obj debug\ripemd160.obj debug\sha1.obj debug\sha512.obj debug\ssl_cache.obj debug\ssl_ciphersuites.obj debug\ssl_cli.obj debug\ssl_srv.obj debug\ssl_tls.obj debug\threading.obj debug\timing.obj debug\version.obj debug\version_features.obj debug\x509.obj debug\x509_create.obj debug\x509_crl.obj debug\x509_crt.obj debug\x509_csr.obj debug\x509write_crt.obj debug\x509write_csr.obj debug\xtea.obj debug\aes.obj debug\moc_Client.obj debug\moc_NetworkManager.obj debug\moc_myserver.obj
 	-$(DEL_FILE) debug\ClientApplication.exp debug\ClientApplication.ilk debug\ClientApplication.idb debug\ClientApplication.exe.embed.manifest debug\ClientApplication.exe_manifest.rc debug\ClientApplication.exe_manifest.res
 
 distclean: clean 
@@ -188,10 +334,14 @@ compiler_no_pch_compiler_make_all:
 compiler_no_pch_compiler_clean:
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: debug\moc_Client.cpp debug\moc_NetworkManager.cpp debug\moc_testserver.cpp debug\moc_testservernetworkmanager.cpp debug\moc_ConnectionHandler.cpp
+compiler_moc_header_make_all: debug\moc_Client.cpp debug\moc_NetworkManager.cpp debug\moc_myserver.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) debug\moc_Client.cpp debug\moc_NetworkManager.cpp debug\moc_testserver.cpp debug\moc_testservernetworkmanager.cpp debug\moc_ConnectionHandler.cpp
+	-$(DEL_FILE) debug\moc_Client.cpp debug\moc_NetworkManager.cpp debug\moc_myserver.cpp
 debug\moc_Client.cpp: ..\ClientApplication\CryptoManager.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
 		..\ClientApplication\NetworkManager.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetwork \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetworkDepends \
@@ -424,8 +574,12 @@ debug\moc_Client.cpp: ..\ClientApplication\CryptoManager.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtnetworkversion.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QUdpSocket \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
 		..\ClientApplication\Opcodes.h \
+		..\ClientApplication\logger.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\QDebug \
+		..\ClientApplication\User.h \
 		..\ClientApplication\Client.h
 	C:\Qt\5.3\msvc2013_64\bin\moc.exe $(DEFINES) -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/Qt/5.3/msvc2013_64/mkspecs/win32-msvc2013 -ID:/Skola/PB173_C++/Project-video-communication/QT/ClientApplication -IC:/Qt/5.3/msvc2013_64/include -IC:/Qt/5.3/msvc2013_64/include/QtNetwork -IC:/Qt/5.3/msvc2013_64/include/QtCore -I. ..\ClientApplication\Client.h -o debug\moc_Client.cpp
 
@@ -660,17 +814,12 @@ debug\moc_NetworkManager.cpp: C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetwork 
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtnetworkversion.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QUdpSocket \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
 		..\ClientApplication\NetworkManager.h
 	C:\Qt\5.3\msvc2013_64\bin\moc.exe $(DEFINES) -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/Qt/5.3/msvc2013_64/mkspecs/win32-msvc2013 -ID:/Skola/PB173_C++/Project-video-communication/QT/ClientApplication -IC:/Qt/5.3/msvc2013_64/include -IC:/Qt/5.3/msvc2013_64/include/QtNetwork -IC:/Qt/5.3/msvc2013_64/include/QtCore -I. ..\ClientApplication\NetworkManager.h -o debug\moc_NetworkManager.cpp
 
-debug\moc_testserver.cpp: ..\ClientApplication\Opcodes.h \
-		..\ClientApplication\testservernetworkmanager.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetwork \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetworkDepends \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QtCore \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QtCoreDepends \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractanimation.h \
+debug\moc_myserver.cpp: C:\Qt\5.3\msvc2013_64\include\QtCore\QObject \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qnamespace.h \
@@ -719,505 +868,33 @@ debug\moc_testserver.cpp: ..\ClientApplication\Opcodes.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontainerfwd.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qisenum.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qanimationgroup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qparallelanimationgroup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpauseanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpropertyanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariantanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qeasingcurve.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvector.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpoint.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariant.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmap.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpair.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdebug.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qhash.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextstream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qiodevice.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlocale.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qshareddata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qset.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontiguouscache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdatastream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qregexp.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringmatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsequentialanimationgroup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextcodec.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qendian.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlibraryinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdatetime.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsharedpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsharedpointer_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbuffer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdir.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfileinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfiledevice.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdiriterator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfileselector.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QObject \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QStringList \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfilesystemwatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlockfile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qloggingcategory.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qprocess.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qresource.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsavefile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsettings.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstandardpaths.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtemporarydir.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QScopedPointer \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtemporaryfile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qurl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qurlquery.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractitemmodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractproxymodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qidentityproxymodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qitemselectionmodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsortfilterproxymodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringlistmodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsonarray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsonvalue.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsondocument.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsonobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstracteventdispatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qeventloop.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractnativeeventfilter.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbasictimer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmath.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmetaobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmimedata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectcleanuphandler.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsharedmemory.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsignalmapper.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsocketnotifier.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsystemsemaphore.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtimer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtranslator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qwineventnotifier.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmimedatabase.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmimetype.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfactoryinterface.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlibrary.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qplugin.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpluginloader.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\quuid.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractstate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstracttransition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qeventtransition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfinalstate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qhistorystate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsignaltransition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstatemachine.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qexception.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfuture.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfutureinterface.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrunnable.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qresultstore.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfuturesynchronizer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfuturewatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qreadwritelock.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsemaphore.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthread.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthreadpool.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthreadstorage.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qwaitcondition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydataops.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydatapointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbitarray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbytearraymatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcollator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcommandlineoption.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcommandlineparser.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcryptographichash.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qelapsedtimer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qline.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlinkedlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmargins.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmessageauthenticationcode.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qqueue.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrect.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsize.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qregularexpression.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qscopedvaluerollback.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstack.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextboundaryfinder.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtimeline.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtimezone.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qxmlstream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtcoreversion.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qabstractnetworkcache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkrequest.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QSharedDataPointer \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QString \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QUrl \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QVariant \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhttpmultipart.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QByteArray \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QIODevice \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QNetworkRequest \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkaccessmanager.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QSslConfiguration \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslconfiguration.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qabstractsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslerror.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslcertificate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qssl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QFlags \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkcookie.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QList \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QMetaType \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkcookiejar.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkdiskcache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkreply.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QNetworkAccessManager \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkconfigmanager.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkconfiguration.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworksession.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkinterface.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhostaddress.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qauthenticator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qdnslookup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhostinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkproxy.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qlocalserver.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qlocalsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpserver.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qudpsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslcertificateextension.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslcipher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslkey.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtnetworkversion.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
-		..\ClientApplication\ConnectionHandler.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QRunnable \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QThread \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\QDebug \
-		..\ClientApplication\testserver.h
-	C:\Qt\5.3\msvc2013_64\bin\moc.exe $(DEFINES) -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/Qt/5.3/msvc2013_64/mkspecs/win32-msvc2013 -ID:/Skola/PB173_C++/Project-video-communication/QT/ClientApplication -IC:/Qt/5.3/msvc2013_64/include -IC:/Qt/5.3/msvc2013_64/include/QtNetwork -IC:/Qt/5.3/msvc2013_64/include/QtCore -I. ..\ClientApplication\testserver.h -o debug\moc_testserver.cpp
-
-debug\moc_testservernetworkmanager.cpp: C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetwork \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetworkDepends \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QtCore \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QtCoreDepends \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qnamespace.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobal.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qconfig.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfeatures.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsystemdetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qprocessordetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcompilerdetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypeinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypetraits.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsysinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlogging.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qflags.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbasicatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qgenericatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_msvc.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv7.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv6.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv5.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_ia64.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_mips.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_x86.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_cxx11.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_gcc.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_unix.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobalstatic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmutex.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qnumeric.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstring.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qchar.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbytearray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrefcount.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringbuilder.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qalgorithms.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qiterator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcoreevent.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qscopedpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmetatype.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvarlengtharray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontainerfwd.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qisenum.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qanimationgroup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qparallelanimationgroup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpauseanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpropertyanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariantanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qeasingcurve.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvector.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpoint.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariant.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmap.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpair.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qdebug.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qhash.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qpair.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qmap.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextstream.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qiodevice.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qlocale.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qshareddata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qset.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontiguouscache.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariant.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringlist.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qdatastream.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qregexp.h \
 		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringmatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsequentialanimationgroup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextcodec.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qendian.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlibraryinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdatetime.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsharedpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsharedpointer_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbuffer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdir.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfileinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfiledevice.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdiriterator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfileselector.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QObject \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QStringList \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfilesystemwatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlockfile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qloggingcategory.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qprocess.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qresource.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsavefile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsettings.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstandardpaths.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtemporarydir.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QScopedPointer \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtemporaryfile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qurl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qurlquery.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractitemmodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractproxymodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qidentityproxymodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qitemselectionmodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsortfilterproxymodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringlistmodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsonarray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsonvalue.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsondocument.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsonobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstracteventdispatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qeventloop.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractnativeeventfilter.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbasictimer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmath.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmetaobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmimedata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectcleanuphandler.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsharedmemory.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsignalmapper.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsocketnotifier.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsystemsemaphore.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtimer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtranslator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qwineventnotifier.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmimedatabase.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmimetype.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfactoryinterface.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlibrary.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qplugin.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpluginloader.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\quuid.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractstate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstracttransition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qeventtransition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfinalstate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qhistorystate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsignaltransition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstatemachine.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qexception.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfuture.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfutureinterface.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrunnable.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qresultstore.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfuturesynchronizer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfuturewatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qreadwritelock.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsemaphore.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthread.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthreadpool.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthreadstorage.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qwaitcondition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydataops.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydatapointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbitarray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbytearraymatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcollator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcommandlineoption.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcommandlineparser.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcryptographichash.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qelapsedtimer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qline.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlinkedlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmargins.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmessageauthenticationcode.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qqueue.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrect.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsize.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qregularexpression.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qscopedvaluerollback.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstack.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextboundaryfinder.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtimeline.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtimezone.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qxmlstream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtcoreversion.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qabstractnetworkcache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkrequest.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QSharedDataPointer \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QString \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QUrl \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QVariant \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhttpmultipart.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QByteArray \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QIODevice \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QNetworkRequest \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkaccessmanager.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QSslConfiguration \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslconfiguration.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qabstractsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslerror.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslcertificate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qssl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QFlags \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkcookie.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QList \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QMetaType \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkcookiejar.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkdiskcache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkreply.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QNetworkAccessManager \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkconfigmanager.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkconfiguration.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworksession.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkinterface.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhostaddress.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qauthenticator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qdnslookup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhostinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkproxy.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qlocalserver.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qlocalsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpserver.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qudpsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslcertificateextension.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslcipher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslkey.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtnetworkversion.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qshareddata.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qvector.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qpoint.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qset.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontiguouscache.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
-		..\ClientApplication\ConnectionHandler.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QRunnable \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QThread \
-		..\ClientApplication\testservernetworkmanager.h
-	C:\Qt\5.3\msvc2013_64\bin\moc.exe $(DEFINES) -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/Qt/5.3/msvc2013_64/mkspecs/win32-msvc2013 -ID:/Skola/PB173_C++/Project-video-communication/QT/ClientApplication -IC:/Qt/5.3/msvc2013_64/include -IC:/Qt/5.3/msvc2013_64/include/QtNetwork -IC:/Qt/5.3/msvc2013_64/include/QtCore -I. ..\ClientApplication\testservernetworkmanager.h -o debug\moc_testservernetworkmanager.cpp
-
-debug\moc_ConnectionHandler.cpp: C:\Qt\5.3\msvc2013_64\include\QtCore\QRunnable \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrunnable.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobal.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qconfig.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfeatures.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsystemdetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qprocessordetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcompilerdetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypeinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypetraits.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsysinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlogging.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qflags.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbasicatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qgenericatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_msvc.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv7.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv6.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv5.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_ia64.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_mips.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_x86.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_cxx11.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_gcc.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_unix.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobalstatic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmutex.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qnumeric.h \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpserver.h \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qabstractsocket.h \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhostaddress.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qabstractsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qiodevice.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qnamespace.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstring.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qchar.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbytearray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrefcount.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringbuilder.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qalgorithms.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qiterator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcoreevent.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qscopedpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmetatype.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvarlengtharray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontainerfwd.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qisenum.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdebug.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qhash.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpair.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmap.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextstream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlocale.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariant.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdatastream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qregexp.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringmatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qshareddata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvector.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpoint.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qset.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontiguouscache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QThread \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthread.h \
-		..\ClientApplication\ConnectionHandler.h
-	C:\Qt\5.3\msvc2013_64\bin\moc.exe $(DEFINES) -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/Qt/5.3/msvc2013_64/mkspecs/win32-msvc2013 -ID:/Skola/PB173_C++/Project-video-communication/QT/ClientApplication -IC:/Qt/5.3/msvc2013_64/include -IC:/Qt/5.3/msvc2013_64/include/QtNetwork -IC:/Qt/5.3/msvc2013_64/include/QtCore -I. ..\ClientApplication\ConnectionHandler.h -o debug\moc_ConnectionHandler.cpp
+		..\ClientApplication\Opcodes.h \
+		..\ClientApplication\myserver.h
+	C:\Qt\5.3\msvc2013_64\bin\moc.exe $(DEFINES) -D_MSC_VER=1800 -D_WIN32 -D_WIN64 -IC:/Qt/5.3/msvc2013_64/mkspecs/win32-msvc2013 -ID:/Skola/PB173_C++/Project-video-communication/QT/ClientApplication -IC:/Qt/5.3/msvc2013_64/include -IC:/Qt/5.3/msvc2013_64/include/QtNetwork -IC:/Qt/5.3/msvc2013_64/include/QtCore -I. ..\ClientApplication\myserver.h -o debug\moc_myserver.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1466,14 +1143,26 @@ debug\main.obj: ..\ClientApplication\main.cpp C:\Qt\5.3\msvc2013_64\include\QtCo
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtnetworkversion.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QUdpSocket \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
 		..\ClientApplication\Client.h \
 		..\ClientApplication\CryptoManager.h \
-		..\ClientApplication\Opcodes.h
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
+		..\ClientApplication\Opcodes.h \
+		..\ClientApplication\logger.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\QDebug \
+		..\ClientApplication\User.h
 
 debug\ClientApplicationTests.obj: ..\ClientApplication\ClientApplicationTests.cpp ..\ClientApplication\catch.hpp \
 		..\ClientApplication\Client.h \
 		..\ClientApplication\CryptoManager.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
 		..\ClientApplication\NetworkManager.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetwork \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetworkDepends \
@@ -1706,14 +1395,13 @@ debug\ClientApplicationTests.obj: ..\ClientApplication\ClientApplicationTests.cp
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtnetworkversion.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QUdpSocket \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
 		..\ClientApplication\Opcodes.h \
-		..\ClientApplication\testserver.h \
-		..\ClientApplication\testservernetworkmanager.h \
-		..\ClientApplication\ConnectionHandler.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QRunnable \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QThread \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QDebug
+		..\ClientApplication\logger.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\QDebug \
+		..\ClientApplication\User.h \
+		..\ClientApplication\myserver.h
 
 debug\NetworkManager.obj: ..\ClientApplication\NetworkManager.cpp ..\ClientApplication\NetworkManager.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetwork \
@@ -1947,10 +1635,15 @@ debug\NetworkManager.obj: ..\ClientApplication\NetworkManager.cpp ..\ClientAppli
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtnetworkversion.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QUdpSocket \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket
 
 debug\Client.obj: ..\ClientApplication\Client.cpp ..\ClientApplication\Client.h \
 		..\ClientApplication\CryptoManager.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
 		..\ClientApplication\NetworkManager.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetwork \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetworkDepends \
@@ -2183,572 +1876,886 @@ debug\Client.obj: ..\ClientApplication\Client.cpp ..\ClientApplication\Client.h 
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtnetworkversion.h \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QUdpSocket \
 		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
+		..\ClientApplication\Opcodes.h \
+		..\ClientApplication\logger.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\QDebug \
+		..\ClientApplication\User.h
+
+debug\logger.obj: ..\ClientApplication\logger.cpp ..\ClientApplication\logger.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\QDebug \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qdebug.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qalgorithms.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobal.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qconfig.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qfeatures.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qsystemdetection.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qprocessordetection.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qcompilerdetection.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypeinfo.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypetraits.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qsysinfo.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qlogging.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qflags.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qbasicatomic.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qgenericatomic.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_msvc.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv7.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv6.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv5.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_ia64.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_mips.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_x86.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_cxx11.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_gcc.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_unix.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobalstatic.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qmutex.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qnumeric.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qhash.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qchar.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qiterator.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qlist.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qrefcount.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qpair.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qmap.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextstream.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qiodevice.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qnamespace.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qstring.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qbytearray.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydata.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringbuilder.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qcoreevent.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qscopedpointer.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qmetatype.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qvarlengtharray.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontainerfwd.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qisenum.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject_impl.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qlocale.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariant.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringlist.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qdatastream.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qregexp.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringmatcher.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qshareddata.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qvector.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qpoint.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qset.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontiguouscache.h
+
+debug\myserver.obj: ..\ClientApplication\myserver.cpp ..\ClientApplication\myserver.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\QObject \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qnamespace.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobal.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qconfig.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qfeatures.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qsystemdetection.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qprocessordetection.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qcompilerdetection.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypeinfo.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypetraits.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qsysinfo.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qlogging.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qflags.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qbasicatomic.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qgenericatomic.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_msvc.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv7.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv6.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv5.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_ia64.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_mips.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_x86.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_cxx11.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_gcc.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_unix.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobalstatic.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qmutex.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qnumeric.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qstring.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qchar.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qbytearray.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qrefcount.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydata.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringbuilder.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qlist.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qalgorithms.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qiterator.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qcoreevent.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qscopedpointer.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qmetatype.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qvarlengtharray.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontainerfwd.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qisenum.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject_impl.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\QDebug \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qdebug.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qhash.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qpair.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qmap.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextstream.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qiodevice.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qlocale.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariant.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringlist.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qdatastream.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qregexp.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringmatcher.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qshareddata.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qvector.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qpoint.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qset.h \
+		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontiguouscache.h \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpserver.h \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qabstractsocket.h \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhostaddress.h \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
+		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpsocket.h \
 		..\ClientApplication\Opcodes.h
 
-debug\logger.obj: ..\ClientApplication\logger.cpp ..\ClientApplication\logger.h
+debug\CryptoManager.obj: ..\ClientApplication\CryptoManager.cpp ..\ClientApplication\CryptoManager.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h
 
-debug\testserver.obj: ..\ClientApplication\testserver.cpp ..\ClientApplication\testserver.h \
-		..\ClientApplication\Opcodes.h \
-		..\ClientApplication\testservernetworkmanager.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetwork \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetworkDepends \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QtCore \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QtCoreDepends \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qnamespace.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobal.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qconfig.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfeatures.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsystemdetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qprocessordetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcompilerdetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypeinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypetraits.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsysinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlogging.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qflags.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbasicatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qgenericatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_msvc.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv7.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv6.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv5.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_ia64.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_mips.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_x86.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_cxx11.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_gcc.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_unix.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobalstatic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmutex.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qnumeric.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstring.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qchar.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbytearray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrefcount.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringbuilder.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qalgorithms.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qiterator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcoreevent.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qscopedpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmetatype.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvarlengtharray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontainerfwd.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qisenum.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qanimationgroup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qparallelanimationgroup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpauseanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpropertyanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariantanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qeasingcurve.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvector.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpoint.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariant.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmap.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpair.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdebug.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qhash.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextstream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qiodevice.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlocale.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qshareddata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qset.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontiguouscache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdatastream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qregexp.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringmatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsequentialanimationgroup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextcodec.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qendian.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlibraryinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdatetime.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsharedpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsharedpointer_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbuffer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdir.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfileinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfiledevice.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdiriterator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfileselector.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QObject \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QStringList \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfilesystemwatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlockfile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qloggingcategory.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qprocess.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qresource.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsavefile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsettings.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstandardpaths.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtemporarydir.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QScopedPointer \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtemporaryfile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qurl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qurlquery.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractitemmodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractproxymodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qidentityproxymodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qitemselectionmodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsortfilterproxymodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringlistmodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsonarray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsonvalue.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsondocument.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsonobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstracteventdispatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qeventloop.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractnativeeventfilter.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbasictimer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmath.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmetaobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmimedata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectcleanuphandler.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsharedmemory.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsignalmapper.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsocketnotifier.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsystemsemaphore.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtimer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtranslator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qwineventnotifier.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmimedatabase.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmimetype.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfactoryinterface.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlibrary.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qplugin.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpluginloader.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\quuid.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractstate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstracttransition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qeventtransition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfinalstate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qhistorystate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsignaltransition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstatemachine.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qexception.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfuture.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfutureinterface.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrunnable.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qresultstore.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfuturesynchronizer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfuturewatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qreadwritelock.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsemaphore.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthread.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthreadpool.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthreadstorage.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qwaitcondition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydataops.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydatapointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbitarray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbytearraymatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcollator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcommandlineoption.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcommandlineparser.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcryptographichash.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qelapsedtimer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qline.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlinkedlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmargins.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmessageauthenticationcode.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qqueue.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrect.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsize.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qregularexpression.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qscopedvaluerollback.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstack.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextboundaryfinder.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtimeline.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtimezone.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qxmlstream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtcoreversion.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qabstractnetworkcache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkrequest.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QSharedDataPointer \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QString \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QUrl \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QVariant \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhttpmultipart.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QByteArray \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QIODevice \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QNetworkRequest \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkaccessmanager.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QSslConfiguration \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslconfiguration.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qabstractsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslerror.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslcertificate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qssl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QFlags \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkcookie.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QList \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QMetaType \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkcookiejar.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkdiskcache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkreply.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QNetworkAccessManager \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkconfigmanager.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkconfiguration.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworksession.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkinterface.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhostaddress.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qauthenticator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qdnslookup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhostinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkproxy.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qlocalserver.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qlocalsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpserver.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qudpsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslcertificateextension.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslcipher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslkey.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtnetworkversion.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
-		..\ClientApplication\ConnectionHandler.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QRunnable \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QThread \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QDebug
+debug\rsa.obj: ..\ClientApplication\Crypto\rsa.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\platform.h \
+		..\ClientApplication\Crypto\polarssl\sha1.h
 
-debug\testservernetworkmanager.obj: ..\ClientApplication\testservernetworkmanager.cpp ..\ClientApplication\testservernetworkmanager.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetwork \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QtNetworkDepends \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QtCore \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QtCoreDepends \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qnamespace.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobal.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qconfig.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfeatures.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsystemdetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qprocessordetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcompilerdetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypeinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypetraits.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsysinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlogging.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qflags.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbasicatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qgenericatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_msvc.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv7.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv6.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv5.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_ia64.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_mips.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_x86.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_cxx11.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_gcc.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_unix.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobalstatic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmutex.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qnumeric.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstring.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qchar.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbytearray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrefcount.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringbuilder.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qalgorithms.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qiterator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcoreevent.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qscopedpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmetatype.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvarlengtharray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontainerfwd.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qisenum.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qanimationgroup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qparallelanimationgroup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpauseanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpropertyanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariantanimation.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qeasingcurve.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvector.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpoint.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariant.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmap.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpair.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdebug.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qhash.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextstream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qiodevice.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlocale.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qshareddata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qset.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontiguouscache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdatastream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qregexp.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringmatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsequentialanimationgroup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextcodec.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qendian.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlibraryinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdatetime.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsharedpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsharedpointer_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbuffer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdir.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfileinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfiledevice.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdiriterator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfileselector.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QObject \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QStringList \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfilesystemwatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlockfile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qloggingcategory.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qprocess.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qresource.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsavefile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsettings.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstandardpaths.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtemporarydir.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QScopedPointer \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtemporaryfile.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qurl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qurlquery.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractitemmodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractproxymodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qidentityproxymodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qitemselectionmodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsortfilterproxymodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringlistmodel.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsonarray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsonvalue.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsondocument.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qjsonobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstracteventdispatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qeventloop.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractnativeeventfilter.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbasictimer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcoreapplication.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmath.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmetaobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmimedata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectcleanuphandler.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsharedmemory.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsignalmapper.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsocketnotifier.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsystemsemaphore.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtimer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtranslator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qwineventnotifier.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmimedatabase.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmimetype.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfactoryinterface.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlibrary.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qplugin.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpluginloader.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\quuid.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstractstate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qabstracttransition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qeventtransition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfinalstate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qhistorystate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsignaltransition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstatemachine.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qexception.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfuture.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfutureinterface.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrunnable.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qresultstore.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfuturesynchronizer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfuturewatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qreadwritelock.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsemaphore.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthread.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthreadpool.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthreadstorage.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qwaitcondition.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydataops.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydatapointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbitarray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbytearraymatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcollator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcommandlineoption.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcommandlineparser.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcryptographichash.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qelapsedtimer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qline.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlinkedlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmargins.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmessageauthenticationcode.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qqueue.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrect.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsize.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qregularexpression.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qscopedvaluerollback.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstack.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextboundaryfinder.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtimeline.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtimezone.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qxmlstream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtcoreversion.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qabstractnetworkcache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkrequest.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QSharedDataPointer \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QString \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QUrl \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QVariant \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhttpmultipart.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QByteArray \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QIODevice \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QNetworkRequest \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkaccessmanager.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QSslConfiguration \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslconfiguration.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qabstractsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslerror.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslcertificate.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qssl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QFlags \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkcookie.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QList \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QMetaType \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkcookiejar.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkdiskcache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkreply.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QNetworkAccessManager \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkconfigmanager.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkconfiguration.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworksession.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkinterface.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhostaddress.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qauthenticator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qdnslookup.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qhostinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qnetworkproxy.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qlocalserver.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qlocalsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpserver.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qudpsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslcertificateextension.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslcipher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qsslkey.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtnetworkversion.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpServer \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
-		..\ClientApplication\ConnectionHandler.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QRunnable \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QThread
+debug\sha256.obj: ..\ClientApplication\Crypto\sha256.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
 
-debug\ConnectionHandler.obj: ..\ClientApplication\ConnectionHandler.cpp ..\ClientApplication\ConnectionHandler.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QRunnable \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrunnable.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobal.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qconfig.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qfeatures.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsystemdetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qprocessordetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcompilerdetection.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypeinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtypetraits.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qsysinfo.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlogging.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qflags.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbasicatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_bootstrap.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qgenericatomic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_msvc.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv7.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv6.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_armv5.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_ia64.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_mips.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_x86.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_cxx11.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_gcc.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qatomic_unix.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qglobalstatic.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmutex.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qnumeric.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QTcpSocket \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qtcpsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\qabstractsocket.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qiodevice.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qnamespace.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobjectdefs_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstring.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qchar.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qbytearray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qrefcount.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qarraydata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringbuilder.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qalgorithms.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qiterator.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcoreevent.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qscopedpointer.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmetatype.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvarlengtharray.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontainerfwd.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qisenum.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qobject_impl.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdebug.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qhash.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpair.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qmap.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qtextstream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qlocale.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvariant.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringlist.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qdatastream.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qregexp.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qstringmatcher.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qshareddata.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qvector.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qpoint.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qset.h \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qcontiguouscache.h \
-		C:\Qt\5.3\msvc2013_64\include\QtNetwork\QAbstractSocket \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\QThread \
-		C:\Qt\5.3\msvc2013_64\include\QtCore\qthread.h
+debug\aesni.obj: ..\ClientApplication\Crypto\aesni.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\aesni.h \
+		..\ClientApplication\Crypto\polarssl\aes.h
+
+debug\arc4.obj: ..\ClientApplication\Crypto\arc4.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\arc4.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\asn1parse.obj: ..\ClientApplication\Crypto\asn1parse.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\asn1write.obj: ..\ClientApplication\Crypto\asn1write.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\asn1write.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\base64.obj: ..\ClientApplication\Crypto\base64.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\base64.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\bignum.obj: ..\ClientApplication\Crypto\bignum.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\bn_mul.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\blowfish.obj: ..\ClientApplication\Crypto\blowfish.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\blowfish.h
+
+debug\camellia.obj: ..\ClientApplication\Crypto\camellia.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\camellia.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\ccm.obj: ..\ClientApplication\Crypto\ccm.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\ccm.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\certs.obj: ..\ClientApplication\Crypto\certs.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h
+
+debug\cipher.obj: ..\ClientApplication\Crypto\cipher.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\cipher_wrap.h \
+		..\ClientApplication\Crypto\polarssl\gcm.h \
+		..\ClientApplication\Crypto\polarssl\ccm.h
+
+debug\cipher_wrap.obj: ..\ClientApplication\Crypto\cipher_wrap.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\cipher_wrap.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\arc4.h \
+		..\ClientApplication\Crypto\polarssl\camellia.h \
+		..\ClientApplication\Crypto\polarssl\des.h \
+		..\ClientApplication\Crypto\polarssl\blowfish.h \
+		..\ClientApplication\Crypto\polarssl\gcm.h \
+		..\ClientApplication\Crypto\polarssl\ccm.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\ctr_drbg.obj: ..\ClientApplication\Crypto\ctr_drbg.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\ctr_drbg.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\debug.obj: ..\ClientApplication\Crypto\debug.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\debug.h \
+		..\ClientApplication\Crypto\polarssl\ssl.h \
+		..\ClientApplication\Crypto\polarssl\net.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ssl_ciphersuites.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\md5.h \
+		..\ClientApplication\Crypto\polarssl\sha1.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
+		..\ClientApplication\Crypto\polarssl\sha512.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\x509_crt.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\x509_crl.h \
+		..\ClientApplication\Crypto\polarssl\dhm.h \
+		..\ClientApplication\Crypto\polarssl\ecdh.h
+
+debug\des.obj: ..\ClientApplication\Crypto\des.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\des.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\dhm.obj: ..\ClientApplication\Crypto\dhm.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\dhm.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\pem.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\platform.h \
+		..\ClientApplication\Crypto\polarssl\certs.h
+
+debug\ecdh.obj: ..\ClientApplication\Crypto\ecdh.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\ecdh.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h
+
+debug\ecdsa.obj: ..\ClientApplication\Crypto\ecdsa.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\asn1write.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\hmac_drbg.h
+
+debug\ecp.obj: ..\ClientApplication\Crypto\ecp.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\ecp_curves.obj: ..\ClientApplication\Crypto\ecp_curves.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h
+
+debug\error.obj: ..\ClientApplication\Crypto\error.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\error.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\base64.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\blowfish.h \
+		..\ClientApplication\Crypto\polarssl\camellia.h \
+		..\ClientApplication\Crypto\polarssl\ccm.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\ctr_drbg.h \
+		..\ClientApplication\Crypto\polarssl\des.h \
+		..\ClientApplication\Crypto\polarssl\dhm.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\entropy.h \
+		..\ClientApplication\Crypto\polarssl\sha512.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\havege.h \
+		..\ClientApplication\Crypto\polarssl\gcm.h \
+		..\ClientApplication\Crypto\polarssl\hmac_drbg.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\md2.h \
+		..\ClientApplication\Crypto\polarssl\md4.h \
+		..\ClientApplication\Crypto\polarssl\md5.h \
+		..\ClientApplication\Crypto\polarssl\net.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\padlock.h \
+		..\ClientApplication\Crypto\polarssl\pbkdf2.h \
+		..\ClientApplication\Crypto\polarssl\pem.h \
+		..\ClientApplication\Crypto\polarssl\pkcs12.h \
+		..\ClientApplication\Crypto\polarssl\pkcs5.h \
+		..\ClientApplication\Crypto\polarssl\ripemd160.h \
+		..\ClientApplication\Crypto\polarssl\sha1.h \
+		..\ClientApplication\Crypto\polarssl\ssl.h \
+		..\ClientApplication\Crypto\polarssl\ssl_ciphersuites.h \
+		..\ClientApplication\Crypto\polarssl\x509_crt.h \
+		..\ClientApplication\Crypto\polarssl\x509_crl.h \
+		..\ClientApplication\Crypto\polarssl\ecdh.h \
+		..\ClientApplication\Crypto\polarssl\xtea.h
+
+debug\gcm.obj: ..\ClientApplication\Crypto\gcm.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\gcm.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\aesni.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\havege.obj: ..\ClientApplication\Crypto\havege.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\havege.h \
+		..\ClientApplication\Crypto\polarssl\timing.h
+
+debug\hmac_drbg.obj: ..\ClientApplication\Crypto\hmac_drbg.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\hmac_drbg.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\md.obj: ..\ClientApplication\Crypto\md.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\md_wrap.h
+
+debug\md2.obj: ..\ClientApplication\Crypto\md2.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\md2.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\md4.obj: ..\ClientApplication\Crypto\md4.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\md4.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\md5.obj: ..\ClientApplication\Crypto\md5.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\md5.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\md_wrap.obj: ..\ClientApplication\Crypto\md_wrap.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\md_wrap.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\md2.h \
+		..\ClientApplication\Crypto\polarssl\md4.h \
+		..\ClientApplication\Crypto\polarssl\md5.h \
+		..\ClientApplication\Crypto\polarssl\ripemd160.h \
+		..\ClientApplication\Crypto\polarssl\sha1.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
+		..\ClientApplication\Crypto\polarssl\sha512.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\memory_buffer_alloc.obj: ..\ClientApplication\Crypto\memory_buffer_alloc.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\memory_buffer_alloc.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\net.obj: ..\ClientApplication\Crypto\net.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\net.h
+
+debug\oid.obj: ..\ClientApplication\Crypto\oid.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\x509.h
+
+debug\padlock.obj: ..\ClientApplication\Crypto\padlock.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\padlock.h \
+		..\ClientApplication\Crypto\polarssl\aes.h
+
+debug\pbkdf2.obj: ..\ClientApplication\Crypto\pbkdf2.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\pbkdf2.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\pkcs5.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h
+
+debug\pem.obj: ..\ClientApplication\Crypto\pem.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\pem.h \
+		..\ClientApplication\Crypto\polarssl\base64.h \
+		..\ClientApplication\Crypto\polarssl\des.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\md5.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\pk.obj: ..\ClientApplication\Crypto\pk.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\pk_wrap.h
+
+debug\pk_wrap.obj: ..\ClientApplication\Crypto\pk_wrap.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\pk_wrap.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\pkcs11.obj: ..\ClientApplication\Crypto\pkcs11.c ..\ClientApplication\Crypto\polarssl\pkcs11.h \
+		..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\x509_crt.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\x509_crl.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\pkcs12.obj: ..\ClientApplication\Crypto\pkcs12.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\pkcs12.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\arc4.h \
+		..\ClientApplication\Crypto\polarssl\des.h
+
+debug\pkcs5.obj: ..\ClientApplication\Crypto\pkcs5.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\pkcs5.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\pkparse.obj: ..\ClientApplication\Crypto\pkparse.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\pem.h \
+		..\ClientApplication\Crypto\polarssl\pkcs5.h \
+		..\ClientApplication\Crypto\polarssl\pkcs12.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\pkwrite.obj: ..\ClientApplication\Crypto\pkwrite.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\asn1write.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\pem.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\platform.obj: ..\ClientApplication\Crypto\platform.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\ripemd160.obj: ..\ClientApplication\Crypto\ripemd160.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\ripemd160.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\sha1.obj: ..\ClientApplication\Crypto\sha1.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\sha1.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\sha512.obj: ..\ClientApplication\Crypto\sha512.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\sha512.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\ssl_cache.obj: ..\ClientApplication\Crypto\ssl_cache.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\ssl_cache.h \
+		..\ClientApplication\Crypto\polarssl\ssl.h \
+		..\ClientApplication\Crypto\polarssl\net.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ssl_ciphersuites.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\md5.h \
+		..\ClientApplication\Crypto\polarssl\sha1.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
+		..\ClientApplication\Crypto\polarssl\sha512.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\x509_crt.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\x509_crl.h \
+		..\ClientApplication\Crypto\polarssl\dhm.h \
+		..\ClientApplication\Crypto\polarssl\ecdh.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\ssl_ciphersuites.obj: ..\ClientApplication\Crypto\ssl_ciphersuites.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\ssl_ciphersuites.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\ssl.h \
+		..\ClientApplication\Crypto\polarssl\net.h \
+		..\ClientApplication\Crypto\polarssl\md5.h \
+		..\ClientApplication\Crypto\polarssl\sha1.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
+		..\ClientApplication\Crypto\polarssl\sha512.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\x509_crt.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\x509_crl.h \
+		..\ClientApplication\Crypto\polarssl\dhm.h \
+		..\ClientApplication\Crypto\polarssl\ecdh.h
+
+debug\ssl_cli.obj: ..\ClientApplication\Crypto\ssl_cli.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\debug.h \
+		..\ClientApplication\Crypto\polarssl\ssl.h \
+		..\ClientApplication\Crypto\polarssl\net.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ssl_ciphersuites.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\md5.h \
+		..\ClientApplication\Crypto\polarssl\sha1.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
+		..\ClientApplication\Crypto\polarssl\sha512.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\x509_crt.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\x509_crl.h \
+		..\ClientApplication\Crypto\polarssl\dhm.h \
+		..\ClientApplication\Crypto\polarssl\ecdh.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\ssl_srv.obj: ..\ClientApplication\Crypto\ssl_srv.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\debug.h \
+		..\ClientApplication\Crypto\polarssl\ssl.h \
+		..\ClientApplication\Crypto\polarssl\net.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ssl_ciphersuites.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\md5.h \
+		..\ClientApplication\Crypto\polarssl\sha1.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
+		..\ClientApplication\Crypto\polarssl\sha512.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\x509_crt.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\x509_crl.h \
+		..\ClientApplication\Crypto\polarssl\dhm.h \
+		..\ClientApplication\Crypto\polarssl\ecdh.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\ssl_tls.obj: ..\ClientApplication\Crypto\ssl_tls.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\debug.h \
+		..\ClientApplication\Crypto\polarssl\ssl.h \
+		..\ClientApplication\Crypto\polarssl\net.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ssl_ciphersuites.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\md5.h \
+		..\ClientApplication\Crypto\polarssl\sha1.h \
+		..\ClientApplication\Crypto\polarssl\sha256.h \
+		..\ClientApplication\Crypto\polarssl\sha512.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\x509_crt.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\x509_crl.h \
+		..\ClientApplication\Crypto\polarssl\dhm.h \
+		..\ClientApplication\Crypto\polarssl\ecdh.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\threading.obj: ..\ClientApplication\Crypto\threading.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\threading.h
+
+debug\timing.obj: ..\ClientApplication\Crypto\timing.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\platform.h \
+		..\ClientApplication\Crypto\polarssl\timing.h \
+		..\ClientApplication\Crypto\polarssl\net.h
+
+debug\version.obj: ..\ClientApplication\Crypto\version.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\version.h
+
+debug\version_features.obj: ..\ClientApplication\Crypto\version_features.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\version.h
+
+debug\x509.obj: ..\ClientApplication\Crypto\x509.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\pem.h \
+		..\ClientApplication\Crypto\polarssl\platform.h \
+		..\ClientApplication\Crypto\polarssl\x509_crt.h \
+		..\ClientApplication\Crypto\polarssl\x509_crl.h \
+		..\ClientApplication\Crypto\polarssl\certs.h
+
+debug\x509_create.obj: ..\ClientApplication\Crypto\x509_create.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\asn1write.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h
+
+debug\x509_crl.obj: ..\ClientApplication\Crypto\x509_crl.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\x509_crl.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\pem.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\x509_crt.obj: ..\ClientApplication\Crypto\x509_crt.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\x509_crt.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\x509_crl.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\pem.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\x509_csr.obj: ..\ClientApplication\Crypto\x509_csr.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\x509_csr.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\pem.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\x509write_crt.obj: ..\ClientApplication\Crypto\x509write_crt.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\x509_crt.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\x509_crl.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\asn1write.h \
+		..\ClientApplication\Crypto\polarssl\sha1.h \
+		..\ClientApplication\Crypto\polarssl\pem.h
+
+debug\x509write_csr.obj: ..\ClientApplication\Crypto\x509write_csr.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\x509_csr.h \
+		..\ClientApplication\Crypto\polarssl\x509.h \
+		..\ClientApplication\Crypto\polarssl\asn1.h \
+		..\ClientApplication\Crypto\polarssl\bignum.h \
+		..\ClientApplication\Crypto\polarssl\pk.h \
+		..\ClientApplication\Crypto\polarssl\md.h \
+		..\ClientApplication\Crypto\polarssl\rsa.h \
+		..\ClientApplication\Crypto\polarssl\threading.h \
+		..\ClientApplication\Crypto\polarssl\ecp.h \
+		..\ClientApplication\Crypto\polarssl\ecdsa.h \
+		..\ClientApplication\Crypto\polarssl\oid.h \
+		..\ClientApplication\Crypto\polarssl\cipher.h \
+		..\ClientApplication\Crypto\polarssl\asn1write.h \
+		..\ClientApplication\Crypto\polarssl\pem.h
+
+debug\xtea.obj: ..\ClientApplication\Crypto\xtea.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\xtea.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
+
+debug\aes.obj: ..\ClientApplication\Crypto\aes.c ..\ClientApplication\Crypto\polarssl\config.h \
+		..\ClientApplication\Crypto\polarssl\check_config.h \
+		..\ClientApplication\Crypto\polarssl\aes.h \
+		..\ClientApplication\Crypto\polarssl\padlock.h \
+		..\ClientApplication\Crypto\polarssl\aesni.h \
+		..\ClientApplication\Crypto\polarssl\platform.h
 
 debug\moc_Client.obj: debug\moc_Client.cpp 
 
 debug\moc_NetworkManager.obj: debug\moc_NetworkManager.cpp 
 
-debug\moc_testserver.obj: debug\moc_testserver.cpp 
-
-debug\moc_testservernetworkmanager.obj: debug\moc_testservernetworkmanager.cpp 
-
-debug\moc_ConnectionHandler.obj: debug\moc_ConnectionHandler.cpp 
+debug\moc_myserver.obj: debug\moc_myserver.cpp 
 
 ####### Install
 

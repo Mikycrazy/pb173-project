@@ -10,7 +10,7 @@
 const char IP_SERVER[] = "127.0.0.1";
 const int PORT_SERVER = 13374;
 
-
+/*
 TEST_CASE("SERVER")
 {
 
@@ -343,8 +343,41 @@ TEST_CASE("CLIENT TO CLIENT")
 
         delete client;
     }
-    SECTION("Send ecrypted data to client")
+}
+*/
+TEST_CASE("KEYSTREAM")
+{
+    SECTION("Generating keystream and cheacking if method waiting on data ")
     {
+        unsigned char key[16];
+        unsigned char nonce_counter[16] = {0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,250};
+        double elapsed_secs[5];
+
+        CryptoManager manager;
+        manager.startCtrCalculation(key, nonce_counter);
+        Sleep(1500);
+        unsigned char stream[50];
+
+        for (int y = 0; y < 5; y++)
+        {
+            clock_t begin = clock();
+            for (int i = 0; i < 200000; i++)
+            {
+                manager.getEncKeystream(stream, 50);
+            }
+            clock_t end = clock();
+
+            elapsed_secs[y] = double(end - begin) / CLOCKS_PER_SEC;
+        }
+
+        std::cout << std::endl;
+
+        for(int i = 0; i < 5; i++)
+            std::cout << elapsed_secs[i] << "  ;  ";
+
+        std::cout << std::endl;
+
+        REQUIRE(elapsed_secs[0] < elapsed_secs[4]);
 
     }
 }

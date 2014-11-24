@@ -7,8 +7,11 @@ Client::Client(string username, string email) : mUsername(username), mEmail(emai
     mLastReicevedDataSize = 10;
     mLastReicevedData = new unsigned char [10];
     memset(mLastReicevedData, 97, 10);
+
     this->mNetwork = new NetworkManager();
     this->mNetwork->startConnection(SERVER_ADDRESS, SERVER_PORT);
+
+    this->mCrypto = new CryptoManager();
 
     connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
 }
@@ -25,6 +28,7 @@ int Client::login()
 
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(LOGIN_REQUEST,data,&packet,dataSize);
+
     Logger::getLogger()->Log("Client:"+ mUsername +" send LOGIN_REQUEST");
     //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(packet, packetSize);
@@ -245,14 +249,12 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
 {
     int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size;
     *packet = new unsigned char[newSize];//casem pribude hash
-
     (*packet)[0] = id;
     //tady asi pak bude treba lepsi random
     for(int i = ID_LENGHT; i < ID_LENGHT + RANDOM_BYTES_LENGTH; i++)
     {
         (*packet)[i] = rand() % 256;
     }
-
 
     //int to byte
     if(sizeof(size) == 4)
@@ -301,6 +303,7 @@ void Client::processPacket(unsigned char* packet, int size)
         }
 
         unsigned char *data = new unsigned char [dataSize];
+        delete[] mLastReicevedData;
         mLastReicevedData = new unsigned char [dataSize];
         memcpy(data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
         memcpy(mLastReicevedData, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
@@ -343,14 +346,12 @@ void Client::processPacket(unsigned char* packet, int size)
              qDebug() << "Received online list:" << bdata;
             processGetOnlineListResponse(data, dataSize);
             //tohle tadz pak nebude ale ted nwm kam to dat
-             this->connectToClient(this->OnlineList()[0]->getConnectionID());
+            this->connectToClient(this->OnlineList()[0]->getConnectionID());
 
             break;
         case SERVER_COMUNICATION_REQUEST:
              Logger::getLogger()->Log("SERVER_COMUNICATION_REQUEST");
                 acceptConnection(processServerCommunicationRequest(data,dataSize),&data[4]);
-                mCrypto->startCtrCalculation(mAESkey,mAESIV);
-
                 break;
         case SERVER_COMUNICATION_RESPONSE:
              Logger::getLogger()->Log(" SERVER_COMUNICATION_RESPONSE");
@@ -365,7 +366,7 @@ void Client::processPacket(unsigned char* packet, int size)
                 {
 
                    Logger::getLogger()->Log(" ACCEPT CONNECTION - START CALC");
-                   mCrypto->startCtrCalculation(mAESkey,mAESIV);
+                   mCrypto->startCtrCalculation(mAESkey, mAESIV);
                 }
                 break;
         case CLIENT_COMMUNICATION_DATA:
