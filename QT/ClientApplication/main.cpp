@@ -15,13 +15,19 @@ int main(int argc, char *argv[])
 
     CryptoManager manager;
     manager.startCtrCalculation(key, nonce_counter);
-    Sleep(1000);
 
     unsigned char stream[50];
-    manager.getKeystream(stream, 50);
-    manager.getKeystream(stream, 50);
-    manager.getKeystream(stream, 50);
 
+    manager.getEncKeystream(stream, 50);
+    for (int i = 0; i < 50; i++) std::cout << (int)(stream[i]) << " ";
+    std::cout << endl;
+
+    for (int i = 0; i < 200000; i++)
+        manager.getEncKeystream(stream, 50);
+    for (int i = 0; i < 50; i++) std::cout << (int)(stream[i]) << " ";
+    std::cout << endl;
+
+    manager.getDecKeystream(stream, 50);
     for (int i = 0; i < 50; i++) std::cout << (int)(stream[i]) << " ";
 
     //Client* client = new Client("test", "test@test");

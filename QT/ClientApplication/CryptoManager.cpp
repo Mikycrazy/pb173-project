@@ -5,7 +5,8 @@ CryptoManager::CryptoManager()
 {
     aes_init(&mAes);
 
-    mKeystreamStart = -1;
+    mEncKeystreamStart = -1;
+    mDecKeystreamStart = -1;
 }
 
 int CryptoManager::addPadding(std::string& input_text)
@@ -127,61 +128,82 @@ void CryptoManager::startCtrCalculation(unsigned char* key, unsigned char* count
 {
     memcpy(mAesKey, key, AES_KEY_LENGTH / 8);
     memcpy(mCounterStart, counter, CTR_PART_LENGTH);
-    mKeystreamThread = new std::thread(&CryptoManager::generateCtrKeystream, this);
+    mEncKeystreamThread = new std::thread(&CryptoManager::generateEncCtrKeystream, this);
+    mDecKeystreamThread = new std::thread(&CryptoManager::generateDecCtrKeystream, this);
 }
 
-void CryptoManager::generateCtrKeystream()
+void CryptoManager::generateCtrKeystream(unsigned char* stream, int* start, int* end)
 {
     aes_context aes;
     unsigned char nonce_counter[CTR_PART_LENGTH];
     std::chrono::milliseconds sleepTime(50);
 
-    mKeystreamEnd = 0;
+    *end = 0;
     aes_setkey_enc(&aes, (const unsigned char*)mAesKey, AES_KEY_LENGTH);
     memcpy(nonce_counter, mCounterStart, CTR_PART_LENGTH);
 
     while (true)
     {
-        aes_crypt_ecb(&aes, AES_ENCRYPT, nonce_counter, (unsigned char*)(mKeystream + mKeystreamEnd));
+        aes_crypt_ecb(&aes, AES_ENCRYPT, nonce_counter, (unsigned char*)(stream + *end));
 
-        if (mKeystreamStart == -1)
-            mKeystreamStart = 0;
+        if (*start == -1)
+            *start = 0;
 
         for(int i = CTR_PART_LENGTH; i > 0; i--)
             if(++nonce_counter[i - 1] != 0)
                 break;
 
-        mKeystreamEnd += CTR_PART_LENGTH;
-        if (mKeystreamEnd == KEYSTREAM_SIZE)
-            mKeystreamEnd = 0;
+        *end += CTR_PART_LENGTH;
+        if (*end == KEYSTREAM_SIZE)
+            *end = 0;
 
-        while(mKeystreamStart - mKeystreamEnd >= 0 && mKeystreamStart - mKeystreamEnd <= CTR_PART_LENGTH)
+        while(*start - *end >= 0 && *start - *end <= CTR_PART_LENGTH)
             std::this_thread::sleep_for(sleepTime);
     }
 }
 
-void CryptoManager::getKeystream(unsigned char* stream, int length, int from)
+void CryptoManager::generateEncCtrKeystream()
+{
+    this->generateCtrKeystream((unsigned char*)mEncKeystream, &mEncKeystreamStart, &mEncKeystreamEnd);
+}
+
+void CryptoManager::generateDecCtrKeystream()
+{
+    this->generateCtrKeystream((unsigned char*)mDecKeystream, &mDecKeystreamStart, &mDecKeystreamEnd);
+}
+
+void CryptoManager::getKeystream(unsigned char* stream, int* start, int* end, unsigned char* output, int length, int from)
 {
     std::chrono::milliseconds sleepTime(10);
 
-    while(mKeystreamEnd - mKeystreamStart > 0 && mKeystreamEnd - mKeystreamStart <= length)
+    while(*end - *start > 0 && *end - *start <= length)
         std::this_thread::sleep_for(sleepTime);
 
-    int start = from == -1 ? mKeystreamStart : from;
-    if (start + length < KEYSTREAM_SIZE)
+    int begin = from == -1 ? *start : from;
+    if (begin + length < KEYSTREAM_SIZE)
     {
-        memcpy(stream, mKeystream + start, length);
+        memcpy(output, stream + begin, length);
 
         if (from == -1)
-            mKeystreamStart += length;
+            *start += length;
     }
     else
     {
-        int endDiff = KEYSTREAM_SIZE - start;
-        memcpy(stream, mKeystream + start, endDiff);
-        memcpy(stream + endDiff, mKeystream, length - endDiff);
+        int endDiff = KEYSTREAM_SIZE - begin;
+        memcpy(output, stream + begin, endDiff);
+        memcpy(output + endDiff, stream, length - endDiff);
 
         if (from == -1)
-            mKeystreamStart = length - endDiff;
+            *start = length - endDiff;
     }
+}
+
+void CryptoManager::getEncKeystream(unsigned char* stream, int length, int from)
+{
+    this->getKeystream((unsigned char*)mEncKeystream, &mEncKeystreamStart, &mEncKeystreamEnd, stream, length, from);
+}
+
+void CryptoManager::getDecKeystream(unsigned char* stream, int length, int from)
+{
+    this->getKeystream((unsigned char*)mDecKeystream, &mDecKeystreamStart, &mDecKeystreamEnd, stream, length, from);
 }

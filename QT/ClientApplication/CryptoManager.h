@@ -20,10 +20,12 @@ private:
     aes_context mAes;
 	sha256_context mSha;
     //pk_context mRsa;
-    std::thread* mKeystreamThread;
-    char mKeystream[KEYSTREAM_SIZE];
+    std::thread *mEncKeystreamThread, *mDecKeystreamThread;
+    char mEncKeystream[KEYSTREAM_SIZE];
+    char mDecKeystream[KEYSTREAM_SIZE];
     char mCounterStart[CTR_PART_LENGTH];
-    int mKeystreamStart, mKeystreamEnd;
+    int mEncKeystreamStart, mEncKeystreamEnd;
+    int mDecKeystreamStart, mDecKeystreamEnd;
     char mAesKey[AES_KEY_LENGTH / 8];
 public:
     CryptoManager();
@@ -130,10 +132,16 @@ public:
     int XORData(unsigned char* input, unsigned char *output, int size, unsigned char* key);
 
     void startCtrCalculation(unsigned char* key, unsigned char* counter);
-    void getKeystream(unsigned char* stream, int length, int from = -1);
+
+    void getEncKeystream(unsigned char* stream, int length, int from = -1);
+
+    void getDecKeystream(unsigned char* stream, int length, int from = -1);
 
 private:
     int addPadding(std::string &input_text);
 	int removePadding(unsigned char* data, int size);
-    void generateCtrKeystream();
+    void getKeystream(unsigned char* stream, int* start, int* end, unsigned char* output, int length, int from);
+    void generateCtrKeystream(unsigned char* stream, int* start, int* end);
+    void generateEncCtrKeystream();
+    void generateDecCtrKeystream();
 };
