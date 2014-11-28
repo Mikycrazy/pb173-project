@@ -49,6 +49,8 @@ private:
     unsigned char* mLastReicevedData;
     int mLastReicevedDataSize;
 
+    int mStatus;
+
 public:
 
 	/**
@@ -59,7 +61,7 @@ public:
 	* @param email			email
 	*/
     Client() : mLoggedToServer(false), mConnectedToClient(false) { ; }
-	Client(std::string username, std::string email);
+    Client(std::string username, std::string email, qint16 UDPport);
     ~Client() {}
 
 	std::string Username() const { return mUsername; }
@@ -157,6 +159,9 @@ public:
     int sendDataToClient(QHostAddress address, quint16 port, unsigned char* data, int size);
 
     int sendDataToClient(QHostAddress address, quint16 port, std::string filename);
+
+    int getStatus();
+    void setStatus(int status);
 
 private:
     int processGetOnlineListResponse(unsigned char *data, int size);

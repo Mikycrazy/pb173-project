@@ -108,6 +108,17 @@ bool Server::sendConnectionRequest(User *from, User *to, unsigned char *data, in
     memcpy(&newData[from->getIPAddress().size()], DATA_SPLITER.c_str(), DATA_SPLITER.size());
     memcpy(&newData[from->getIPAddress().size() + DATA_SPLITER.size()],data, size);
 */
+
+    //data sou spatnej maj bejt jine conid
+    int conId = from->getConnectionID();
+    if(sizeof(size) == 4)
+    {
+        data[0] = conId & 0x000000ff;
+        data[1] = (conId & 0x0000ff00) >> 8;
+        data[2] = (conId & 0x00ff0000) >> 16;
+        data[3] = (conId & 0xff000000) >> 24;
+    }
+
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(SERVER_COMUNICATION_REQUEST,data,&packet,size);
 
@@ -205,29 +216,29 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
         {
          case LOGIN_REQUEST:
               Logger::getLogger()->Log("Got LOGIN_REQUEST packet");
-              qDebug() << "Got LOGIN_REQUEST packet";
               this->processLoginUserPacket(connectionID, data, dataSize);
               break;
          case LOGOUT_REQUEST:
-             Logger::getLogger()->Log("Got LOGOUT_REQUEST packet");
-             qDebug() << "Got LOGOUT_REQUEST packet";
              this->processLogoutUserPacket(connectionID, data, dataSize);
+             Logger::getLogger()->Log("Got LOGOUT_REQUEST packet" + from->getUsername());
              break;
         case  GET_ONLINE_USER_LIST_REQUEST:
-            Logger::getLogger()->Log("Got GET_ONLINE_USER_LIST_REQUEST packet");
             from = getUserFromConnectionID(connectionID);
+            Logger::getLogger()->Log("Got GET_ONLINE_USER_LIST_REQUEST packetfrom: " + from->getUsername());
             sendOnlineList(from);
             break;
         case CLIENT_COMUNICATION_REQUEST:
-            Logger::getLogger()->Log("Got CLIENT_COMUNICATION_REQUEST packet");
+
             from = getUserFromConnectionID(connectionID);
             to = getUserFromConnectionID(processClientComunicationRequest(data,dataSize));
+            Logger::getLogger()->Log("Got CLIENT_COMUNICATION_REQUEST packet from: "+ from->getUsername() + " to: "+ to->getUsername());
             sendConnectionRequest(from, to, data, dataSize);
             break;
         case CLIENT_COMUNICATION_RESPONSE:
-            Logger::getLogger()->Log("Got CLIENT_COMUNICATION_RESPONSE packet");
+
             from = getUserFromConnectionID(connectionID);
             to = getUserFromConnectionID(processClientComunicationResponse(data,dataSize));
+            Logger::getLogger()->Log("Got CLIENT_COMUNICATION_RESPONSE packet: "+ from->getUsername() + " to: "+ to->getUsername());
             sendConnectionResponse(from, to, data, dataSize);
             break;
          default:

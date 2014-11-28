@@ -1,6 +1,6 @@
 #include "Client.h"
 
-Client::Client(string username, string email) : mUsername(username), mEmail(email), mLoggedToServer(false), mConnectedToClient(false)
+Client::Client(string username, string email, qint16 UDPport) : mUsername(username), mEmail(email), mLoggedToServer(false), mConnectedToClient(false)
 {
     srand(time(NULL));
 
@@ -8,9 +8,14 @@ Client::Client(string username, string email) : mUsername(username), mEmail(emai
     mLastReicevedData = new unsigned char [10];
     memset(mLastReicevedData, 97, 10);
     this->mNetwork = new NetworkManager();
-    this->mNetwork->startConnection(SERVER_ADDRESS, SERVER_PORT);
+    this->mNetwork->startConnection(SERVER_ADDRESS, SERVER_PORT, UDPport);
 
     mCrypto = new CryptoManager();
+    mAESkey = new unsigned char[AES_KEY_LENGTH];
+    mAESIV = new unsigned char[AES_IV_LENGTH];
+    memset(mAESkey,'b',AES_KEY_LENGTH);
+    memset(mAESIV,'c',AES_IV_LENGTH);
+    mStatus = 256;
 
     connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
 }
@@ -32,6 +37,8 @@ int Client::login()
     this->mNetwork->sendData(packet, packetSize);
 
     delete[] data;
+    delete[] packet;
+
     return 0;
 }
 int Client::logout()
@@ -55,6 +62,8 @@ int Client::logout()
     Logger::getLogger()->Log("Client:"+ mUsername +" send LOGOUT_REQUEST");
 
     delete[] data;
+    delete[] packet;
+
     return 0;
 }
 
@@ -77,6 +86,7 @@ int Client::getOnlineList()
     Logger::getLogger()->Log("Client:"+ mUsername +" send GET_ONLINE_USER_LIST_REQUEST");
 
     delete[] data;
+    delete[] packet;
     return 0;
 }
 
@@ -111,6 +121,7 @@ int Client::connectToClient(int connectionID)
     Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_REQUEST");
 
     delete[] data;
+    delete[] packet;
     return 0;
 }
 
@@ -142,15 +153,15 @@ int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
         data[i] = rand() % 256;
 
 
-    mAESkey = new unsigned char[AES_KEY_LENGTH];
+
     memcpy(mAESkey,  &(data[5]), AES_KEY_LENGTH);
 
     // generovani IV
     for(int i = 1 + sizeof(connectionID) + AES_KEY_LENGTH; i < dataSize; i++)
         data[i] = rand() % 256;
 
-    mAESIV = new unsigned char[AES_IV_LENGTH];
-    memcpy(mAESkey,  &(data[1 + sizeof(connectionID) + AES_KEY_LENGTH]), AES_KEY_LENGTH);
+
+    memcpy(mAESIV,  &(data[1 + sizeof(connectionID) + AES_KEY_LENGTH]), AES_KEY_LENGTH);
 
     mCrypto->computeHash(mAESkey,mAESkey,AES_KEY_LENGTH);
 
@@ -163,6 +174,7 @@ int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
     Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_RESPONSE");
 
     delete[] data;
+    delete[] packet;
     return 0;
 
 }
@@ -197,19 +209,23 @@ int Client::refuseConnection(int connectionID)
    Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_RESPONSE");
 
    delete[] data;
+   delete[] packet;
 
    return 0;
 }
 
 int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* data, int size)
 {
-
+    std::cout <<  std::endl;
+    std::cout <<"data: ";
+    for(int i = 0; i < size; i++)
+        std::cout<< data[i];
+    std::cout <<  std::endl;
     unsigned char *packet = NULL;
 
     unsigned char *stream = new unsigned char[size];
     mCrypto->getEncKeystream(stream, size);
     mCrypto->XORData(data,data,size, stream);
-
 
 
     int packetSize = this->createPacket(CLIENT_COMMUNICATION_DATA,data,&packet,size);
@@ -230,6 +246,8 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
     std::cout <<  std::endl;
 
     delete[] stream;
+    delete[] packet;
+
     return 0;
 }
 
@@ -335,24 +353,27 @@ void Client::processPacket(unsigned char* packet, int size)
         switch(id)
         {
          case LOGIN_RESPONSE:
+            setStatus(LOGIN_RESPONSE);
             if(mUsername.compare((const char*)data))
             {
                 mLoggedToServer = true;
-                Logger::getLogger()->Log("Login successful");
+                Logger::getLogger()->Log("Client:"+ mUsername +"Login successful");
                 qDebug() << "Login successful";
 
             }
             break;
          case LOGOUT_RESPONSE:
+             setStatus(LOGOUT_RESPONSE);
             if(mUsername.compare((const char*)data))
             {
                 mLoggedToServer = false;
-                Logger::getLogger()->Log("Logout successful");
+                Logger::getLogger()->Log("Client:"+ mUsername +"Logout successful");
                 qDebug() << "Logout successful";
             }
             break;
         case GET_ONLINE_USER_LIST_REQUEST:
-            Logger::getLogger()->Log("GET_ONLINE_USER_LIST_REQUEST");
+             setStatus(GET_ONLINE_USER_LIST_REQUEST);
+            Logger::getLogger()->Log("Client:"+ mUsername +" got GET_ONLINE_USER_LIST_REQUEST");
             for (int i = 0; i < dataSize; i++)
             {
                 if(data[i] == ';')
@@ -362,15 +383,17 @@ void Client::processPacket(unsigned char* packet, int size)
             }
             break;
         case GET_ONLINE_USER_LIST_RESPONSE:
-            Logger::getLogger()->Log("GET_ONLINE_USER_LIST_RESPONSE");
+            setStatus(GET_ONLINE_USER_LIST_RESPONSE);
+            Logger::getLogger()->Log("Client:"+ mUsername +" got GET_ONLINE_USER_LIST_RESPONSE");
              qDebug() << "Received online list:" << bdata;
             processGetOnlineListResponse(data, dataSize);
             //tohle tadz pak nebude ale ted nwm kam to dat
-             this->connectToClient(this->OnlineList()[0]->getConnectionID());
+            // this->connectToClient(this->OnlineList()[0]->getConnectionID());
 
             break;
         case SERVER_COMUNICATION_REQUEST:
-             Logger::getLogger()->Log("SERVER_COMUNICATION_REQUEST");
+                setStatus(SERVER_COMUNICATION_REQUEST);
+                Logger::getLogger()->Log("Client:"+ mUsername +" got SERVER_COMUNICATION_REQUEST");
                 acceptConnection(processServerCommunicationRequest(data,dataSize),&data[4]);
                 mCrypto->startCtrCalculation(mAESkey,mAESIV);
                 std::cout << "aesKey: ";
@@ -379,11 +402,11 @@ void Client::processPacket(unsigned char* packet, int size)
                 std::cout << std::endl << "aesIV: ";
                 for(int i = 0; i < 16; i++)
                     std::cout<< mAESIV[i];
-               // mNetwork->receiveUdpData();
 
                 break;
         case SERVER_COMUNICATION_RESPONSE:
-             Logger::getLogger()->Log(" SERVER_COMUNICATION_RESPONSE");
+            setStatus(SERVER_COMUNICATION_RESPONSE);
+             Logger::getLogger()->Log("Client:"+ mUsername +" got SERVER_COMUNICATION_RESPONSE");
                 accept = processServerCommunicationResponse(data,dataSize);
                 //druhy klient zamitnul spojeni
                 if(!accept)
@@ -394,7 +417,7 @@ void Client::processPacket(unsigned char* packet, int size)
                 else
                 {
 
-                   Logger::getLogger()->Log(" ACCEPT CONNECTION - START CALC");
+                   Logger::getLogger()->Log("Client:"+ mUsername +"ACCEPT CONNECTION - START CALC");
                    mCrypto->computeHash(mAESkey,mAESkey,AES_KEY_LENGTH);
 
 
@@ -405,16 +428,27 @@ void Client::processPacket(unsigned char* packet, int size)
                    std::cout << std::endl << "aesIV: ";
                    for(int i = 0; i < 16; i++)
                        std::cout<< mAESIV[i];
-                   this->sendDataToClient(mReceiverIP, 13375,testData,5);
+                   //this->sendDataToClient(mReceiverIP, 12346,testData,5);
 
                 }
                 break;
         case CLIENT_COMMUNICATION_DATA:
-            qDebug() << "Received UDP data: " << bdata;
+            setStatus(CLIENT_COMMUNICATION_DATA);
+             Logger::getLogger()->Log("Client:"+ mUsername +" Received UDP data: ");
+            qDebug() << bdata;
             std::cout << "dataCyp: ";
             for(int i = 0; i < dataSize; i++)
                 std::cout<< data[i];
+
+            std::cout << "aesKey: ";
+            for(int i = 0; i < 16; i++)
+                std::cout<< mAESkey[i];
+            std::cout << std::endl << "aesIV: ";
+            for(int i = 0; i < 16; i++)
+                std::cout<< mAESIV[i];
+
             processServerCommunicationData(data, dataSize);
+
             break;
          default:
              break;
@@ -432,6 +466,7 @@ int Client::processServerCommunicationRequest(unsigned char *data, int size)
         connectionID = ( data[3] << 24) | ( data[2] << 16) | (data[1] << 8) | ( data[0]);
 
     }
+    std::cout << connectionID ;
     return connectionID;
 }
 int Client::processServerCommunicationResponse(unsigned char *data, int size)
@@ -442,16 +477,9 @@ int Client::processServerCommunicationResponse(unsigned char *data, int size)
         int connectionID  = 0;
         if(size > 3)
             connectionID  = ( data[4] << 24) | ( data[3] << 16) | (data[2] << 8) | ( data[1]);
-        int i, j;
-        for(i = 5, j = 0; i < size; i++,j++)
-        {
-            if(data[i] == ';')
-                break;
-            mAESkey[j] = data[i];
-        }
-        for(j = 0; i < size; i++,j++)
-            mAESIV[j] = data[i];
 
+        memcpy(mAESkey, data + 5, AES_KEY_LENGTH);
+        memcpy(mAESIV, data + 5 + AES_KEY_LENGTH,AES_IV_LENGTH);
 
     }
 
@@ -472,6 +500,8 @@ int Client::processGetOnlineListResponse(unsigned char *data, int size)
        if(u.size() > 2)
             mOnlineList.push_back(new User(u[0].toStdString(),"" , "", NULL, std::stoi(u[1].toStdString())));
     }
+    for(int i = 0; i < mOnlineList.size();i++)
+       std::cout << mOnlineList[i]->getUsername() <<  std::endl;
     return 0;
 }
 
@@ -524,4 +554,14 @@ bool Client::isConnected()
 void Client::sendData(unsigned char *data, int size)
 {
     this->mNetwork->sendData(data, size);
+}
+
+int Client::getStatus()
+{
+    return mStatus;
+}
+
+void Client::setStatus(int status)
+{
+    mStatus = status;
 }

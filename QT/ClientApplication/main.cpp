@@ -12,15 +12,21 @@ int main(int argc, char *argv[])
 
     if(argc == 2)
     {
+        QHostAddress mReceiverIP;
+        mReceiverIP= "127.0.0.1";
+        unsigned char testData[5];
+        for(int i = 0; i < 5; i++)
+            testData[i] = 'a';
+
         if(!strcmp(argv[1], "-l"))
         {
-            Client* client2 = new Client("test2", "test2@test2");
+            Client* client2 = new Client("test1", "test1@test1",12345);
 
             client2->login();
         }
         else if(!strcmp(argv[1], "-c"))
         {
-            Client* client2 = new Client("test2", "test2@test2");
+            Client* client2 = new Client("test2", "test2@test2",12346);
 
             client2->login();
 
@@ -30,6 +36,18 @@ int main(int argc, char *argv[])
                 qApp->processEvents();
                 client2->getOnlineList();
             }
+            while(client2->getStatus() != GET_ONLINE_USER_LIST_RESPONSE)
+            {
+                Sleep(10);
+                qApp->processEvents();
+            }
+            client2->connectToClient(client2->OnlineList()[0]->getConnectionID());
+            while(client2->getStatus() != SERVER_COMUNICATION_RESPONSE)
+            {
+                Sleep(10);
+                qApp->processEvents();
+            }
+            client2->sendDataToClient(mReceiverIP, 12345,testData,5);
         }
     }
     else
@@ -56,18 +74,18 @@ int main(int argc, char *argv[])
     for (int i = 0; i < 50; i++) std::cout << (int)(stream[i]) << " ";
     */
 
-    Client* client = new Client("test", "test@test");
+    Client* client = new Client("test", "test@test", 12345);
 
     client->login();
 
     Sleep(500);
-    Client* client2 = new Client("test2", "test2@test2");
+   /* Client* client2 = new Client("test2", "test2@test2", 12346);
 
     client2->login();
 
     while(!client2->isLogged())
     {
-    Sleep(10);
+    Sleep(100);
     qApp->processEvents();
     client2->getOnlineList();
     }
@@ -77,7 +95,7 @@ int main(int argc, char *argv[])
     Sleep(100);
     qApp->processEvents();
 
-    }
+    }*/
    // int conID = client2->OnlineList()[0]->getConnectionID();
    // client2->connectToClient(conID);
 

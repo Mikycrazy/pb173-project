@@ -20,4 +20,7 @@ void Logger::Log(const std::string& log)
 
     mFile << " - " << dt << "\t";
     mFile << log << std::endl;
+
+    qDebug() << log.c_str();
+
 }

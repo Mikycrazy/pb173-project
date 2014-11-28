@@ -1,11 +1,11 @@
 #include "NetworkManager.h"
 
-bool NetworkManager::startConnection(QString ipAddress, quint16 port)
+bool NetworkManager::startConnection(QString ipAddress, quint16 port, quint16 UDPport)
 {
     this->mSocket = new QTcpSocket();
     this->mUdpSocket = new QUdpSocket();
 
-    this->mUdpSocket->bind(QHostAddress::Any, UDP_PORT);
+    this->mUdpSocket->bind(QHostAddress::Any, UDPport);
 
     connect(mSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
     connect(mSocket, SIGNAL(readyRead()), this, SLOT(receiveData()));
@@ -44,7 +44,7 @@ void NetworkManager::disconnected()
 void NetworkManager::receiveData()
 {
     QByteArray data = mSocket->readAll();
-    qDebug() << "Received data from server:" << data.toHex();
+    //qDebug() << "Received data from server:" << data.toHex();
 
     emit this->networkReceivedData((unsigned char*)data.data(), data.length());
 }

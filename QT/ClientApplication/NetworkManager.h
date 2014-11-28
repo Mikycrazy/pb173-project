@@ -40,7 +40,7 @@ public:
     * @param port		server port
     * @return           true ak sa spojenie podarilo
     */
-    bool startConnection(QString ipAddress, quint16 port);
+    bool startConnection(QString ipAddress, quint16 port, quint16 UDPport);
 
     /**
     * Odosle data serveru

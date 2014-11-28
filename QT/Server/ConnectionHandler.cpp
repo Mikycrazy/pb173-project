@@ -16,7 +16,7 @@ void ConnectionHandler::readyRead()
 {
     qDebug() << "Ready read enter";
     QByteArray data = this->mSocket->readAll();
-    qDebug() << "Received data:" << data.toHex() << "size:" << data.length();
+    //qDebug() << "Received data:" << data.toHex() << "size:" << data.length();
 
     emit this->networkReceivedData(mSocketID, (unsigned char*)(data.data()), data.length());
 }
