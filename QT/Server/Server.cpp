@@ -5,13 +5,16 @@ Server::Server(quint16 port)
     srand(time(NULL));
 
     this->mNetwork = new NetworkManager();
+    this->mCrypto = new CryptoManager();
+
     connect(this->mNetwork, SIGNAL(receivedData(int,unsigned char*,int)), this, SLOT(processPacket(int,unsigned char*,int)));
     this->mNetwork->startListening(port);
 }
 
 Server::Server()
 {
-
+    this->mNetwork = new NetworkManager();
+    this->mCrypto = new CryptoManager();
 }
 
 bool Server::loginUser(User* user)
@@ -19,8 +22,7 @@ bool Server::loginUser(User* user)
     user->setOnline();
     mUsers.push_back(user);
 
-    Logger::getLogger()->Log("Logged user" + user->getUsername());
-    qDebug() << "Logged user" << (user->getUsername().c_str());
+    Logger::getLogger()->Log("Logged user " + user->getUsername());
 
     unsigned char *data = NULL;
     int dataSize = user->getUsername().size();
@@ -153,11 +155,13 @@ bool Server::sendConnectionResponse(User *from, User *to, unsigned char *data, i
 
 int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **packet, int size)
 {
-    int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size;
-    *packet = new unsigned char[newSize];//casem pribude hash
+    int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size + INTERGRITY_HASH_SIZE;
+
+    *packet = new unsigned char[newSize];
+    memset(*packet, 0 , newSize);
 
     (*packet)[0] = id;
-    //tady asi pak bude treba lepsi random
+
     for(int i = ID_LENGHT; i < ID_LENGHT + RANDOM_BYTES_LENGTH; i++)
     {
         (*packet)[i] = rand() % 256;
@@ -171,7 +175,15 @@ int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **
         (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 2] = (size & 0x00ff0000) >> 16;
         (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] = (size & 0xff000000) >> 24;
     }
-    memcpy(&((*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size)]),data, size);
+
+    memcpy(((*packet) + (ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size))), data, size);
+
+    unsigned char* hash = new unsigned char[32];
+    mCrypto->computeHash(*packet, hash, newSize - INTERGRITY_HASH_SIZE);
+
+    memcpy(((*packet) + ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size), hash, INTERGRITY_HASH_SIZE);
+
+    delete[] hash;
 
     return newSize;
 }
@@ -181,30 +193,36 @@ int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **
 void Server::processPacket(int connectionID, unsigned char* packet, int size)
 {
     Logger::getLogger()->Log("Received packet from connection" + connectionID);
-    qDebug() << "Received packet from connection" << connectionID;
 
     int id = 0;
     int dataSize = 0;
 
-    if (size < ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH)
+    if (size < ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH + INTERGRITY_HASH_SIZE)
     {
+
         Logger::getLogger()->Log("Received packet with invalid size:" + size);
-        qDebug() << "Received packet with invalid size:" << size;
         return;
     }
 
-    //desifrovani zkontrolovani hashu atd. tady bude
+    unsigned char* packethash = new unsigned char[INTERGRITY_HASH_SIZE];
+    memcpy(packethash, packet + size - INTERGRITY_HASH_SIZE, INTERGRITY_HASH_SIZE);
+
+    unsigned char* computedhash = new unsigned char[INTERGRITY_HASH_SIZE];
+    mCrypto->computeHash(packet, computedhash, size - INTERGRITY_HASH_SIZE);
+
+    if(!mCrypto->compareHash(packethash, computedhash, INTERGRITY_HASH_SIZE))
+        Logger::getLogger()->Log("Hashes not matching!!");
+
     if(sizeof(int) == 4)
     {
         id = packet[0];
         dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
 
-        if (dataSize + ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH != size || dataSize < 0)
+        if (dataSize + ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH + INTERGRITY_HASH_SIZE != size || dataSize < 0)
         {
             string s = "Received packet with invalid data size:" + dataSize;
             s +=  "- total packet size:" + size;
             Logger::getLogger()->Log(s);
-            qDebug() << "Received packet with invalid data size:" << dataSize << "- total packet size:" << size;
             return;
         }
 
@@ -214,14 +232,14 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
         User* to = NULL;
         switch(id)
         {
-         case LOGIN_REQUEST:
-              Logger::getLogger()->Log("Got LOGIN_REQUEST packet");
-              this->processLoginUserPacket(connectionID, data, dataSize);
-              break;
-         case LOGOUT_REQUEST:
-             this->processLogoutUserPacket(connectionID, data, dataSize);
-             Logger::getLogger()->Log("Got LOGOUT_REQUEST packet" + from->getUsername());
-             break;
+        case LOGIN_REQUEST:
+            Logger::getLogger()->Log("Got LOGIN_REQUEST packet");
+            this->processLoginUserPacket(connectionID, data, dataSize);
+            break;
+        case LOGOUT_REQUEST:
+            this->processLogoutUserPacket(connectionID, data, dataSize);
+            Logger::getLogger()->Log("Got LOGOUT_REQUEST packet" + from->getUsername());
+            break;
         case  GET_ONLINE_USER_LIST_REQUEST:
             from = getUserFromConnectionID(connectionID);
             Logger::getLogger()->Log("Got GET_ONLINE_USER_LIST_REQUEST packetfrom: " + from->getUsername());
@@ -260,7 +278,6 @@ void Server::processLoginUserPacket(int connectionID, unsigned char *data, int s
     if (parts.length() != 2)
     {
         Logger::getLogger()->Log("Received invalid login request packet, number of parts:" + parts.length());
-        qDebug() << "Received invalid login request packet, number of parts:" << parts.length();
         return;
     }
 
@@ -278,7 +295,6 @@ void Server::processLogoutUserPacket(int connectionID, unsigned char *data, int 
     if (parts.length() != 2)
     {
         Logger::getLogger()->Log("Received invalid login request packet, number of parts:" + parts.length());
-        qDebug() << "Received invalid logout request packet, number of parts:" << parts.length();
         return;
     }
 
@@ -311,21 +327,39 @@ User* Server::getUserFromConnectionID(int connectionID)
     return NULL;
 }
 
-int Server::processPacket(unsigned char* packet, unsigned char** data)
+int Server::processPacket(unsigned char* packet, unsigned char** data, int size)
 {
     if(packet == NULL)
-        return -1;
+     return -1;
 
     int id = 0;
     int dataSize = 0;
+
+    unsigned char* packethash = new unsigned char[INTERGRITY_HASH_SIZE];
+    memcpy(packethash, packet + size - INTERGRITY_HASH_SIZE, INTERGRITY_HASH_SIZE);
+
+    unsigned char* computedhash = new unsigned char[INTERGRITY_HASH_SIZE];
+    mCrypto->computeHash(packet, computedhash, size - INTERGRITY_HASH_SIZE);
+
+    std::cout << "Hash: ";
+    for (int i = 0; i < INTERGRITY_HASH_SIZE; i++) {
+      printf("%02X", packethash[i]);
+    }
+    std::cout << std::endl;
+
+    std::cout << "Hash: ";
+    for (int i = 0; i < INTERGRITY_HASH_SIZE; i++) {
+      printf("%02X", computedhash[i]);
+    }
+    std::cout << std::endl;
+
 
     if(sizeof(int) == 4)
     {
         id = packet[0];
         dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
         *data = new unsigned char [dataSize];
-         memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
-
-        return dataSize;
+        memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
     }
+    return dataSize;
 }

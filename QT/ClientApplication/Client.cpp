@@ -20,6 +20,12 @@ Client::Client(string username, string email, qint16 UDPport) : mUsername(userna
     connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
 }
 
+Client::Client() : mLoggedToServer(false), mConnectedToClient(false)
+{
+    mCrypto = new CryptoManager();
+    this->mNetwork = new NetworkManager();
+}
+
 int Client::login()
 {
     unsigned char *data = NULL;
@@ -128,7 +134,6 @@ int Client::connectToClient(int connectionID)
 
 int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
 {
-     qDebug() << "enter acceptConection";
     //if(!mLoggedToServer)
        // return 1;
 
@@ -176,12 +181,10 @@ int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
     delete[] data;
     delete[] packet;
     return 0;
-
 }
 
 int Client::refuseConnection(int connectionID)
 {
-    qDebug() << "enter refuseConnection";
    //if(!mLoggedToServer)
       // return 1;
 
@@ -227,13 +230,12 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
     mCrypto->getEncKeystream(stream, size);
     mCrypto->XORData(data,data,size, stream);
 
-
     int packetSize = this->createPacket(CLIENT_COMMUNICATION_DATA,data,&packet,size);
 
     //bude nasledovat sifrovani a poslani pres sit
 
     this->mNetwork->sendUdpData(address, port, packet, packetSize);
-    Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_DATA");
+    Logger::getLogger()->Log("Client: "+ mUsername +" send CLIENT_COMUNICATION_DATA");
 
     std::cout <<  std::endl;
     std::cout <<"data Cyp: ";
@@ -253,7 +255,6 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
 
 int Client::sendDataToClient(QHostAddress address, quint16 port, string filename)
 {
-
     std::ifstream t;
     int length;
     int dataSize = 1024;
@@ -272,25 +273,25 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, string filename
             if(length - i < dataSize)
                 dataSize = length - i;
             sendDataToClient(address, port, &buffer[i], dataSize);
-
         }
     }
-      return 0;
+    return 0;
 }
 
 
 int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **packet, int size)
 {
-    int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size;
-    *packet = new unsigned char[newSize];//casem pribude hash
+    int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size + INTERGRITY_HASH_SIZE;
+
+    *packet = new unsigned char[newSize];
+    memset(*packet, 0 , newSize);
 
     (*packet)[0] = id;
-    //tady asi pak bude treba lepsi random
+
     for(int i = ID_LENGHT; i < ID_LENGHT + RANDOM_BYTES_LENGTH; i++)
     {
         (*packet)[i] = rand() % 256;
     }
-
 
     //int to byte
     if(sizeof(size) == 4)
@@ -301,9 +302,23 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
         (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] = (size & 0xff000000) >> 24;
     }
 
-    memcpy(&((*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size)]), data, size);
+    memcpy(((*packet) + (ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size))), data, size);
+
+    unsigned char* hash = new unsigned char[32];
+    mCrypto->computeHash(*packet, hash, newSize - INTERGRITY_HASH_SIZE);
+
+    memcpy(((*packet) + ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size), hash, INTERGRITY_HASH_SIZE);
+
+    std::cout << "Packet: ";
+    for (int i = 0; i < newSize; i++) {
+      printf("%02X", (*packet)[i]);
+    }
+    std::cout << std::endl;
+
+    delete[] hash;
 
     return newSize;
+
 }
 
 void Client::processPacket(unsigned char* packet, int size)
@@ -311,21 +326,29 @@ void Client::processPacket(unsigned char* packet, int size)
     int id = 0;
     int dataSize = 0;
     mReceiverIP = "127.0.0.1";
-    if (size < ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH)
+
+    if (size < ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH + INTERGRITY_HASH_SIZE)
     {
 
         Logger::getLogger()->Log("Received packet with invalid size:" + size);
-        qDebug() << "Received packet with invalid size:" << size;
         return;
     }
 
-    //desifrovani zkontrolovani hashu atd. tady bude
+    unsigned char* packethash = new unsigned char[INTERGRITY_HASH_SIZE];
+    memcpy(packethash, packet + size - INTERGRITY_HASH_SIZE, INTERGRITY_HASH_SIZE);
+
+    unsigned char* computedhash = new unsigned char[INTERGRITY_HASH_SIZE];
+    mCrypto->computeHash(packet, computedhash, size - INTERGRITY_HASH_SIZE);
+
+    if(!mCrypto->compareHash(packethash, computedhash, INTERGRITY_HASH_SIZE))
+        Logger::getLogger()->Log("Hashes not matching!!");
+
     if(sizeof(int) == 4)
     {
         id = packet[0];
-        dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
+        dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24 ) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16 ) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8 ) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
 
-        if (dataSize + ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH != size || dataSize < 0)
+        if (dataSize + ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH + INTERGRITY_HASH_SIZE != size || dataSize < 0)
         {
             /*stringstream s;
             s << "Received packet with invalid data size:" << dataSize << "- total packet size:" << size;*/
@@ -392,46 +415,44 @@ void Client::processPacket(unsigned char* packet, int size)
 
             break;
         case SERVER_COMUNICATION_REQUEST:
-                setStatus(SERVER_COMUNICATION_REQUEST);
-                Logger::getLogger()->Log("Client:"+ mUsername +" got SERVER_COMUNICATION_REQUEST");
-                acceptConnection(processServerCommunicationRequest(data,dataSize),&data[4]);
-                mCrypto->startCtrCalculation(mAESkey,mAESIV);
-                std::cout << "aesKey: ";
-                for(int i = 0; i < 16; i++)
-                    std::cout<< mAESkey[i];
-                std::cout << std::endl << "aesIV: ";
-                for(int i = 0; i < 16; i++)
-                    std::cout<< mAESIV[i];
+            setStatus(SERVER_COMUNICATION_REQUEST);
+            Logger::getLogger()->Log("Client:"+ mUsername +" got SERVER_COMUNICATION_REQUEST");
+            acceptConnection(processServerCommunicationRequest(data,dataSize),&data[4]);
+            mCrypto->startCtrCalculation(mAESkey,mAESIV);
+            std::cout << "aesKey: ";
+            for(int i = 0; i < 16; i++)
+                std::cout<< mAESkey[i];
+            std::cout << std::endl << "aesIV: ";
+            for(int i = 0; i < 16; i++)
+                std::cout<< mAESIV[i];
 
-                break;
+            break;
         case SERVER_COMUNICATION_RESPONSE:
             setStatus(SERVER_COMUNICATION_RESPONSE);
-             Logger::getLogger()->Log("Client:"+ mUsername +" got SERVER_COMUNICATION_RESPONSE");
-                accept = processServerCommunicationResponse(data,dataSize);
-                //druhy klient zamitnul spojeni
-                if(!accept)
-                {
+            Logger::getLogger()->Log("Client:"+ mUsername +" got SERVER_COMUNICATION_RESPONSE");
+            accept = processServerCommunicationResponse(data,dataSize);
+            //druhy klient zamitnul spojeni
+            if(!accept)
+            {
 
-                }
-                //druhy klient prijal spojeni
-                else
-                {
+            }
+            //druhy klient prijal spojeni
+            else
+            {
 
-                   Logger::getLogger()->Log("Client:"+ mUsername +"ACCEPT CONNECTION - START CALC");
-                   mCrypto->computeHash(mAESkey,mAESkey,AES_KEY_LENGTH);
+               Logger::getLogger()->Log("Client:"+ mUsername +"ACCEPT CONNECTION - START CALC");
+               mCrypto->computeHash(mAESkey,mAESkey,AES_KEY_LENGTH);
+               mCrypto->startCtrCalculation(mAESkey,mAESIV);
+               std::cout << "aesKey: ";
+               for(int i = 0; i < 16; i++)
+                   std::cout<< mAESkey[i];
+               std::cout << std::endl << "aesIV: ";
+               for(int i = 0; i < 16; i++)
+                   std::cout<< mAESIV[i];
+               //this->sendDataToClient(mReceiverIP, 12346,testData,5);
 
-
-                   mCrypto->startCtrCalculation(mAESkey,mAESIV);
-                   std::cout << "aesKey: ";
-                   for(int i = 0; i < 16; i++)
-                       std::cout<< mAESkey[i];
-                   std::cout << std::endl << "aesIV: ";
-                   for(int i = 0; i < 16; i++)
-                       std::cout<< mAESIV[i];
-                   //this->sendDataToClient(mReceiverIP, 12346,testData,5);
-
-                }
-                break;
+            }
+            break;
         case CLIENT_COMMUNICATION_DATA:
             setStatus(CLIENT_COMMUNICATION_DATA);
              Logger::getLogger()->Log("Client:"+ mUsername +" Received UDP data: ");
@@ -452,7 +473,6 @@ void Client::processPacket(unsigned char* packet, int size)
             break;
          default:
              break;
-
         }
         delete[] data;
     }
@@ -482,7 +502,6 @@ int Client::processServerCommunicationResponse(unsigned char *data, int size)
         memcpy(mAESIV, data + 5 + AES_KEY_LENGTH,AES_IV_LENGTH);
 
     }
-
     return accept;
 }
 int Client::processGetOnlineListResponse(unsigned char *data, int size)
@@ -523,13 +542,32 @@ int Client::processServerCommunicationData(unsigned char *data, int size)
     return 0;
 }
 
-int Client::processPacket(unsigned char* packet, unsigned char** data)
+int Client::processPacket(unsigned char* packet, unsigned char** data, int size)
 {
     if(packet == NULL)
      return -1;
 
     int id = 0;
     int dataSize = 0;
+
+    unsigned char* packethash = new unsigned char[INTERGRITY_HASH_SIZE];
+    memcpy(packethash, packet + size - INTERGRITY_HASH_SIZE, INTERGRITY_HASH_SIZE);
+
+    unsigned char* computedhash = new unsigned char[INTERGRITY_HASH_SIZE];
+    mCrypto->computeHash(packet, computedhash, size - INTERGRITY_HASH_SIZE);
+
+    std::cout << "Hash: ";
+    for (int i = 0; i < INTERGRITY_HASH_SIZE; i++) {
+      printf("%02X", packethash[i]);
+    }
+    std::cout << std::endl;
+
+    std::cout << "Hash: ";
+    for (int i = 0; i < INTERGRITY_HASH_SIZE; i++) {
+      printf("%02X", computedhash[i]);
+    }
+    std::cout << std::endl;
+
 
     if(sizeof(int) == 4)
     {

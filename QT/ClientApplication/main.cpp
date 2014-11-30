@@ -2,7 +2,6 @@
 #include "NetworkManager.h"
 #include "Client.h"
 #include "Windows.h"
-//#include "polarssl/aes.h"
 
 //#define UNIT_TEST
 #ifndef UNIT_TEST
@@ -49,30 +48,23 @@ int main(int argc, char *argv[])
             }
             client2->sendDataToClient(mReceiverIP, 12345,testData,5);
         }
+        else if(!strcmp(argv[1], "-d"))
+        {
+            Client c;
+
+            const int DATA_LENGTH = 10;
+            unsigned char* data = new unsigned char[DATA_LENGTH];
+            unsigned char* packet = NULL;
+            unsigned char* data2 = NULL;
+
+            memset(data, 97, DATA_LENGTH);
+
+            int size = c.createPacket(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
+            int size2 = c.processPacket(packet, &data2, size);
+        }
     }
     else
     {
-    /*
-    unsigned char key[16];
-    unsigned char nonce_counter[16] = {0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,250};
-
-    CryptoManager manager;
-    manager.startCtrCalculation(key, nonce_counter);
-
-    unsigned char stream[50];
-
-    manager.getEncKeystream(stream, 50);
-    for (int i = 0; i < 50; i++) std::cout << (int)(stream[i]) << " ";
-    std::cout << endl;
-
-    for (int i = 0; i < 200000; i++)
-        manager.getEncKeystream(stream, 50);
-    for (int i = 0; i < 50; i++) std::cout << (int)(stream[i]) << " ";
-    std::cout << endl;
-
-    manager.getDecKeystream(stream, 50);
-    for (int i = 0; i < 50; i++) std::cout << (int)(stream[i]) << " ";
-    */
 
     Client* client = new Client("test", "test@test", 12345);
 
@@ -122,50 +114,7 @@ int main(int argc, char *argv[])
    // int conID = client->OnlineList()[0]->getConnectionID();
    // client->connectToClient(conID);
     //client->logout();
-/*
-    CryptoManager manager;
-    unsigned char key[16] = "0";
-    unsigned char iv[16] = { 0xb6, 0x58, 0x9f, 0xc6, 0xab, 0x0d, 0xc8, 0x2c, 0xf1, 0x20, 0x99, 0xd1, 0xc2, 0xd4, 0x0a, 0xb9 };
-    unsigned char iv2[16];
 
-    memcpy(iv2, iv, 16);
-
-    for(int i = 0; i < 10; i++)
-    {
-        unsigned char* data;
-        unsigned char* cypher = new unsigned char[16];
-        unsigned char data2[] = "Hello World";
-        unsigned char* cypher2 = new unsigned char[16];
-
-        memset(cypher2, 0, 16);
-
-
-        std::string s = manager.PrepairCounterForEncryption(i);
-        data = (unsigned char*)s.c_str();
-
-        manager.encryptAES(data, cypher, key, iv, 16);
-
-
-        manager.XORData(data2, cypher2, 11, cypher);
-
-
-        char printstr[22] = {00};
-
-        for(int x = 0; x < 11; x++)
-            sprintf(printstr+(x*2), "%02x", cypher[x]);
-        printstr[21] = '\0';
-
-        std::cout << data2 << "  --  " << printstr << "  --  ";
-
-        manager.XORData(cypher2, data, 11,  cypher);
-
-        std::cout << data << std::endl;
-
-
-
-
-    }
-*/
     }
     return a.exec();
 }

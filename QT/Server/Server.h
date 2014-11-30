@@ -4,6 +4,7 @@
 #include "User.h"
 #include "Opcodes.h"
 #include "NetworkManager.h"
+#include "CryptoManager.h"
 #include <vector>
 #include <QDebug>
 #include <time.h>
@@ -15,6 +16,7 @@ using namespace std;
 const int ID_LENGHT = 1;
 const int RANDOM_BYTES_LENGTH = 10;
 const int DATA_SIZE_LENGTH = 4;
+const int INTERGRITY_HASH_SIZE = 32;
 const std::string DATA_SPLITER = ";";
 
 class Server : QObject
@@ -26,9 +28,7 @@ private:
     unsigned char* mPrivateKey;
     unsigned char* mPublicKey;
     NetworkManager* mNetwork;
-
-
-
+    CryptoManager* mCrypto;
 public:
 
     /**
@@ -81,7 +81,7 @@ public:
     */
     bool sendConnectionResponse(User* from, User* to, unsigned char* data, int size);
 
-    int processPacket(unsigned char* packet, unsigned char** data);
+    int processPacket(unsigned char* packet, unsigned char** data, int size);
 
     /**
     * Zpracuje data a id pozadavku do podoby paketu k odeslani po siti

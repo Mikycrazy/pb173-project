@@ -72,9 +72,9 @@ TEST_CASE("PACKET CREATING")
         memset(data, 84, DATA_LENGTH);
 
         int size = s.createPacket(LOGIN_RESPONSE, data, &packet, DATA_LENGTH);
-        int size2 = s.processPacket(packet, &data2);
+        int size2 = s.processPacket(packet, &data2, size);
 
-        REQUIRE(size == DATA_LENGTH + 15);
+        REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
 
         if(size2 == 1)
@@ -96,9 +96,9 @@ TEST_CASE("PACKET CREATING")
         memset(data, 84, DATA_LENGTH);
 
         int size = s.createPacket(LOGOUT_RESPONSE, data, &packet, DATA_LENGTH);
-        int size2 = s.processPacket(packet, &data2);
+        int size2 = s.processPacket(packet, &data2, size);
 
-        REQUIRE(size == DATA_LENGTH + 15);
+        REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
 
         if(size2 == 1)
@@ -120,9 +120,9 @@ TEST_CASE("PACKET CREATING")
         memset(data, 97, DATA_LENGTH);
 
         int size = s.createPacket(GET_ONLINE_USER_LIST_REQUEST, data, &packet, DATA_LENGTH);
-        int size2 = s.processPacket(packet, &data2);
+        int size2 = s.processPacket(packet, &data2, size);
 
-        REQUIRE(size == DATA_LENGTH + 15);
+        REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
 
         if(size2 == DATA_LENGTH)

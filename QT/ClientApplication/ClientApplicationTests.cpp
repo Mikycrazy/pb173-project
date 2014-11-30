@@ -10,21 +10,21 @@
 const char IP_SERVER[] = "127.0.0.1";
 const int PORT_SERVER = 13374;
 
-/*
+
 TEST_CASE("SERVER")
 {
 
     SECTION("is not avaible")
     {
         NetworkManager manager;
-        REQUIRE_FALSE(manager.startConnection(IP_SERVER, PORT_SERVER));
+        REQUIRE_FALSE(manager.startConnection(IP_SERVER, PORT_SERVER, UDP_PORT));
     }
     SECTION("is avaible")
     {
         MyServer server;
 
         NetworkManager manager;
-        REQUIRE(manager.startConnection(IP_SERVER, PORT_SERVER));
+        REQUIRE(manager.startConnection(IP_SERVER, PORT_SERVER, UDP_PORT));
 
         server.Stop();
     }
@@ -43,9 +43,9 @@ TEST_CASE("PACKET CREATING")
         memset(data, 97, DATA_LENGTH);
 
         int size = c.createPacket(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
-        int size2 = c.processPacket(packet, &data2);
+        int size2 = c.processPacket(packet, &data2, size);
 
-        REQUIRE(size == DATA_LENGTH + 15);
+        REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
 
         if(size2 == DATA_LENGTH)
@@ -72,9 +72,9 @@ TEST_CASE("PACKET CREATING")
         unsigned char* data2 = NULL;
 
         int size = c.createPacket(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
-        int size2 = c.processPacket(packet, &data2);
+        int size2 = c.processPacket(packet, &data2, size);
 
-        REQUIRE(size == DATA_LENGTH + 15);
+        REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
 
         delete data;
@@ -91,9 +91,9 @@ TEST_CASE("PACKET CREATING")
         memset(data, 97, DATA_LENGTH);
 
         int size = c.createPacket(LOGOUT_REQUEST, data, &packet, DATA_LENGTH);
-        int size2 = c.processPacket(packet, &data2);
+        int size2 = c.processPacket(packet, &data2, size);
 
-        REQUIRE(size == DATA_LENGTH + 15);
+        REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
 
         if(size2 == DATA_LENGTH)
@@ -122,9 +122,9 @@ TEST_CASE("PACKET CREATING")
         memset(data, 97, DATA_LENGTH);
 
         int size = c.createPacket(LOGOUT_REQUEST, data, &packet, DATA_LENGTH);
-        int size2 = c.processPacket(packet, &data2);
+        int size2 = c.processPacket(packet, &data2, size);
 
-        REQUIRE(size == DATA_LENGTH + 15);
+        REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
 
         if(size2 == DATA_LENGTH)
@@ -153,9 +153,9 @@ TEST_CASE("PACKET CREATING")
         memset(data, 97, DATA_LENGTH);
 
         int size = c.createPacket(GET_ONLINE_USER_LIST_REQUEST, data, &packet, DATA_LENGTH);
-        int size2 = c.processPacket(packet, &data2);
+        int size2 = c.processPacket(packet, &data2, size);
 
-        REQUIRE(size == DATA_LENGTH + 15);
+        REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
 
         if(size2 == DATA_LENGTH)
@@ -187,7 +187,7 @@ TEST_CASE("SENDING DATA")
 
         MyServer server;
 
-        Client c("asdf","asdf");
+        Client c("asdf","asdf",UDP_PORT);
         c.sendData(data, DATA_LENGTH);
 
         QByteArray data2 = server.getLastData();
@@ -222,7 +222,7 @@ TEST_CASE("RECIEVING DATA")
         for(int i = 0; i < DATA_LENGTH; i++)
             data[i] = char(i);
 
-        Client c("asdf","asdf");
+        Client c("asdf","asdf",UDP_PORT);
         c.createPacket(LOGIN_RESPONSE, data, &packet, DATA_LENGTH);
         c.sendData(packet, DATA_LENGTH);
 
@@ -255,7 +255,7 @@ TEST_CASE("RECIEVING DATA")
 
         memset(data, 97, DATA_LENGTH);
 
-        Client c("asdf","asdf");
+        Client c("asdf","asdf",UDP_PORT);
         c.sendData(data, DATA_LENGTH);
 
         data2 = c.getLastData();
@@ -285,7 +285,7 @@ TEST_CASE("RECIEVING DATA")
 
         memcpy(data, tmp, DATA_LENGTH);
 
-        Client c("asdf","asdf");
+        Client c("asdf","asdf",UDP_PORT);
         int size = c.createPacket(GET_ONLINE_USER_LIST_RESPONSE, data, &packet, DATA_LENGTH);
         c.sendData(packet, size);
 
@@ -317,7 +317,7 @@ TEST_CASE("CLIENT TO CLIENT")
 
     SECTION("Send data to client")
     {
-        Client* client = new Client("test", "test@test");
+        Client* client = new Client("test", "test@test",UDP_PORT);
         unsigned char* data2 = NULL;
         QHostAddress address("127.0.0.1");
         unsigned char data[5] = {'a', 'b', 'c', 'd', 'e'};
@@ -344,7 +344,7 @@ TEST_CASE("CLIENT TO CLIENT")
         delete client;
     }
 }
-*/
+/*
 TEST_CASE("KEYSTREAM")
 {
     SECTION("Generating keystream and cheacking if method waiting on data ")
@@ -380,5 +380,5 @@ TEST_CASE("KEYSTREAM")
         REQUIRE(elapsed_secs[0] < elapsed_secs[4]);
 
     }
-}
+}*/
 #endif

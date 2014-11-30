@@ -15,6 +15,7 @@ const int ID_LENGHT = 1;
 const int RANDOM_BYTES_LENGTH = 10;
 const int DATA_SIZE_LENGTH = 4;
 const int CYPHER_BLOCK_LENGTH = 16;
+const int INTERGRITY_HASH_SIZE = 32;
 const std::string DATA_SPLITER = ";";
 
 const QString SERVER_ADDRESS = "127.0.0.1";
@@ -60,7 +61,7 @@ public:
 	* @param username		uzivatelke jmeno
 	* @param email			email
 	*/
-    Client() : mLoggedToServer(false), mConnectedToClient(false) { ; }
+    Client();
     Client(std::string username, std::string email, qint16 UDPport);
     ~Client() {}
 
@@ -144,7 +145,7 @@ public:
 
     int createPacket(unsigned char id, unsigned char* data, unsigned char **packet, int size);
 
-    int processPacket(unsigned char* packet, unsigned char** data);
+    int processPacket(unsigned char* packet, unsigned char** data, int size);
 
     bool isLogged();
 

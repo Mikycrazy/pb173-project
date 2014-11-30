@@ -119,6 +119,8 @@ public:
 	*/
     int computeHash(unsigned char* data, unsigned char hash[], int size);
 
+    bool compareHash(unsigned char *hash1, unsigned char *hash2, int size);
+
 	/**
 	* ziska public key daneho uzivatele
 	*
