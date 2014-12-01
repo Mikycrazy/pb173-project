@@ -233,3 +233,7 @@ $RECYCLE.BIN/
 *.Debug
 *.Release
 QT/build-ClientApplication-Desktop_Qt_5_3_MSVC2013_64bit-Debug/log.txt
+QT/build-ClientApplication-Desktop_Qt_5_3_MSVC2013_64bit-Debug/Makefile
+QT/build-ClientApplication-Desktop_Qt_5_3_MSVC2013_64bit-Debug/Makefile
+QT/build-ClientApplication-Desktop_Qt_5_3_MSVC2013_64bit-Debug/Makefile
+QT/build-ClientApplication-Desktop_Qt_5_3_MSVC2013_64bit-Debug/Makefile.Debug
