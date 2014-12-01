@@ -28,6 +28,7 @@ class Client : public QObject
 private:
 	std::string mUsername;
 	std::string mEmail;
+    int UDPport;
 
 	unsigned char* mAESkey;
     unsigned char* mAESIV;
@@ -172,6 +173,8 @@ private:
     int processServerCommunicationResponse(unsigned char *data, int size);
 
     int processServerCommunicationData(unsigned char *data, int size);
+
+    void initNetwork();
 
 public slots:
 

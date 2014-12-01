@@ -7,8 +7,8 @@ Client::Client(string username, string email, qint16 UDPport) : mUsername(userna
     mLastReicevedDataSize = 10;
     mLastReicevedData = new unsigned char [10];
     memset(mLastReicevedData, 97, 10);
-    this->mNetwork = new NetworkManager();
-    this->mNetwork->startConnection(SERVER_ADDRESS, SERVER_PORT, UDPport);
+    this->UDPport = UDPport;
+    this->initNetwork();
 
     mCrypto = new CryptoManager();
     mAESkey = new unsigned char[AES_KEY_LENGTH];
@@ -16,14 +16,20 @@ Client::Client(string username, string email, qint16 UDPport) : mUsername(userna
     memset(mAESkey,'b',AES_KEY_LENGTH);
     memset(mAESIV,'c',AES_IV_LENGTH);
     mStatus = 256;
-
-    connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
 }
 
 Client::Client() : mLoggedToServer(false), mConnectedToClient(false)
 {
     mCrypto = new CryptoManager();
     this->mNetwork = new NetworkManager();
+}
+
+void Client::initNetwork()
+{
+    this->mNetwork = new NetworkManager();
+    this->mNetwork->startConnection(SERVER_ADDRESS, SERVER_PORT, this->UDPport);
+
+    connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
 }
 
 int Client::login()
@@ -44,6 +50,20 @@ int Client::login()
 
     delete[] data;
     delete[] packet;
+
+    int counter = 0;
+    std::chrono::milliseconds sleepTime(10);
+    while(!this->isLogged() && ++counter < 200)
+    {
+        std::this_thread::sleep_for(sleepTime);
+        qApp->processEvents();
+    }
+    if (counter == 200)
+    {
+        Logger::getLogger()->Log("Connection with server failed. Reconnecting...");
+        this->initNetwork();
+        return this->login();
+    }
 
     return 0;
 }
