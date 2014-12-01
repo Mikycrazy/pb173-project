@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        QHostAddress mReceiverIP;
+      QHostAddress mReceiverIP;
         mReceiverIP= "127.0.0.1";
     std::cout << "Zadej username" << std::endl;
     std::string username, input;
@@ -87,8 +87,9 @@ int main(int argc, char *argv[])
     {
         Sleep(10);
         qApp->processEvents();
-        client->getOnlineList();
+
     }
+    client->getOnlineList();
     while(client->getStatus() != GET_ONLINE_USER_LIST_RESPONSE)
     {
         Sleep(10);
@@ -108,8 +109,11 @@ int main(int argc, char *argv[])
      std::cout << std::endl << "Zadejte data ktera chcete poslat" << std::endl;
      std::cin >> input;
      client->sendDataToClient(mReceiverIP, 12345,(unsigned char *)input.c_str(),input.size());
-
-    Sleep(500);
+     while(client->getStatus() != CLIENT_COMMUNICATION_DATA)
+     {
+         Sleep(10);
+         qApp->processEvents();
+     }
    /* Client* client2 = new Client("test2", "test2@test2", 12346);
 
     client2->login();
