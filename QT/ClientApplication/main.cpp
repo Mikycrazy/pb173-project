@@ -33,9 +33,9 @@ int main(int argc, char *argv[])
             {
                 Sleep(10);
                 qApp->processEvents();
-                client2->getOnlineList();
-            }
 
+            }
+            client2->getOnlineList();
             while(client2->getStatus() != GET_ONLINE_USER_LIST_RESPONSE)
             {
                 Sleep(10);

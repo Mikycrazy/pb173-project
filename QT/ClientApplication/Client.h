@@ -50,6 +50,9 @@ private:
     int mLastReicevedDataSize;
 
     int mStatus;
+    int mCypherPosition;
+    int mCypherLastPositionRecieved;
+    int UDPport;
 
 public:
 
@@ -162,6 +165,7 @@ public:
 
     int getStatus();
     void setStatus(int status);
+    void setCypherPosition(int pos);
 
 private:
     int processGetOnlineListResponse(unsigned char *data, int size);
@@ -170,7 +174,8 @@ private:
 
     int processServerCommunicationResponse(unsigned char *data, int size);
 
-    int processServerCommunicationData(unsigned char *data, int size);
+    int processServerCommunicationData(unsigned char **data, int size);
+    void initNetwork();
 
 public slots:
 

@@ -202,7 +202,6 @@ void CryptoManager::getKeystream(unsigned char* stream, int* start, int* end, un
     {
         memcpy(output, stream + begin, length);
 
-        if (from == -1)
             *start += length;
     }
     else
@@ -211,7 +210,6 @@ void CryptoManager::getKeystream(unsigned char* stream, int* start, int* end, un
         memcpy(output, stream + begin, endDiff);
         memcpy(output + endDiff, stream, length - endDiff);
 
-        if (from == -1)
             *start = length - endDiff;
     }
 }

@@ -7,8 +7,9 @@ Client::Client(string username, string email, qint16 UDPport) : mUsername(userna
     mLastReicevedDataSize = 10;
     mLastReicevedData = new unsigned char [10];
     memset(mLastReicevedData, 97, 10);
-    this->mNetwork = new NetworkManager();
-    this->mNetwork->startConnection(SERVER_ADDRESS, SERVER_PORT, UDPport);
+
+    this->UDPport = UDPport;
+    this->initNetwork();
 
     mCrypto = new CryptoManager();
     mAESkey = new unsigned char[AES_KEY_LENGTH];
@@ -17,8 +18,10 @@ Client::Client(string username, string email, qint16 UDPport) : mUsername(userna
     memset(mAESIV,'c',AES_IV_LENGTH);
 
     mStatus = 256;
+    mCypherPosition = 0;
+    mCypherLastPositionRecieved = 0;
 
-    connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
+   // connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
 }
 
 Client::Client() : mLoggedToServer(false), mConnectedToClient(false)
@@ -31,6 +34,15 @@ Client::~Client()
 {
     delete mNetwork;
     delete mCrypto;
+}
+
+void Client::initNetwork()
+{
+    this->mNetwork = new NetworkManager();
+    this->mNetwork->startConnection(SERVER_ADDRESS, SERVER_PORT, this->UDPport);
+
+    connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
+
 }
 
 int Client::login()
@@ -50,6 +62,20 @@ int Client::login()
 
     delete[] data;
     delete[] packet;
+
+    int counter = 0;
+    std::chrono::milliseconds sleepTime(10);
+    while(!this->isLogged() && ++counter < 200)
+    {
+        std::this_thread::sleep_for(sleepTime);
+        qApp->processEvents();
+    }
+    if (counter == 200)
+    {
+        Logger::getLogger()->Log("Connection with server failed. Reconnecting...");
+        this->initNetwork();
+        return this->login();
+    }
 
     return 0;
 }
@@ -245,7 +271,7 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
     mCrypto->XORData(data, data, size, stream);
 
     int packetSize = this->createPacket(CLIENT_COMMUNICATION_DATA,data,&packet,size);
-
+    mCypherPosition++;
     //bude nasledovat sifrovani a poslani pres sit
 
     this->mNetwork->sendUdpData(address, port, packet, packetSize);
@@ -295,9 +321,12 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, string filename
 int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **packet, int size)
 {
     int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size + INTERGRITY_HASH_SIZE;
+    if(id == CLIENT_COMMUNICATION_DATA)
+        newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + sizeof(mCypherPosition) + size + INTERGRITY_HASH_SIZE;
+
 
     *packet = new unsigned char[newSize];
-    memset(*packet, 0 , newSize);
+    memset(*packet,97 , newSize);
 
     (*packet)[0] = id;
 
@@ -305,27 +334,64 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
     {
         (*packet)[i] = rand() % 256;
     }
-
-    //int to byte
-    if(sizeof(size) == 4)
+    if(id == CLIENT_COMMUNICATION_DATA)
     {
-        (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH] = size & 0x000000ff;
-        (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] = (size & 0x0000ff00) >> 8;
-        (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 2] = (size & 0x00ff0000) >> 16;
-        (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] = (size & 0xff000000) >> 24;
+
+        size += sizeof(mCypherPosition);
+        if(sizeof(size) == 4)
+        {
+            (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH] = size & 0x000000ff;
+            (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] = (size & 0x0000ff00) >> 8;
+            (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 2] = (size & 0x00ff0000) >> 16;
+            (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] = (size & 0xff000000) >> 24;
+        }
+        std::cout << "Packet: ";
+        for (int i = 0; i < newSize; i++) {
+          printf("%02X", (*packet)[i]);
+        }
+        std::cout << std::endl;
+        if(sizeof(mCypherPosition) == 4)
+        {
+            (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size)] = mCypherPosition & 0x000000ff;
+            (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + 1] = (mCypherPosition & 0x0000ff00) >> 8;
+            (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + 2] = (mCypherPosition & 0x00ff0000) >> 16;
+            (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + 3] = (mCypherPosition & 0xff000000) >> 24;
+        }
+        std::cout << "Packet: ";
+        for (int i = 0; i < newSize; i++) {
+          printf("%02X", (*packet)[i]);
+        }
+        std::cout << std::endl;
+        memcpy(((*packet) + (ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + sizeof(mCypherPosition) )), data, size - sizeof(mCypherPosition));
+
+        unsigned char* hash = new unsigned char[32];
+        mCrypto->computeHash(*packet, hash, newSize - INTERGRITY_HASH_SIZE);
+
+        memcpy(((*packet) + ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size), hash, INTERGRITY_HASH_SIZE);
+        delete[] hash;
     }
+    else
+    {
+        //int to byte
+        if(sizeof(size) == 4)
+        {
+            (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH] = size & 0x000000ff;
+            (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] = (size & 0x0000ff00) >> 8;
+            (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 2] = (size & 0x00ff0000) >> 16;
+            (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] = (size & 0xff000000) >> 24;
+        }
 
-    memcpy(((*packet) + (ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size))), data, size);
 
-    unsigned char* hash = new unsigned char[32];
-    mCrypto->computeHash(*packet, hash, newSize - INTERGRITY_HASH_SIZE);
+        memcpy(((*packet) + (ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size))), data, size);
 
-    memcpy(((*packet) + ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size), hash, INTERGRITY_HASH_SIZE);
+        unsigned char* hash = new unsigned char[32];
+        mCrypto->computeHash(*packet, hash, newSize - INTERGRITY_HASH_SIZE);
 
-    delete[] hash;
+        memcpy(((*packet) + ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size), hash, INTERGRITY_HASH_SIZE);
 
+        delete[] hash;
+     }
     return newSize;
-
 }
 
 void Client::processPacket(unsigned char* packet, int size)
@@ -462,7 +528,7 @@ void Client::processPacket(unsigned char* packet, int size)
             for(int i = 0; i < 16; i++)
                 std::cout << std::hex << static_cast<int>(mAESIV[i]);
 
-            processServerCommunicationData(data, dataSize);
+            processServerCommunicationData(&data, dataSize);
 
             break;
          default:
@@ -520,16 +586,40 @@ int Client::processGetOnlineListResponse(unsigned char *data, int size)
     return 0;
 }
 
-int Client::processServerCommunicationData(unsigned char *data, int size)
+int Client::processServerCommunicationData(unsigned char **data, int size)
 {
+    std::cout << "enter proces communication data" << std::endl;
+    unsigned char *oldData = new unsigned char[size];
+    memcpy(oldData, *data, size);
+    int cypherPosition = 0;
+    if(size > 3)
+    {
+        cypherPosition = ( oldData[3] << 24) | ( oldData[2] << 16) | (oldData[1] << 8) | ( oldData[0]);
+
+    }
+    if(cypherPosition < mCypherLastPositionRecieved)
+    {
+         Logger::getLogger()->Log("Packet dropped");
+        delete[] oldData;
+        return 1;
+    }
+
+    mCypherLastPositionRecieved = cypherPosition;
+    delete[] *data;
+    size -= sizeof(mCypherPosition);
+    *data = new unsigned char[size];
+    memcpy(*data,oldData + sizeof(mCypherPosition), size );
+
     unsigned char *stream = new unsigned char[size];
-    mCrypto->getDecKeystream(stream, size);
-    mCrypto->XORData(data, data, size, stream);
+
+    //mCrypto->getDecKeystream(stream, size);
+    mCrypto->getDecKeystream(stream, size, mCypherLastPositionRecieved);
+    mCrypto->XORData(*data,*data,size, stream);
 
     std::cout << std::endl;
     std::cout << "data: ";
     for(int i = 0; i < size; i++)
-        std::cout << data[i];
+        std::cout<< (*data)[i];
     std::cout <<  std::endl;
 
      std::cout <<"stream: ";
@@ -538,7 +628,7 @@ int Client::processServerCommunicationData(unsigned char *data, int size)
     std::cout << std::endl;
 
     delete[] stream;
-
+    delete[] oldData;
     return 0;
 }
 
@@ -603,3 +693,7 @@ void Client::setStatus(int status)
 {
     mStatus = status;
 }
+ void  Client::setCypherPosition(int pos)
+ {
+    mCypherPosition = pos;
+ }
