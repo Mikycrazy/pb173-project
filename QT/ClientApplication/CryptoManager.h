@@ -21,12 +21,16 @@ private:
 	sha256_context mSha;
     //pk_context mRsa;
     std::thread *mEncKeystreamThread, *mDecKeystreamThread;
+
     char* mEncKeystream;
     char* mDecKeystream;
+
     char mCounterStart[CTR_PART_LENGTH];
+
     int mEncKeystreamStart, mEncKeystreamEnd;
     int mDecKeystreamStart, mDecKeystreamEnd;
-    unsigned char *mAesKey;
+
+    unsigned char* mAesKey;
 public:
     CryptoManager();
     ~CryptoManager();

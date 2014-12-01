@@ -26,6 +26,7 @@ void NetworkManager::incomingConnection(qintptr handle)
 
     ConnectionHandler* connection = new ConnectionHandler(handle, socket);
     connect(connection, SIGNAL(networkReceivedData(int,unsigned char*,int)), this, SLOT(networkReceivedData(int,unsigned char*,int)));
+    connect(connection, SIGNAL(clientDisconnected(int)), this, SLOT(clientDisconnect(int)));
     connection->start();
 }
 
@@ -44,4 +45,9 @@ bool NetworkManager::sendData(int connectionID, const unsigned char* data, int s
     socket->flush();
 
     return true;
+}
+
+void NetworkManager::clientDisconnect(int connection)
+{
+    emit this->disconnect(connection);
 }

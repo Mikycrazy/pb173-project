@@ -24,6 +24,6 @@ void ConnectionHandler::readyRead()
 void ConnectionHandler::disconnected()
 {
     qDebug() << "Client disconnected";
-
+    emit this->clientDisconnected(mSocketID);
     exit(0);
 }

@@ -31,7 +31,7 @@ public:
     * Konstruktor pre triedu NetworkManager.
     */
     explicit NetworkManager()  {}
-    ~NetworkManager(){}
+    ~NetworkManager();
 
     /**
     * Zahaji spojeni tcp spojeni s nastavenou adresou a portem

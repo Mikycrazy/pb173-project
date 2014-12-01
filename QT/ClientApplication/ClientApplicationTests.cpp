@@ -32,7 +32,7 @@ TEST_CASE("SERVER")
 }
 TEST_CASE("PACKET CREATING")
 {
-    Client c;
+    Client* c = new Client();
     SECTION("Create login packet with 'aaaaaaaaaa' data ")
 	{
         const int DATA_LENGTH = 10;
@@ -42,8 +42,8 @@ TEST_CASE("PACKET CREATING")
 
         memset(data, 97, DATA_LENGTH);
 
-        int size = c.createPacket(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
-        int size2 = c.processPacket(packet, &data2, size);
+        int size = c->createPacket(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
+        int size2 = c->processPacket(packet, &data2, size);
 
         REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
@@ -60,9 +60,9 @@ TEST_CASE("PACKET CREATING")
             REQUIRE(match);
         }
 
-        delete data;
-        delete packet;
-        delete data2;
+        delete[] data;
+        delete[] data2;
+        delete[] packet;
     }
     SECTION("Create login packet with zero data ")
     {
@@ -71,15 +71,15 @@ TEST_CASE("PACKET CREATING")
         unsigned char* packet = NULL;
         unsigned char* data2 = NULL;
 
-        int size = c.createPacket(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
-        int size2 = c.processPacket(packet, &data2, size);
+        int size = c->createPacket(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
+        int size2 = c->processPacket(packet, &data2, size);
 
         REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
 
-        delete data;
-        delete packet;
-        delete data2;
+        delete[] data;
+        delete[] data2;
+        delete[] packet;
     }
     SECTION("Create logout packet with 'bbbbb' data")
 	{
@@ -90,8 +90,8 @@ TEST_CASE("PACKET CREATING")
 
         memset(data, 97, DATA_LENGTH);
 
-        int size = c.createPacket(LOGOUT_REQUEST, data, &packet, DATA_LENGTH);
-        int size2 = c.processPacket(packet, &data2, size);
+        int size = c->createPacket(LOGOUT_REQUEST, data, &packet, DATA_LENGTH);
+        int size2 = c->processPacket(packet, &data2, size);
 
         REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
@@ -108,9 +108,9 @@ TEST_CASE("PACKET CREATING")
             REQUIRE(match);
         }
 
-        delete data;
-        delete packet;
-        delete data2;
+        delete[] data;
+        delete[] data2;
+        delete[] packet;
     }
     SECTION("Create logout packet with long data")
     {
@@ -121,8 +121,8 @@ TEST_CASE("PACKET CREATING")
 
         memset(data, 97, DATA_LENGTH);
 
-        int size = c.createPacket(LOGOUT_REQUEST, data, &packet, DATA_LENGTH);
-        int size2 = c.processPacket(packet, &data2, size);
+        int size = c->createPacket(LOGOUT_REQUEST, data, &packet, DATA_LENGTH);
+        int size2 = c->processPacket(packet, &data2, size);
 
         REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
@@ -139,9 +139,9 @@ TEST_CASE("PACKET CREATING")
             REQUIRE(match);
         }
 
-        delete data;
-        delete packet;
-        delete data2;
+        delete[] data;
+        delete[] data2;
+        delete[] packet;
     }
     SECTION("Create get online list packet")
 	{
@@ -152,8 +152,8 @@ TEST_CASE("PACKET CREATING")
 
         memset(data, 97, DATA_LENGTH);
 
-        int size = c.createPacket(GET_ONLINE_USER_LIST_REQUEST, data, &packet, DATA_LENGTH);
-        int size2 = c.processPacket(packet, &data2, size);
+        int size = c->createPacket(GET_ONLINE_USER_LIST_REQUEST, data, &packet, DATA_LENGTH);
+        int size2 = c->processPacket(packet, &data2, size);
 
         REQUIRE(size == DATA_LENGTH + ID_LENGHT + RANDOM_BYTES_LENGTH + 4 + INTERGRITY_HASH_SIZE);
         REQUIRE(size2 == DATA_LENGTH);
@@ -170,10 +170,11 @@ TEST_CASE("PACKET CREATING")
             REQUIRE(match);
         }
 
-        delete data;
-        delete packet;
-        delete data2;
-	}
+        delete[] data;
+        delete[] data2;
+        delete[] packet;
+    }
+    delete c;
 }
 
 TEST_CASE("SENDING DATA")
@@ -205,7 +206,7 @@ TEST_CASE("SENDING DATA")
 
             REQUIRE(match);
         }
-        delete data;
+        delete[] data;
 	}
 }
 
@@ -241,8 +242,9 @@ TEST_CASE("RECIEVING DATA")
             REQUIRE(match);
         }
 
-        delete data;
-        delete packet;
+        delete[] data;
+        delete[] data2;
+        delete[] packet;
     }
 	SECTION("login not succesful")
 	{
@@ -273,7 +275,7 @@ TEST_CASE("RECIEVING DATA")
             REQUIRE(match);
         }
 
-        delete data;
+        delete[] data;
 	}
 	SECTION("request list of users when logged in")
 	{
@@ -306,8 +308,9 @@ TEST_CASE("RECIEVING DATA")
             REQUIRE(match);
         }
 
-        delete data;
-        delete packet;
+        delete[] data;
+        delete[] data2;
+        delete[] packet;
 	}
 }
 
@@ -342,9 +345,9 @@ TEST_CASE("CLIENT TO CLIENT")
         }
 
         delete client;
+        delete[] data2;
     }
 }
-/*
 TEST_CASE("KEYSTREAM")
 {
     SECTION("Generating keystream and cheacking if method waiting on data ")
@@ -380,5 +383,5 @@ TEST_CASE("KEYSTREAM")
         REQUIRE(elapsed_secs[0] < elapsed_secs[4]);
 
     }
-}*/
+}
 #endif

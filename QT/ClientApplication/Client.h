@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string.h>
+#include <iomanip>
 #include <time.h>
 #include "CryptoManager.h"
 #include "NetworkManager.h"
@@ -29,14 +30,12 @@ private:
 	std::string mUsername;
 	std::string mEmail;
 
-	unsigned char* mAESkey;
+    unsigned char* mAESkey;
     unsigned char* mAESIV;
-	unsigned char* mPublicRSAKey;
-	unsigned char* mPrivateRSAKey;
+    unsigned char* mPublicRSAKey;
+    unsigned char* mPrivateRSAKey;
 
     std::vector<User*> mOnlineList;
-
-	unsigned char* mCertificate;
 
 	bool mLoggedToServer;
 	bool mConnectedToClient;
@@ -63,7 +62,7 @@ public:
 	*/
     Client();
     Client(std::string username, std::string email, qint16 UDPport);
-    ~Client() {}
+    ~Client();
 
 	std::string Username() const { return mUsername; }
 	void Username(std::string username)	{ mUsername = username; }

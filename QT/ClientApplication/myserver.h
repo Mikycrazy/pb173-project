@@ -12,6 +12,7 @@ class MyServer : public QObject
     Q_OBJECT
 public:
     MyServer();
+    ~MyServer();
     QByteArray getLastData() {return *mData;}
     void Stop();
 signals:

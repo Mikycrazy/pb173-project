@@ -104,6 +104,8 @@ public slots:
     */
     void processPacket(int connectionID, unsigned char* packet, int size);
 
+    void disconnectClient(int connectionID);
+
 private:
 
     void processLoginUserPacket(int connectionID, unsigned char *data, int size);

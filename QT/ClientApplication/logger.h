@@ -19,7 +19,7 @@ private:
     Logger( const Logger&){}
     Logger& operator=(const Logger& ){ return *this;}
 
-    ~Logger() {}
+    ~Logger();
 
     static const std::string mFileName;
     static std::ofstream mFile;

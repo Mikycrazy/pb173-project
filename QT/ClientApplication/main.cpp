@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
     if(argc == 2)
     {
         QHostAddress mReceiverIP;
-        mReceiverIP= "127.0.0.1";
+        mReceiverIP = "127.0.0.1";
         unsigned char testData[5];
         for(int i = 0; i < 5; i++)
             testData[i] = 'a';
@@ -35,32 +35,27 @@ int main(int argc, char *argv[])
                 qApp->processEvents();
                 client2->getOnlineList();
             }
+
             while(client2->getStatus() != GET_ONLINE_USER_LIST_RESPONSE)
             {
                 Sleep(10);
                 qApp->processEvents();
             }
+
             client2->connectToClient(client2->OnlineList()[0]->getConnectionID());
+
             while(client2->getStatus() != SERVER_COMUNICATION_RESPONSE)
             {
                 Sleep(10);
                 qApp->processEvents();
             }
+
             client2->sendDataToClient(mReceiverIP, 12345,testData,5);
+
         }
         else if(!strcmp(argv[1], "-d"))
         {
-            Client c;
 
-            const int DATA_LENGTH = 10;
-            unsigned char* data = new unsigned char[DATA_LENGTH];
-            unsigned char* packet = NULL;
-            unsigned char* data2 = NULL;
-
-            memset(data, 97, DATA_LENGTH);
-
-            int size = c.createPacket(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
-            int size2 = c.processPacket(packet, &data2, size);
         }
     }
     else

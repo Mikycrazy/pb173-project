@@ -1,5 +1,10 @@
 #include "NetworkManager.h"
 
+NetworkManager::~NetworkManager()
+{
+
+}
+
 bool NetworkManager::startConnection(QString ipAddress, quint16 port, quint16 UDPport)
 {
     this->mSocket = new QTcpSocket();
@@ -51,8 +56,6 @@ void NetworkManager::receiveData()
 
 void NetworkManager::receiveUdpData()
 {
-    qDebug() << "Enter function receiveUdpData()";
-
     QByteArray data;
     QHostAddress sender;
     quint16 port;

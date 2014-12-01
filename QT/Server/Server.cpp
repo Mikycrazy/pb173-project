@@ -8,6 +8,7 @@ Server::Server(quint16 port)
     this->mCrypto = new CryptoManager();
 
     connect(this->mNetwork, SIGNAL(receivedData(int,unsigned char*,int)), this, SLOT(processPacket(int,unsigned char*,int)));
+    connect(this->mNetwork, SIGNAL(disconnect(int)), this, SLOT(disconnectClient(int)));
     this->mNetwork->startListening(port);
 }
 
@@ -211,7 +212,10 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
     mCrypto->computeHash(packet, computedhash, size - INTERGRITY_HASH_SIZE);
 
     if(!mCrypto->compareHash(packethash, computedhash, INTERGRITY_HASH_SIZE))
+    {
         Logger::getLogger()->Log("Hashes not matching!!");
+        //return;
+    }
 
     if(sizeof(int) == 4)
     {
@@ -235,6 +239,8 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
         case LOGIN_REQUEST:
             Logger::getLogger()->Log("Got LOGIN_REQUEST packet");
             this->processLoginUserPacket(connectionID, data, dataSize);
+            for(auto i : mUsers)
+                std::cout << i->getUsername() << std::endl;
             break;
         case LOGOUT_REQUEST:
             this->processLogoutUserPacket(connectionID, data, dataSize);
@@ -362,4 +368,16 @@ int Server::processPacket(unsigned char* packet, unsigned char** data, int size)
         memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
     }
     return dataSize;
+}
+
+void Server::disconnectClient(int connectionID)
+{
+    for(std::vector<User*>::const_iterator it = mUsers.begin(); it != mUsers.end(); it++)
+    {
+        if((*it)->getConnectionID() == connectionID)
+        {
+            mUsers.erase(it);
+            break;
+        }
+    }
 }

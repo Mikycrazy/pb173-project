@@ -3,6 +3,11 @@
 Logger* Logger::mpThis = NULL;
 std::ofstream Logger::mFile;
 
+Logger::~Logger()
+{
+
+}
+
 Logger* Logger::getLogger()
 {
     if(mpThis == NULL){

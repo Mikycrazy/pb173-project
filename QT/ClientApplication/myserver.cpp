@@ -18,6 +18,12 @@ MyServer::MyServer()
     mData = new QByteArray(10,'a');
 }
 
+MyServer::~MyServer()
+{
+    delete mServer;
+    delete mData;
+}
+
 void MyServer::Stop()
 {
     mServer->close();
