@@ -14,6 +14,7 @@ class ConnectionHandler : public QThread
 public:
     ConnectionHandler(qintptr id, QTcpSocket* socket)
         : mSocketID(id), mSocket(socket) {}
+    ~ConnectionHandler() { delete mSocket; }
 
     void run();
 
@@ -31,7 +32,7 @@ public slots:
 
 private:
     qintptr mSocketID;
-    QTcpSocket* mSocket;
+    QTcpSocket* mSocket = nullptr;
 
 signals:
     void networkReceivedData(int connection, unsigned char* data, int size);

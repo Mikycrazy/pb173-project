@@ -13,7 +13,7 @@ private:
 	string mUsername;
 	string mEmail;
 	string mIPAddress;
-	unsigned char* mPublicKey;
+    unsigned char* mPublicKey = nullptr;
 	bool mOnline;
     int mConnectionID;
 
@@ -21,6 +21,7 @@ public:
     User() : mUsername(), mEmail(), mIPAddress(), mOnline(false), mConnectionID() {}
     User(string username, string email, string ip, unsigned char* key, int connectionID) :
         mUsername(username), mEmail(email), mIPAddress(ip), mPublicKey(key), mOnline(false), mConnectionID(connectionID) {}
+    ~User() { delete[] mPublicKey; }
 
 	void setOnline() { mOnline = true; }
 	void setOffline() { mOnline = false; }

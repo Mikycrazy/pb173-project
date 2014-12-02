@@ -25,10 +25,10 @@ class Server : QObject
 
 private:
     vector<User*> mUsers;
-    unsigned char* mPrivateKey;
-    unsigned char* mPublicKey;
-    NetworkManager* mNetwork;
-    CryptoManager* mCrypto;
+    unsigned char* mPrivateKey = nullptr;
+    unsigned char* mPublicKey = nullptr;
+    NetworkManager* mNetwork = nullptr;
+    CryptoManager* mCrypto = nullptr;
 public:
 
     /**
@@ -36,7 +36,7 @@ public:
     */
     Server();
     Server(quint16 port);
-    ~Server() {}
+    ~Server();
 
     /**
     * Prihlasenie pouzivatela

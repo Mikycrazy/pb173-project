@@ -16,6 +16,10 @@ CryptoManager::~CryptoManager()
 {
     delete[] mEncKeystream;
     delete[] mDecKeystream;
+    delete[] mAesKey;
+
+    delete mEncKeystreamThread;
+    delete mDecKeystreamThread;
 }
 
 int CryptoManager::addPadding(std::string& input_text)

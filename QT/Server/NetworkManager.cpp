@@ -4,6 +4,11 @@ NetworkManager::NetworkManager()
 {
 }
 
+NetworkManager::~NetworkManager()
+{
+    mConnections.clear();
+}
+
 void NetworkManager::startListening(quint16 port)
 {
     if (this->listen(QHostAddress::Any, port))

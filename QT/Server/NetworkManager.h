@@ -21,7 +21,6 @@ class NetworkManager : public QTcpServer
 
 private:
     map<qintptr, QTcpSocket*> mConnections;
-    QThreadPool *mPool;
 
 public:
 
@@ -29,7 +28,7 @@ public:
     * Konstruktor pre triedu NetworkManager.
     */
     NetworkManager();
-    ~NetworkManager(){}
+    ~NetworkManager();
 
     /**
     * Zacne pocuvat na zadanom porte

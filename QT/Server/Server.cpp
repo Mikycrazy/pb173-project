@@ -18,6 +18,19 @@ Server::Server()
     this->mCrypto = new CryptoManager();
 }
 
+Server::~Server()
+{
+    delete[] mPrivateKey;
+    delete[] mPublicKey;
+
+    delete mNetwork;
+    delete mCrypto;
+
+    if(mUsers.size() > 0)
+        for(auto i : mUsers)
+            delete i;
+}
+
 bool Server::loginUser(User* user)
 {
     user->setOnline();
