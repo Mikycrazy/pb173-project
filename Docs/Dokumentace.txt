@@ -1,10 +1,12 @@
 Pro öifrov·nÌ pouûijeme knihovny PolarSSL.
 Pro sÌùovou komunikaci pravdepodobnÏ pouûijeme knihovny QT.
 
-pakety budou vypadat:
-1byteTypPaketu-10bytuRandomData-4bytyDelkaDatVBajtech-Data-(pozdejiZdeBUdeHash)
+Struktura Packetu:
+1-byteTypePaket|10-byteRandomData|4-byteLengthDataInBytes|data|32-hash
+
+Typ Paketu:
 1-login request
-2-login response
+2-login response 
 3-logout request
 4-logout response
 5-getOnlineUsersList request
@@ -13,4 +15,12 @@ pakety budou vypadat:
 8-serverComunicationRequest - server posle na ID klienta request
 9-clientComunicationResponse - prijmuti/zamitnuti komunikace (pozdeji se budou psilat klice)
 10-serverComunicationResponse - prijmuti/zamitnuti komunikace, prida se ip druheho klienta (pozdeji se budou psilat klice)
-11
+11-clientComunicationData - prenos dat mezi clienty.
+
+clientComunicationData
+struktura dat v clientComunicationData:
+
+1-byteTypePaket|10-byteRandomData|4-byteLengthDataInBytes|data|32-hash
+
+data = 4byteCoutner + data
+
