@@ -267,7 +267,7 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
     unsigned char *packet = NULL;
 
     unsigned char *stream = new unsigned char[size];
-    mCrypto->getEncKeystream(stream, size);
+    mCrypto->getEncKeystream(stream, size, mCypherPosition);
     mCrypto->XORData(data, data, size, stream);
 
     int packetSize = this->createPacket(CLIENT_COMMUNICATION_DATA,data,&packet,size);
@@ -345,10 +345,6 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
             (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 2] = (size & 0x00ff0000) >> 16;
             (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] = (size & 0xff000000) >> 24;
         }
-        std::cout << "Packet: ";
-        for (int i = 0; i < newSize; i++) {
-          printf("%02X", (*packet)[i]);
-        }
         std::cout << std::endl;
         if(sizeof(mCypherPosition) == 4)
         {
@@ -357,11 +353,6 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
             (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + 2] = (mCypherPosition & 0x00ff0000) >> 16;
             (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + 3] = (mCypherPosition & 0xff000000) >> 24;
         }
-        std::cout << "Packet: ";
-        for (int i = 0; i < newSize; i++) {
-          printf("%02X", (*packet)[i]);
-        }
-        std::cout << std::endl;
         memcpy(((*packet) + (ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + sizeof(mCypherPosition) )), data, size - sizeof(mCypherPosition));
 
         unsigned char* hash = new unsigned char[32];
@@ -527,6 +518,7 @@ void Client::processPacket(unsigned char* packet, int size)
             std::cout << std::endl << "aesIV: ";
             for(int i = 0; i < 16; i++)
                 std::cout << std::hex << static_cast<int>(mAESIV[i]);
+            std::cout << std::endl;
 
             processServerCommunicationData(&data, dataSize);
 
@@ -612,14 +604,13 @@ int Client::processServerCommunicationData(unsigned char **data, int size)
 
     unsigned char *stream = new unsigned char[size];
 
-    //mCrypto->getDecKeystream(stream, size);
+
     mCrypto->getDecKeystream(stream, size, mCypherLastPositionRecieved);
     mCrypto->XORData(*data,*data,size, stream);
 
-    std::cout << std::endl;
     std::cout << "data: ";
     for(int i = 0; i < size; i++)
-        std::cout<< (*data)[i];
+        std::cout << (*data)[i];
     std::cout <<  std::endl;
 
      std::cout <<"stream: ";
