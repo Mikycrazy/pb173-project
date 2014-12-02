@@ -30,23 +30,23 @@ private:
 	std::string mUsername;
 	std::string mEmail;
 
-    unsigned char* mAESkey;
-    unsigned char* mAESIV;
-    unsigned char* mPublicRSAKey;
-    unsigned char* mPrivateRSAKey;
+    unsigned char* mAESkey = nullptr;
+    unsigned char* mAESIV = nullptr;
+    unsigned char* mPublicRSAKey = nullptr;
+    unsigned char* mPrivateRSAKey = nullptr;
 
     std::vector<User*> mOnlineList;
 
-	bool mLoggedToServer;
-	bool mConnectedToClient;
+    bool mLoggedToServer = nullptr;
+    bool mConnectedToClient = nullptr;
 
     QHostAddress mReceiverIP;
-	int mReceiverPort;
+    int mReceiverPort;
 
     NetworkManager* mNetwork;
     CryptoManager* mCrypto;
 
-    unsigned char* mLastReicevedData;
+    unsigned char* mLastReicevedData = nullptr;
     int mLastReicevedDataSize;
 
     int mStatus;

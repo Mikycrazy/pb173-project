@@ -7,6 +7,7 @@ CryptoManager::CryptoManager()
 
     mEncKeystream = new char[KEYSTREAM_SIZE];
     mDecKeystream = new char[KEYSTREAM_SIZE];
+    mAesKey = nullptr;
 
     mEncKeystreamStart = -1;
     mDecKeystreamStart = -1;
@@ -16,6 +17,7 @@ CryptoManager::~CryptoManager()
 {
     delete[] mEncKeystream;
     delete[] mDecKeystream;
+    delete[] mAesKey;
 }
 
 int CryptoManager::addPadding(std::string& input_text)

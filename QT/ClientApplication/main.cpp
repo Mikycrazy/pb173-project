@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
                 Sleep(10);
                 qApp->processEvents();
             }
+
+            delete client2;
         }
         else if(!strcmp(argv[1], "-c"))
         {
@@ -58,20 +60,12 @@ int main(int argc, char *argv[])
             client2->sendDataToClient(mReceiverIP, 12345,testData,5);
             client2->setCypherPosition(1);
             client2->sendDataToClient(mReceiverIP, 12345,testData,5);
+
+            delete client2;
         }
         else if(!strcmp(argv[1], "-d"))
         {
-            Client c;
 
-            const int DATA_LENGTH = 10;
-            unsigned char* data = new unsigned char[DATA_LENGTH];
-            unsigned char* packet = NULL;
-            unsigned char* data2 = NULL;
-
-            memset(data, 97, DATA_LENGTH);
-
-            int size = c.createPacket(LOGIN_REQUEST, data, &packet, DATA_LENGTH);
-            int size2 = c.processPacket(packet, &data2, size);
         }
     }
     else
@@ -107,59 +101,19 @@ int main(int argc, char *argv[])
         Sleep(10);
         qApp->processEvents();
     }
-     std::cout << std::endl << "Zadejte data ktera chcete poslat" << std::endl;
-     std::cin >> input;
-     client->sendDataToClient(mReceiverIP, 12345,(unsigned char *)input.c_str(),input.size());
-     while(client->getStatus() != CLIENT_COMMUNICATION_DATA)
-     {
-         Sleep(10);
-         qApp->processEvents();
-     }
-   /* Client* client2 = new Client("test2", "test2@test2", 12346);
-
-    client2->login();
-
-    while(!client2->isLogged())
-    {
-    Sleep(100);
-    qApp->processEvents();
-    client2->getOnlineList();
-    }
-    bool b = true;
-    while(client2->isLogged())
-    {
-    Sleep(100);
-    qApp->processEvents();
-
-    }*/
-   // int conID = client2->OnlineList()[0]->getConnectionID();
-   // client2->connectToClient(conID);
-
-    //Client* client = new Client("test", "test@test");
-
-    //client->login();
-
-    //unsigned char key[64];
-
-
-    //QHostAddress address("127.0.0.1");
-    //unsigned char data[5] = {'a', 'b', 'c', 'd', 'e'};
-    //client->sendDataToClient(address, 13375, data, 5);
-
-
-    /*while(!client->isLogged())
+    std::cout << std::endl << "Zadejte data ktera chcete poslat" << std::endl;
+    std::cin >> input;
+    client->sendDataToClient(mReceiverIP, 12345,(unsigned char *)input.c_str(),input.size());
+    while(client->getStatus() != CLIENT_COMMUNICATION_DATA)
     {
         Sleep(10);
         qApp->processEvents();
-        client->getOnlineList();
-    }*/
-    //Sleep(10);
-    //std::cout <<  client->OnlineList().size() << std::endl;
-   // int conID = client->OnlineList()[0]->getConnectionID();
-   // client->connectToClient(conID);
-    //client->logout();
+    }
+
+    delete client;
 
     }
+
     return 0;//a.exec();
 }
 #endif

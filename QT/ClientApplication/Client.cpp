@@ -32,8 +32,19 @@ Client::Client() : mLoggedToServer(false), mConnectedToClient(false)
 
 Client::~Client()
 {
+    delete[] mAESkey;
+    delete[] mAESIV;
+    delete[] mPublicRSAKey;
+    delete[] mPrivateRSAKey;
+    delete[] mLastReicevedData;
+
     delete mNetwork;
     delete mCrypto;
+
+    if(mOnlineList.size() > 0)
+        for(auto i : mOnlineList)
+            delete i;
+
 }
 
 void Client::initNetwork()
@@ -263,7 +274,6 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
     std::cout << "data: ";
     for(int i = 0; i < size; i++)
         std::cout<< data[i];
-    std::cout <<  std::endl;
     unsigned char *packet = NULL;
 
     unsigned char *stream = new unsigned char[size];
@@ -272,7 +282,6 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
 
     int packetSize = this->createPacket(CLIENT_COMMUNICATION_DATA,data,&packet,size);
     mCypherPosition++;
-    //bude nasledovat sifrovani a poslani pres sit
 
     this->mNetwork->sendUdpData(address, port, packet, packetSize);
     Logger::getLogger()->Log("Client: "+ mUsername +" send CLIENT_COMUNICATION_DATA");
@@ -412,10 +421,6 @@ void Client::processPacket(unsigned char* packet, int size)
 
         if (dataSize + ID_LENGHT + RANDOM_BYTES_LENGTH + DATA_SIZE_LENGTH + INTERGRITY_HASH_SIZE != size || dataSize < 0)
         {
-            /*stringstream s;
-            s << "Received packet with invalid data size:" << dataSize << "- total packet size:" << size;*/
-            //string log = "Received packet with invalid data size:" + "a";
-           // log += "aa";
             string s = "Received packet with invalid data size:" + dataSize;
             s +=  "- total packet size:" + size;
             Logger::getLogger()->Log(s);

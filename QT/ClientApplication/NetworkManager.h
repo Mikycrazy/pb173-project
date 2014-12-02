@@ -30,7 +30,7 @@ public:
     /**
     * Konstruktor pre triedu NetworkManager.
     */
-    explicit NetworkManager()  {}
+    explicit NetworkManager();
     ~NetworkManager();
 
     /**

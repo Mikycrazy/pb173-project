@@ -316,13 +316,27 @@ TEST_CASE("LOGIN/LOGOUT USERS")
     }
     SECTION("remove user")
     {
-        server.logoutUser(user);
+        if(userCount <= 0)
+        {
+            server.loginUser(user);
+            userCount++;
+        }
 
+        server.logoutUser(user);
+        userCount--;
         int size = server.getUsers().size();
         REQUIRE(size == userCount);
     }
     SECTION("remove 5 users")
     {
+        if(userCount <= 0)
+        {
+            for(int i = 0; i < 5; i++)
+                server.logoutUser(user);
+            userCount += 5;
+        }
+
+
         for(int i = 0; i < 5; i++)
             server.logoutUser(user);
 

@@ -1,15 +1,19 @@
 #include "NetworkManager.h"
 
+NetworkManager::NetworkManager()
+{
+    this->mSocket = new QTcpSocket();
+    this->mUdpSocket = new QUdpSocket();
+}
+
 NetworkManager::~NetworkManager()
 {
-
+    delete mSocket;
+    delete mUdpSocket;
 }
 
 bool NetworkManager::startConnection(QString ipAddress, quint16 port, quint16 UDPport)
 {
-    this->mSocket = new QTcpSocket();
-    this->mUdpSocket = new QUdpSocket();
-
     this->mUdpSocket->bind(QHostAddress::Any, UDPport);
 
     connect(mSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
