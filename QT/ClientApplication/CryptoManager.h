@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CRYPTOMANAGER_H
+#define CRYPTOMANAGER_H
+
 #include <string>
 #include <stdlib.h>
 #include <iostream>
@@ -151,3 +153,4 @@ private:
     void generateEncCtrKeystream();
     void generateDecCtrKeystream();
 };
+#endif

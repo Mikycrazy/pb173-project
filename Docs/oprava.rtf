@@ -1,0 +1,22 @@
+Hrochokobry
+
+
+Tux++
+# Portability
+* Linux: Windows.h: No such file or directory
+* Windows: won't compile either
+* project works only on Windows where int is of size 4
+
+```
+int connectionID;
+...
+if(sizeof(connectionID) == 4) {
+	data[1] = connectionID & 0x000000ff;
+	data[2] = (connectionID & 0x0000ff00) >> 8;
+	data[3] = (connectionID & 0x00ff0000) >> 16;
+	data[4] = (connectionID & 0xff000000) >> 24;
+} else return 1;
+
+
+
+Sapiens

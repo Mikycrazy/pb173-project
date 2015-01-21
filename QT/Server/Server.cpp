@@ -47,7 +47,6 @@ bool Server::loginUser(User* user)
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(LOGIN_RESPONSE,data,&packet,dataSize);
 
-    //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
     delete[] data;
 
@@ -71,7 +70,6 @@ bool Server::logoutUser(User* user)
              unsigned char *packet = NULL;
              int packetSize = this->createPacket(LOGOUT_RESPONSE,data,&packet,dataSize);
 
-             //bude nasledovat sifrovani a poslani pres sit
              this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
 
              Logger::getLogger()->Log("Logout user" + user->getUsername());
@@ -125,7 +123,6 @@ bool Server::sendConnectionRequest(User *from, User *to, unsigned char *data, in
     memcpy(&newData[from->getIPAddress().size() + DATA_SPLITER.size()],data, size);
 */
 
-    //data sou spatnej maj bejt jine conid
     int conId = from->getConnectionID();
     if(sizeof(size) == 4)
     {
@@ -134,11 +131,11 @@ bool Server::sendConnectionRequest(User *from, User *to, unsigned char *data, in
         data[2] = (conId & 0x00ff0000) >> 16;
         data[3] = (conId & 0xff000000) >> 24;
     }
+    else return 1;
 
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(SERVER_COMUNICATION_REQUEST,data,&packet,size);
 
-    //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(to->getConnectionID(), packet, packetSize);
     //delete[] data;
 
@@ -189,6 +186,7 @@ int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **
         (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 2] = (size & 0x00ff0000) >> 16;
         (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] = (size & 0xff000000) >> 24;
     }
+    else return 1;
 
     memcpy(((*packet) + (ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size))), data, size);
 
@@ -283,6 +281,16 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
 
         }
         delete[] data;
+        delete[] packethash;
+        delete[] computedhash;
+    }
+
+
+    else
+    {
+        delete[] packethash;
+        delete[] computedhash;
+        return 1;
     }
 
 }

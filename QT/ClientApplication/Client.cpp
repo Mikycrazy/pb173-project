@@ -19,7 +19,7 @@ Client::Client(string username, string email, qint16 UDPport) : mUsername(userna
 
     mStatus = 256;
     mCypherPosition = 0;
-    mCypherLastPositionRecieved = 0;
+    mCypherLastPositionreceived = 0;
 
    // connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
 }
@@ -108,7 +108,6 @@ int Client::logout()
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(LOGOUT_REQUEST,data,&packet,dataSize);
 
-    //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(packet, packetSize);
     Logger::getLogger()->Log("Client:"+ mUsername +" send LOGOUT_REQUEST");
 
@@ -134,7 +133,6 @@ int Client::getOnlineList()
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(GET_ONLINE_USER_LIST_REQUEST,data,&packet,dataSize);
 
-    //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(packet, packetSize);
     Logger::getLogger()->Log("Client:"+ mUsername +" send GET_ONLINE_USER_LIST_REQUEST");
 
@@ -160,8 +158,9 @@ int Client::connectToClient(int connectionID)
         data[2] = (connectionID & 0x00ff0000) >> 16;
         data[3] = (connectionID & 0xff000000) >> 24;
     }
+    else return 1;
 
-    //generovani klice
+    //key generation
     for(int i = sizeof(connectionID); i < dataSize; i++)
     {
         data[i] = rand() % 256;
@@ -170,7 +169,6 @@ int Client::connectToClient(int connectionID)
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(CLIENT_COMUNICATION_REQUEST,data,&packet,dataSize);
 
-    //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(packet, packetSize);
     Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_REQUEST");
 
@@ -181,7 +179,7 @@ int Client::connectToClient(int connectionID)
 }
 
 
-int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
+int Client::acceptConnection(int connectionID, unsigned char* receivedKey)
 {
     //if(!mLoggedToServer)
        // return 1;
@@ -205,15 +203,15 @@ int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
     else
         return 1;
 
-    memcpy( data + sizeof(connectionID) + 1, recievedKey,AES_KEY_LENGTH/2);
+    memcpy( data + sizeof(connectionID) + 1, receivedKey,AES_KEY_LENGTH/2);
 
-    //generovani klice
+    //key generation
     for(int i = 1 + sizeof(connectionID) + AES_KEY_LENGTH / 2; i < 1 + sizeof(connectionID) + AES_KEY_LENGTH; i++)
         data[i] = rand() % 256;
 
     memcpy(mAESkey,  data + 1 + sizeof(connectionID), AES_KEY_LENGTH);
 
-    // generovani IV
+    // generate IV
     for(int i = 1 + sizeof(connectionID) + AES_KEY_LENGTH; i < dataSize; i++)
         data[i] = rand() % 256;
 
@@ -225,7 +223,6 @@ int Client::acceptConnection(int connectionID, unsigned char* recievedKey)
     int packetSize = this->createPacket(CLIENT_COMUNICATION_RESPONSE,data,&packet,dataSize);
 
     QByteArray bdata((const char*)mAESkey, AES_KEY_LENGTH);
-    //bude nasledovat sifrovani a poslani pres sit
     this->mNetwork->sendData(packet, packetSize);
     Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_RESPONSE");
 
@@ -253,11 +250,11 @@ int Client::refuseConnection(int connectionID)
        data[3] = (connectionID & 0x00ff0000) >> 16;
        data[4] = (connectionID & 0xff000000) >> 24;
    }
+   else return 1;
 
    unsigned char *packet = NULL;
    int packetSize = this->createPacket(CLIENT_COMUNICATION_RESPONSE,data,&packet,dataSize);
 
-   //bude nasledovat sifrovani a poslani pres sit
    this->mNetwork->sendData(packet, packetSize);
    Logger::getLogger()->Log("Client: "+ mUsername +" send CLIENT_COMUNICATION_RESPONSE");
 
@@ -354,6 +351,7 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
             (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 2] = (size & 0x00ff0000) >> 16;
             (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] = (size & 0xff000000) >> 24;
         }
+        else return 1;
         std::cout << std::endl;
         if(sizeof(mCypherPosition) == 4)
         {
@@ -380,6 +378,7 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
             (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 2] = (size & 0x00ff0000) >> 16;
             (*packet)[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] = (size & 0xff000000) >> 24;
         }
+        else return 1;
 
 
         memcpy(((*packet) + (ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size))), data, size);
@@ -486,12 +485,12 @@ void Client::processPacket(unsigned char* packet, int size)
             setStatus(SERVER_COMUNICATION_RESPONSE);
             Logger::getLogger()->Log("Client: "+ mUsername +" got SERVER_COMUNICATION_RESPONSE");
             accept = processServerCommunicationResponse(data,dataSize);
-            //druhy klient zamitnul spojeni
+            //second client refuse conection
             if(!accept)
             {
 
             }
-            //druhy klient prijal spojeni
+            //second client accept conection
             else
             {
 
@@ -532,6 +531,17 @@ void Client::processPacket(unsigned char* packet, int size)
              break;
         }
         delete[] data;
+        delete[] packethash;
+        delete[] computedhash;
+
+    }
+
+
+    else
+    {
+        delete[] packethash;
+        delete[] computedhash;
+        return 1;
     }
 }
 
@@ -594,14 +604,14 @@ int Client::processServerCommunicationData(unsigned char **data, int size)
         cypherPosition = ( oldData[3] << 24) | ( oldData[2] << 16) | (oldData[1] << 8) | ( oldData[0]);
 
     }
-    if(cypherPosition < mCypherLastPositionRecieved)
+    if(cypherPosition < mCypherLastPositionreceived)
     {
          Logger::getLogger()->Log("Packet dropped");
         delete[] oldData;
         return 1;
     }
 
-    mCypherLastPositionRecieved = cypherPosition;
+    mCypherLastPositionreceived = cypherPosition;
     delete[] *data;
     size -= sizeof(mCypherPosition);
     *data = new unsigned char[size];
@@ -610,7 +620,7 @@ int Client::processServerCommunicationData(unsigned char **data, int size)
     unsigned char *stream = new unsigned char[size];
 
 
-    mCrypto->getDecKeystream(stream, size, mCypherLastPositionRecieved);
+    mCrypto->getDecKeystream(stream, size, mCypherLastPositionreceived);
     mCrypto->XORData(*data,*data,size, stream);
 
     std::cout << "data: ";
@@ -662,6 +672,7 @@ int Client::processPacket(unsigned char* packet, unsigned char** data, int size)
         *data = new unsigned char [dataSize];
         memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
     }
+    delete[] packethash;
     return dataSize;
 }
 

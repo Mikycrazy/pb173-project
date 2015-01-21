@@ -25,13 +25,13 @@ class Server : QObject
 
 private:
     vector<User*> mUsers;
-    unsigned char* mPrivateKey = nullptr;
-    unsigned char* mPublicKey = nullptr;
-    NetworkManager* mNetwork = nullptr;
-    CryptoManager* mCrypto = nullptr;
+    unsigned char* mPrivateKey = NULL;
+    unsigned char* mPublicKey = NULL;
+    NetworkManager* mNetwork = NULL;
+    CryptoManager* mCrypto = NULL;
 public:
 
-    /**
+    /*
     * Konstruktor pre triedu Server.
     */
     Server();

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef CLIENT_H
+#define CLIENT_H
+
 #include <stdlib.h>
 #include <iostream>
 #include <string.h>
@@ -30,15 +32,15 @@ private:
 	std::string mUsername;
 	std::string mEmail;
 
-    unsigned char* mAESkey = nullptr;
-    unsigned char* mAESIV = nullptr;
-    unsigned char* mPublicRSAKey = nullptr;
-    unsigned char* mPrivateRSAKey = nullptr;
+    unsigned char* mAESkey = NULL;
+    unsigned char* mAESIV = NULL;
+    unsigned char* mPublicRSAKey = NULL;
+    unsigned char* mPrivateRSAKey = NULL;
 
     std::vector<User*> mOnlineList;
 
-    bool mLoggedToServer = nullptr;
-    bool mConnectedToClient = nullptr;
+    bool mLoggedToServer = NULL;
+    bool mConnectedToClient = NULL;
 
     QHostAddress mReceiverIP;
     int mReceiverPort;
@@ -46,12 +48,12 @@ private:
     NetworkManager* mNetwork;
     CryptoManager* mCrypto;
 
-    unsigned char* mLastReicevedData = nullptr;
+    unsigned char* mLastReicevedData = NULL;
     int mLastReicevedDataSize;
 
     int mStatus;
     int mCypherPosition;
-    int mCypherLastPositionRecieved;
+    int mCypherLastPositionreceived;
     int UDPport;
 
 public:
@@ -120,7 +122,7 @@ public:
     *
     * @param connectionID		connectionID
     */
-    int acceptConnection(int connectionID, unsigned char* recievedKey);
+    int acceptConnection(int connectionID, unsigned char* receivedKey);
 
     /**
     * Odesle zapornou odpoved na pozadavek ke komunikaci ke klientovi
@@ -188,4 +190,4 @@ public slots:
     */
     void processPacket(unsigned char* packet, int size);
 };
-
+#endif
