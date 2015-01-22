@@ -1,22 +1,251 @@
-Hrochokobry
+{\rtf1\ansi\deff0\nouicompat{\fonttbl{\f0\fnil\fcharset0 Courier New;}{\f1\fswiss\fcharset0 Calibri;}{\f2\fnil\fcharset238{\*\fname Courier New;}Courier New CE;}{\f3\fnil\fcharset0 Calibri;}{\f4\fnil\fcharset238 Calibri;}}
+{\colortbl ;\red0\green0\blue0;\red0\green176\blue80;}
+{\*\generator Riched20 6.3.9600}\viewkind4\uc1 
+\pard\ul\b\f0\fs22\lang1033 Hrochokobry\ulnone\b0\par
+\par
 
+\pard\cf1\f1\fs24\par
+\cf0\f0\fs22 Against conventions (no danger): \par
+- comments in slovak/czech language \par
+\par
+- differences between .h and .cpp files \par
+\par
+- class Trida ??? \par
+\cf2 Smazana.\cf0\par
+\cf1\f1\fs24\par
 
-Tux++
-# Portability
-* Linux: Windows.h: No such file or directory
-* Windows: won't compile either
-* project works only on Windows where int is of size 4
+\pard\cf0\f0\fs22 - no initialize all variables in constructors SOLUTION: intialize all variable in constructor \par
+\par
+- acces to dynamically allocated variables without previous deallocating SOLUTION: control if already used and deallocating \par
+\par
+- using rand() as source of randoms SOLUTION: use secure source of random \par
+\ul\par
 
-```
-int connectionID;
-...
-if(sizeof(connectionID) == 4) {
-	data[1] = connectionID & 0x000000ff;
-	data[2] = (connectionID & 0x0000ff00) >> 8;
-	data[3] = (connectionID & 0x00ff0000) >> 16;
-	data[4] = (connectionID & 0xff000000) >> 24;
-} else return 1;
+\pard\cf1\ulnone\f1\fs24\par
+\cf0\f0\fs22 - memory leak in packethash value in Client::processPacket(...) \par
+SOLUTION: deallocating \par
+\cf2 Promena dealokovana.\cf0\par
+- memory leak in packethash value in Server::processPacket(...) \par
 
+\pard SOLUTION: deallocating \par
+\cf2 Promena dealokovana.\cf0\ul\par
+\par
 
+\pard\cf1\ulnone\f1\fs24\par
+\cf0\f0\fs22 Problem identification: C_x \par
+Severity: not decidable \par
+Description of the problem: Hard to read / compile \par
+\par
+Problem identification: A_x (security architecture) \par
+Description of the problem: Symmetric cryptography? \par
+\par
 
-Sapiens
+\pard Cppcheck \endash  only unused and uninitialized variables \ul\par
+\par
+\b Tux++\par
+\b0\par
+\ulnone\b # Portability\b0\par
+* Linux: Windows.h: No such file or directory\par
+* Windows: won't compile either\par
+* project works only on Windows where int is of size 4\par
+\par
+```\par
+int connectionID;\par
+...\par
+if(sizeof(connectionID) == 4) \{\par
+\tab data[1] = connectionID & 0x000000ff;\par
+\tab data[2] = (connectionID & 0x0000ff00) >> 8;\par
+\tab data[3] = (connectionID & 0x00ff0000) >> 16;\par
+\tab data[4] = (connectionID & 0xff000000) >> 24;\par
+\} else return 1;\par
+\par
+\cf2 Dopln\f2\lang1029\'ecny ruturny tam kde nebyly. Na\'9ae aplikace bude fungovat pouze na syst\'e9mech Windows, kde ma int velikost 4.\cf0\par
+\f0\lang1033\par
+
+\pard ---\par
+\par
+\b # Portability\par
+\b0 ```\par
+#pragma once\par
+```\par
+\par
+* non-standard\par
+* Qt Creator creates include guards automatically\par
+\par
+---  \par
+\cf2 #pragma once\f2\lang1029  vymeneno za:\par
+\f0\lang1033 #ifndef CLIENT_H\par
+#define CLIENT_H\par
+
+\pard\f2\lang1029 #endif\f0\lang1033\par
+\cf0\par
+
+\pard ---  \par
+\b         \par
+# Qt\par
+\b0 * use Qt types consistently: QString, QByteArray...\par
+* QByteArray reverse(const QByteArray& array) \{...\}\par
+\tab * implicit sharing\par
+\tab * copy-on-write\par
+* own event loop:\par
+\par
+```\par
+while(true) \{\par
+\tab Sleep(10);\par
+\tab qApp->processEvents();\par
+\}\par
+```\par
+\par
+* why not just "return a.exec();"?\par
+\par
+---\par
+\par
+# Qt\par
+* blocking calls: \par
+\par
+```\par
+return mSocket->waitForBytesWritten(10000);\par
+```\par
+\par
+---\par
+\par
+# Security\par
+* poor random generation\par
+\par
+```\par
+srand(time(NULL));\par
+//generovani klice\par
+for(int i = sizeof(connectionID); i < dataSize; \par
+\tab i++) \par
+\{\par
+\tab data[i] = rand() % 256;\par
+\}\par
+```\par
+* sha256 hash - no integrity, instead use HMAC\par
+\par
+---\par
+\par
+# Crypto manager\par
+* int cpyStringToUnsignedCharArray(std::string str, unsigned char * array) \{...\}\par
+\tab * use string.c_str() or string.data()\par
+* std::chrono::milliseconds sleepTime(50); - in worker thread\par
+    \par
+---\par
+\par
+# Threading\par
+* waiting for something, don't know for what...\par
+* possible race condition\par
+\par
+```\par
+while(*end - *start > 0 && \par
+\tab\tab *end - *start <= length)\par
+\tab\tab std::this_thread::sleep_for(sleepTime);\par
+```\par
+\par
+---\par
+\par
+# C++11\par
+\par
+```\par
+unsigned char *data = NULL;\par
+bool mLoggedToServer = nullptr;\par
+```\par
+\par
+* what?\par
+* also not set C++11 in server config - warning!\par
+\par
+---\par
+\cf2 nullptr nahrazeno za NULL.\cf0\par
+\par
+\par
+# English\par
+* czech language in the comments\par
+* receive, not recieve\par
+* prepare, not prepair\par
+\par
+---\par
+\cf2 Opraveno, komentare smazany/prelozeny.\cf0\par
+\par
+# Other issues\par
+* server mytcpclient.cpp - error\par
+\par
+```\par
+mytcpclient.cpp:58: error: taking address of \par
+\tab temporary [-fpermissive]\par
+memcpy(mLastReicevedData, \par
+\tab &data[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], \par
+\tab dataSize);                                                              \par
+```\par
+* solution:\par
+\par
+```\par
+memcpy(mLastReicevedData, data.data() + \par
+\tab (ID_LENGHT + RANDOM_BYTES_LENGTH + 4), \par
+\tab dataSize);\par
+```\par
+
+\pard\par
+\par
+\ul\b Sapiens\par
+
+\pard\sl276\slmult1\ulnone\f3\lang5 Problem identification\b0 : C_1 \par
+\b Severity:\b0  medium\par
+\b Practicability\b0 : Deviation from proposed architecture\par
+\b Description of the problem\b0 :  Architecture proposed peer to peer communication. But Implementation works through the server.\par
+\b Proposed solution\b0  : \par
+\cf2 Kvuli narocnosti p2p modelu jsme presli na client-server model.\cf0\b\par
+\par
+Problem identification\b0 : C_2\par
+\b Severity:\b0  low\par
+\b Practicability\b0 : Exhaustion of resources. Easy to exploit unknowingly\par
+\b Description of the problem\b0 :  Memory leak. Line 665: packethash variable.\par
+\b Proposed solution\b0 : Deallocate variable ater use.\par
+\cf2 Promena dealokovana.\cf0\par
+\b\par
+Problem identification\b0 : C_3 \par
+\b Severity:\b0  low\par
+\b Practicability\b0 : Exhaustion of resources. Easy to exploit by making multiple chat sessions.\par
+\b Description of the problem\b0 :  Memory leak. Line 147: leak in public function. The pointer 'mAesKey' is not deallocated before it is allocated.\par
+\b Proposed solution\b0 : Deallocate variable before allocation if pre allocated.\par
+\cf2 mAesKEy je alokovana v konstruktoru a dealokovana v destruktoru. V pr\f4\lang1029 ubehu se meni pouze jeji obsah.\cf0\f3\lang5\par
+\par
+\b Problem identification\b0 : C_4\par
+\b Severity:\b0  high\par
+\b Practicability\b0 : Will effect communication operations. \par
+\b Description of the problem\b0 :  Client waits on input stream. If some other client tries to communicate during the time, it will affect the communication.\par
+\b Proposed solution\b0 : Either poll the input stream or wait for it in separate thread. Wait only until some other client initiates a connection.\par
+\par
+\b Problem identification\b0 : C_5\par
+\b Severity:\b0  high\par
+\b Practicability\b0 : Will effect communication operations. \par
+\b Description of the problem\b0 :  Client terminates after one chat session.\par
+\b Proposed solution\b0 : Make persistent client. It should terminate when user asks so.\par
+\b Problem identification\b0 : C_6\par
+\b Severity:\b0  high\par
+\b Practicability\b0 : Easily exploitable by packet capturing. Replay and Man in middle attacks.\par
+\b Description of the problem\b0 :  Unencrypted channel for connection establishment\b  \par
+Proposed solution\b0 : Use secure channel\par
+\par
+\b Problem identification\b0 : C_7\par
+\b Severity:\b0  low\par
+\b Practicability\b0 : \par
+\b Description of the problem\b0 :  Memory allocation not checked. \b  \par
+Proposed solution\b0 : Check the value of pointer after memory allocation.\par
+\par
+\b Problem identification\b0 : C_8\par
+\b Severity:\b0  low\par
+\b Practicability\b0 : \par
+\b Description of the problem\b0 :  Return value of functions not checked \b  \par
+Proposed solution\b0 : Check the return value of functions.\par
+\par
+\b Problem identification\b0 : C_9\par
+\b Severity:\b0  low\par
+\b Practicability\b0 : Can effect performance of system\par
+\b Description of the problem\b0 :  No mechanism to ensure uniqueness of client identifier\b\par
+Proposed solution\b0 : Unique client identifiers shall be either issued from or verified at a central authority.\par
+\par
+
+\pard\ul\b\f0\lang1033\par
+\ulnone\b0\par
+}
+ 
