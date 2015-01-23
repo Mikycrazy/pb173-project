@@ -4,16 +4,24 @@ Client::Client(string username, string email, qint16 UDPport) : mUsername(userna
 {
     srand(time(NULL));
 
+    try
+    {
+        mLastReicevedData = new unsigned char [10];
+        mAESkey = new unsigned char[AES_KEY_LENGTH];
+        mAESIV = new unsigned char[AES_IV_LENGTH];
+        mCrypto = new CryptoManager();
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
     mLastReicevedDataSize = 10;
-    mLastReicevedData = new unsigned char [10];
     memset(mLastReicevedData, 97, 10);
 
     this->UDPport = UDPport;
     this->initNetwork();
 
-    mCrypto = new CryptoManager();
-    mAESkey = new unsigned char[AES_KEY_LENGTH];
-    mAESIV = new unsigned char[AES_IV_LENGTH];
     memset(mAESkey,'b',AES_KEY_LENGTH);
     memset(mAESIV,'c',AES_IV_LENGTH);
 
@@ -26,8 +34,15 @@ Client::Client(string username, string email, qint16 UDPport) : mUsername(userna
 
 Client::Client() : mLoggedToServer(false), mConnectedToClient(false)
 {
-    this->mCrypto = new CryptoManager();
-    this->mNetwork = new NetworkManager();
+    try
+    {
+        this->mCrypto = new CryptoManager();
+        this->mNetwork = new NetworkManager();
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
 }
 
 Client::~Client()
@@ -49,7 +64,16 @@ Client::~Client()
 
 void Client::initNetwork()
 {
-    this->mNetwork = new NetworkManager();
+    try
+    {
+        this->mNetwork = new NetworkManager();
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+
     this->mNetwork->startConnection(SERVER_ADDRESS, SERVER_PORT, this->UDPport);
 
     connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
@@ -60,7 +84,20 @@ int Client::login()
 {
     unsigned char *data = NULL;
     int dataSize = mUsername.size() + mEmail.size() + DATA_SPLITER.size();
-    data = new unsigned char [dataSize];
+
+    try
+    {
+        data = new unsigned char [dataSize];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+
+
+    if(data == NULL)
+        Logger::getLogger()->Log("Allocation memmory Failed");
 
     memcpy(data, mUsername.c_str(), mUsername.size());
     memcpy(&data[mUsername.size()], DATA_SPLITER.c_str(), DATA_SPLITER.size());
@@ -97,7 +134,17 @@ int Client::logout()
 
     unsigned char *data = NULL;
     int dataSize = mUsername.size() + mEmail.size() + DATA_SPLITER.size();
-    data = new unsigned char [dataSize];
+    try
+    {
+        data = new unsigned char [dataSize];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+    if(data == NULL)
+        Logger::getLogger()->Log("Allocation memmory Failed");
 
     memset(data, 0, dataSize);
 
@@ -124,7 +171,19 @@ int Client::getOnlineList()
 
     unsigned char *data = NULL;
     int dataSize = mUsername.size();
-    data = new unsigned char [dataSize];
+
+    try
+    {
+        data = new unsigned char [dataSize];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+    if(data == NULL)
+        Logger::getLogger()->Log("Allocation memmory Failed");
+
     memset(data, 0, dataSize);
 
 
@@ -148,7 +207,18 @@ int Client::connectToClient(int connectionID)
 
     unsigned char *data = NULL;
     int dataSize = sizeof(connectionID) + AES_KEY_LENGTH / 2;
-    data = new unsigned char [dataSize];
+    try
+    {
+        data = new unsigned char [dataSize];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+    if(data == NULL)
+        Logger::getLogger()->Log("Allocation memmory Failed");
+
     memset(data, 0, dataSize);
 
     if(sizeof(connectionID) == 4)
@@ -161,9 +231,14 @@ int Client::connectToClient(int connectionID)
     else return 1;
 
     //key generation
+
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
+    std::uniform_int_distribution<unsigned long long> dis;
+
     for(int i = sizeof(connectionID); i < dataSize; i++)
     {
-        data[i] = rand() % 256;
+        data[i] = dis(gen) % 256;
     }
 
     unsigned char *packet = NULL;
@@ -186,7 +261,18 @@ int Client::acceptConnection(int connectionID, unsigned char* receivedKey)
 
     unsigned char *data = NULL;
     int dataSize = 1 + sizeof(dataSize) + AES_KEY_LENGTH + AES_IV_LENGTH;
-    data = new unsigned char [dataSize];
+
+    try
+    {
+        data = new unsigned char [dataSize];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+    if(data == NULL)
+        Logger::getLogger()->Log("Allocation memmory Failed");
 
     memset(data, 0, dataSize);
 
@@ -206,6 +292,8 @@ int Client::acceptConnection(int connectionID, unsigned char* receivedKey)
     memcpy( data + sizeof(connectionID) + 1, receivedKey,AES_KEY_LENGTH/2);
 
     //key generation
+
+
     for(int i = 1 + sizeof(connectionID) + AES_KEY_LENGTH / 2; i < 1 + sizeof(connectionID) + AES_KEY_LENGTH; i++)
         data[i] = rand() % 256;
 
@@ -238,8 +326,18 @@ int Client::refuseConnection(int connectionID)
 
    unsigned char *data = NULL;
    int dataSize = 1 + sizeof(dataSize);
-   data = new unsigned char [dataSize];
-   qDebug() << "datasize: " <<  dataSize;
+   try
+   {
+       data = new unsigned char [dataSize];
+   }
+   catch(std::bad_alloc& exc)
+   {
+       Logger::getLogger()->Log(exc.what());
+   }
+
+   if(data == NULL)
+       Logger::getLogger()->Log("Allocation memmory Failed");
+
 
    data[0] = 0;
    //int to byte
@@ -271,9 +369,18 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
     std::cout << "data: ";
     for(int i = 0; i < size; i++)
         std::cout<< data[i];
-    unsigned char *packet = NULL;
+    unsigned char *packet = nullptr;
+    unsigned char *stream = nullptr;
 
-    unsigned char *stream = new unsigned char[size];
+    try
+    {
+        stream = new unsigned char[size];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
     mCrypto->getEncKeystream(stream, size, mCypherPosition);
     mCrypto->XORData(data, data, size, stream);
 
@@ -309,7 +416,18 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, string filename
         t.seekg(0, std::ios::end);    // go to the end
         length = t.tellg();           // report location (this is the length)
         t.seekg(0, std::ios::beg);    // go back to the beginning
-        unsigned char *buffer = new unsigned char[length];    // allocate memory for a buffer of appropriate dimension
+        unsigned char *buffer;
+
+        try
+        {
+            buffer = new unsigned char[length];    // allocate memory for a buffer of appropriate dimension
+        }
+        catch(std::bad_alloc& exc)
+        {
+            Logger::getLogger()->Log(exc.what());
+        }
+
+
         t.read((char *)buffer, length);       // read the whole file into the buffer
         t.close();
 
@@ -330,8 +448,22 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
     if(id == CLIENT_COMMUNICATION_DATA)
         newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + sizeof(mCypherPosition) + size + INTERGRITY_HASH_SIZE;
 
+    unsigned char* hash;
 
-    *packet = new unsigned char[newSize];
+    try
+    {
+        *packet = new unsigned char[newSize];
+        hash = new unsigned char[32];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+
+    if(*packet == NULL)
+        Logger::getLogger()->Log("Allocation memmory Failed");
+
     memset(*packet,97 , newSize);
 
     (*packet)[0] = id;
@@ -340,6 +472,7 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
     {
         (*packet)[i] = rand() % 256;
     }
+
     if(id == CLIENT_COMMUNICATION_DATA)
     {
 
@@ -362,7 +495,6 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
         }
         memcpy(((*packet) + (ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + sizeof(mCypherPosition) )), data, size - sizeof(mCypherPosition));
 
-        unsigned char* hash = new unsigned char[32];
         mCrypto->computeHash(*packet, hash, newSize - INTERGRITY_HASH_SIZE);
 
         memcpy(((*packet) + ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size), hash, INTERGRITY_HASH_SIZE);
@@ -383,13 +515,14 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
 
         memcpy(((*packet) + (ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size))), data, size);
 
-        unsigned char* hash = new unsigned char[32];
+
         mCrypto->computeHash(*packet, hash, newSize - INTERGRITY_HASH_SIZE);
 
         memcpy(((*packet) + ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size), hash, INTERGRITY_HASH_SIZE);
 
-        delete[] hash;
-     }
+
+    }
+    delete[] hash;
     return newSize;
 }
 
@@ -404,14 +537,29 @@ void Client::processPacket(unsigned char* packet, int size)
         return;
     }
 
-    unsigned char* packethash = new unsigned char[INTERGRITY_HASH_SIZE];
-    memcpy(packethash, packet + size - INTERGRITY_HASH_SIZE, INTERGRITY_HASH_SIZE);
+    unsigned char* packethash;
+    unsigned char* computedhash;
 
-    unsigned char* computedhash = new unsigned char[INTERGRITY_HASH_SIZE];
+    try
+    {
+        packethash = new unsigned char[INTERGRITY_HASH_SIZE];
+        computedhash = new unsigned char[INTERGRITY_HASH_SIZE];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+    memcpy(packethash, packet + size - INTERGRITY_HASH_SIZE, INTERGRITY_HASH_SIZE);
     mCrypto->computeHash(packet, computedhash, size - INTERGRITY_HASH_SIZE);
 
     if(!mCrypto->compareHash(packethash, computedhash, INTERGRITY_HASH_SIZE))
+    {
         Logger::getLogger()->Log("Hashes not matching!!");
+    }
+
+    delete[] packethash;
+    delete[] computedhash;
 
     if(sizeof(int) == 4)
     {
@@ -426,8 +574,21 @@ void Client::processPacket(unsigned char* packet, int size)
             return;
         }
 
-        unsigned char *data = new unsigned char [dataSize];
-        mLastReicevedData = new unsigned char [dataSize];
+        unsigned char *data;
+
+        try
+        {
+            data = new unsigned char [dataSize];
+            mLastReicevedData = new unsigned char [dataSize];
+        }
+        catch(std::bad_alloc& exc)
+        {
+            Logger::getLogger()->Log(exc.what());
+        }
+
+        if(data == NULL || mLastReicevedData == NULL)
+            Logger::getLogger()->Log("Allocation memmory Failed");
+
         memcpy(data, packet + ID_LENGHT + RANDOM_BYTES_LENGTH + 4, dataSize);
         memcpy(mLastReicevedData, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
         mLastReicevedDataSize = dataSize;
@@ -531,17 +692,10 @@ void Client::processPacket(unsigned char* packet, int size)
              break;
         }
         delete[] data;
-        delete[] packethash;
-        delete[] computedhash;
-
     }
-
-
     else
     {
-        delete[] packethash;
-        delete[] computedhash;
-        return 1;
+        return;
     }
 }
 
@@ -596,7 +750,21 @@ int Client::processGetOnlineListResponse(unsigned char *data, int size)
 int Client::processServerCommunicationData(unsigned char **data, int size)
 {
     std::cout << "enter proces communication data" << std::endl;
-    unsigned char *oldData = new unsigned char[size];
+    unsigned char *oldData;
+
+    try
+    {
+        oldData = new unsigned char[size];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+
+    if(oldData == NULL)
+        Logger::getLogger()->Log("Allocation memmory Failed");
+
     memcpy(oldData, *data, size);
     int cypherPosition = 0;
     if(size > 3)
@@ -614,10 +782,23 @@ int Client::processServerCommunicationData(unsigned char **data, int size)
     mCypherLastPositionreceived = cypherPosition;
     delete[] *data;
     size -= sizeof(mCypherPosition);
-    *data = new unsigned char[size];
+
+    try
+    {
+        *data = new unsigned char[size];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+
     memcpy(*data,oldData + sizeof(mCypherPosition), size );
 
     unsigned char *stream = new unsigned char[size];
+
+    if(stream == NULL)
+        Logger::getLogger()->Log("Allocation memmory Failed");
 
 
     mCrypto->getDecKeystream(stream, size, mCypherLastPositionreceived);
@@ -646,10 +827,20 @@ int Client::processPacket(unsigned char* packet, unsigned char** data, int size)
     int id = 0;
     int dataSize = 0;
 
-    unsigned char* packethash = new unsigned char[INTERGRITY_HASH_SIZE];
-    memcpy(packethash, packet + size - INTERGRITY_HASH_SIZE, INTERGRITY_HASH_SIZE);
+    unsigned char* packethash;
+    unsigned char* computedhash;
 
-    unsigned char* computedhash = new unsigned char[INTERGRITY_HASH_SIZE];
+    try
+    {
+        packethash = new unsigned char[INTERGRITY_HASH_SIZE];
+        computedhash = new unsigned char[INTERGRITY_HASH_SIZE];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+    memcpy(packethash, packet + size - INTERGRITY_HASH_SIZE, INTERGRITY_HASH_SIZE);
     mCrypto->computeHash(packet, computedhash, size - INTERGRITY_HASH_SIZE);
 
     std::cout << "Hash: ";
@@ -669,10 +860,21 @@ int Client::processPacket(unsigned char* packet, unsigned char** data, int size)
     {
         id = packet[0];
         dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
-        *data = new unsigned char [dataSize];
+
+        try
+        {
+            *data = new unsigned char [dataSize];
+        }
+        catch(std::bad_alloc& exc)
+        {
+            Logger::getLogger()->Log(exc.what());
+        }
+
+
         memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
     }
     delete[] packethash;
+    delete[] computedhash;
     return dataSize;
 }
 

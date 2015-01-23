@@ -2,7 +2,15 @@
 
 bool MyTcpClient::startConnection(QString ipAddress, quint16 port)
 {
-    this->mSocket = new QTcpSocket();
+    try
+    {
+        this->mSocket = new QTcpSocket();
+    }
+    catch(std::bad_alloc& msg)
+    {
+
+    }
+
 
     connect(mSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
     connect(mSocket, SIGNAL(readyRead()), this, SLOT(receiveData()));
@@ -55,6 +63,6 @@ void MyTcpClient::receiveData()
         id = data[0];
         dataSize = ( data[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( data[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (data[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( data[ID_LENGHT + RANDOM_BYTES_LENGTH]);
         mLastReicevedData = new unsigned char [dataSize];
-        memcpy(mLastReicevedData, &data[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
+        memcpy(mLastReicevedData, &data + (ID_LENGHT + RANDOM_BYTES_LENGTH + 4), dataSize);
     }
 }

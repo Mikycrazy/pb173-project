@@ -1,8 +1,18 @@
 #include "myserver.h"
+#include "logger.h"
 
 MyServer::MyServer()
 {
-    mServer = new QTcpServer(this);
+    try
+    {
+        mServer = new QTcpServer(this);
+        mData = new QByteArray(10,'a');
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
 
     connect(mServer, SIGNAL(newConnection()), this, SLOT(connection()));
 
@@ -15,7 +25,7 @@ MyServer::MyServer()
         qDebug() << "Server started";
     }
 
-    mData = new QByteArray(10,'a');
+
 }
 
 MyServer::~MyServer()
@@ -46,7 +56,15 @@ void MyServer::connection()
 
     QTcpSocket* socket = mServer->nextPendingConnection();
 
-    mData = new QByteArray(socket->readAll());
+    try
+    {
+        mData = new QByteArray(socket->readAll());
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
 
     if(mData->at(0) == GET_ONLINE_USER_LIST_RESPONSE)
     {

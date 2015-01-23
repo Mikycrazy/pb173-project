@@ -2,6 +2,7 @@
 #include "NetworkManager.h"
 #include "Client.h"
 #include "Windows.h"
+#include <random>
 
 //#define UNIT_TEST
 #ifndef UNIT_TEST
@@ -17,6 +18,19 @@ int main(int argc, char *argv[])
         for(int i = 0; i < 5; i++)
             testData[i] = 'a';
 
+        if(!strcmp(argv[1], "-r"))
+        {
+            std::random_device rd;
+            std::mt19937_64 gen(rd());
+
+              /* This is where you define the number generator for unsigned long long: */
+            std::uniform_int_distribution<unsigned long long> dis;
+
+              /* A few random numbers: */
+            for (int n=0; n<10; ++n)
+                std::cout << dis(gen) << ' ';
+            std::cout << std::endl;
+        }
         if(!strcmp(argv[1], "-l"))
         {
             Client* client2 = new Client("test1", "test1@test1",12345);

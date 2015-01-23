@@ -2,8 +2,16 @@
 
 NetworkManager::NetworkManager()
 {
-    this->mSocket = new QTcpSocket();
-    this->mUdpSocket = new QUdpSocket();
+    try
+    {
+        this->mSocket = new QTcpSocket();
+        this->mUdpSocket = new QUdpSocket();
+    }
+    catch(std::bad_alloc& exc)
+    {
+        qDebug() << exc.what();
+    }
+
 }
 
 NetworkManager::~NetworkManager()

@@ -4,8 +4,16 @@ Server::Server(quint16 port)
 {
     srand(time(NULL));
 
-    this->mNetwork = new NetworkManager();
-    this->mCrypto = new CryptoManager();
+    try
+    {
+        this->mNetwork = new NetworkManager();
+        this->mCrypto = new CryptoManager();
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
 
     connect(this->mNetwork, SIGNAL(receivedData(int,unsigned char*,int)), this, SLOT(processPacket(int,unsigned char*,int)));
     connect(this->mNetwork, SIGNAL(disconnect(int)), this, SLOT(disconnectClient(int)));
@@ -14,8 +22,15 @@ Server::Server(quint16 port)
 
 Server::Server()
 {
-    this->mNetwork = new NetworkManager();
-    this->mCrypto = new CryptoManager();
+    try
+    {
+        this->mNetwork = new NetworkManager();
+        this->mCrypto = new CryptoManager();
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
 }
 
 Server::~Server()
@@ -40,7 +55,15 @@ bool Server::loginUser(User* user)
 
     unsigned char *data = NULL;
     int dataSize = user->getUsername().size();
-    data = new unsigned char [dataSize];
+    try
+    {
+        data = new unsigned char [dataSize];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
 
     memcpy(data, user->getUsername().c_str(), user->getUsername().size());
 
@@ -63,7 +86,16 @@ bool Server::logoutUser(User* user)
 
              unsigned char *data = NULL;
              int dataSize = user->getUsername().size();
-             data = new unsigned char [dataSize];
+
+             try
+             {
+                data = new unsigned char [dataSize];
+             }
+             catch(std::bad_alloc& exc)
+             {
+                 Logger::getLogger()->Log(exc.what());
+             }
+
 
              memcpy(data, user->getUsername().c_str(), user->getUsername().size());
 
@@ -100,7 +132,16 @@ void Server::sendOnlineList(User* user)
     }
     s = ss.str();
     int dataSize = s.size();
-    data = new unsigned char [dataSize];
+
+    try
+    {
+        data = new unsigned char [dataSize];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
     memcpy(data, s.c_str(), s.size());
     Logger::getLogger()->Log("send GET_ONLINE_USER_LIST_RESPONSE packet ");
     Logger::getLogger()->Log(s);
@@ -113,15 +154,6 @@ void Server::sendOnlineList(User* user)
 
 bool Server::sendConnectionRequest(User *from, User *to, unsigned char *data, int size)
 {
-    /*unsigned char *newData = NULL;
-    int newDataSize = from->getIPAddress().size() + DATA_SPLITER.size() + size;
-    data = new unsigned char [newDataSize];
-
-
-    memcpy(newData, from->getIPAddress().c_str(), from->getIPAddress().size());
-    memcpy(&newData[from->getIPAddress().size()], DATA_SPLITER.c_str(), DATA_SPLITER.size());
-    memcpy(&newData[from->getIPAddress().size() + DATA_SPLITER.size()],data, size);
-*/
 
     int conId = from->getConnectionID();
     if(sizeof(size) == 4)
@@ -144,15 +176,6 @@ bool Server::sendConnectionRequest(User *from, User *to, unsigned char *data, in
 
 bool Server::sendConnectionResponse(User *from, User *to, unsigned char *data, int size)
 {
-    /*unsigned char *newData = NULL;
-    int newDataSize = from->getIPAddress().size() + DATA_SPLITER.size() + size;
-    data = new unsigned char [newDataSize];
-
-
-    memcpy(newData, from->getIPAddress().c_str(), from->getIPAddress().size());
-    memcpy(&newData[from->getIPAddress().size()], DATA_SPLITER.c_str(), DATA_SPLITER.size());
-    memcpy(&newData[from->getIPAddress().size() + DATA_SPLITER.size()],data, size);
-*/
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(SERVER_COMUNICATION_RESPONSE,data,&packet,size);
 
@@ -167,15 +190,29 @@ bool Server::sendConnectionResponse(User *from, User *to, unsigned char *data, i
 int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **packet, int size)
 {
     int newSize = ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size + INTERGRITY_HASH_SIZE;
+    unsigned char* hash;
 
-    *packet = new unsigned char[newSize];
+    try
+    {
+        *packet = new unsigned char[newSize];
+        hash = new unsigned char[32];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
     memset(*packet, 0 , newSize);
 
     (*packet)[0] = id;
 
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
+    std::uniform_int_distribution<unsigned long long> dis;
+
     for(int i = ID_LENGHT; i < ID_LENGHT + RANDOM_BYTES_LENGTH; i++)
     {
-        (*packet)[i] = rand() % 256;
+        (*packet)[i] = dis(gen) % 256;
     }
 
     //int to byte
@@ -190,7 +227,7 @@ int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **
 
     memcpy(((*packet) + (ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size))), data, size);
 
-    unsigned char* hash = new unsigned char[32];
+
     mCrypto->computeHash(*packet, hash, newSize - INTERGRITY_HASH_SIZE);
 
     memcpy(((*packet) + ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size), hash, INTERGRITY_HASH_SIZE);
@@ -216,10 +253,20 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
         return;
     }
 
-    unsigned char* packethash = new unsigned char[INTERGRITY_HASH_SIZE];
-    memcpy(packethash, packet + size - INTERGRITY_HASH_SIZE, INTERGRITY_HASH_SIZE);
+    unsigned char* packethash;
+    unsigned char* computedhash;
 
-    unsigned char* computedhash = new unsigned char[INTERGRITY_HASH_SIZE];
+    try
+    {
+        packethash = new unsigned char[INTERGRITY_HASH_SIZE];
+        computedhash = new unsigned char[INTERGRITY_HASH_SIZE];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+    memcpy(packethash, packet + size - INTERGRITY_HASH_SIZE, INTERGRITY_HASH_SIZE);
     mCrypto->computeHash(packet, computedhash, size - INTERGRITY_HASH_SIZE);
 
     if(!mCrypto->compareHash(packethash, computedhash, INTERGRITY_HASH_SIZE))
@@ -227,6 +274,9 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
         Logger::getLogger()->Log("Hashes not matching!!");
         //return;
     }
+
+    delete[] packethash;
+    delete[] computedhash;
 
     if(sizeof(int) == 4)
     {
@@ -241,7 +291,16 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
             return;
         }
 
-        unsigned char *data = new unsigned char [dataSize];
+        unsigned char *data;
+        try
+        {
+            data = new unsigned char [dataSize];
+        }
+        catch(std::bad_alloc& exc)
+        {
+            Logger::getLogger()->Log(exc.what());
+        }
+
         memcpy(data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
         User * from = NULL;
         User* to = NULL;
@@ -281,16 +340,12 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
 
         }
         delete[] data;
-        delete[] packethash;
-        delete[] computedhash;
     }
 
 
     else
     {
-        delete[] packethash;
-        delete[] computedhash;
-        return 1;
+        return;
     }
 
 }
@@ -362,10 +417,20 @@ int Server::processPacket(unsigned char* packet, unsigned char** data, int size)
     int id = 0;
     int dataSize = 0;
 
-    unsigned char* packethash = new unsigned char[INTERGRITY_HASH_SIZE];
-    memcpy(packethash, packet + size - INTERGRITY_HASH_SIZE, INTERGRITY_HASH_SIZE);
+    unsigned char* packethash;
+    unsigned char* computedhash;
 
-    unsigned char* computedhash = new unsigned char[INTERGRITY_HASH_SIZE];
+    try
+    {
+        packethash = new unsigned char[INTERGRITY_HASH_SIZE];
+        computedhash = new unsigned char[INTERGRITY_HASH_SIZE];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
+    memcpy(packethash, packet + size - INTERGRITY_HASH_SIZE, INTERGRITY_HASH_SIZE);
     mCrypto->computeHash(packet, computedhash, size - INTERGRITY_HASH_SIZE);
 
     std::cout << "Hash: ";
@@ -385,7 +450,16 @@ int Server::processPacket(unsigned char* packet, unsigned char** data, int size)
     {
         id = packet[0];
         dataSize = ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 3] << 24) | ( packet[ ID_LENGHT + RANDOM_BYTES_LENGTH +2] << 16) | (packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 1] << 8) | ( packet[ID_LENGHT + RANDOM_BYTES_LENGTH]);
-        *data = new unsigned char [dataSize];
+
+        try
+        {
+            *data = new unsigned char [dataSize];
+        }
+        catch(std::bad_alloc& exc)
+        {
+            Logger::getLogger()->Log(exc.what());
+        }
+
         memcpy(*data, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
     }
     return dataSize;

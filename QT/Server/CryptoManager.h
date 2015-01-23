@@ -21,7 +21,6 @@ class CryptoManager
 private:
     aes_context mAes;
 	sha256_context mSha;
-    //pk_context mRsa;
     std::thread *mEncKeystreamThread = nullptr;
     std::thread *mDecKeystreamThread = nullptr;
     char* mEncKeystream = nullptr;
@@ -58,42 +57,6 @@ public:
 	* @param size			delka dat
 	*/
 	int decryptAES(unsigned char* encryptedData, unsigned char* decryptedData, unsigned char* key, unsigned char* IV, int size);
-
-
-	/**
-	* zasifruje plainData
-	*
-	*
-	* @param plainData		data urcena k zasifrovani
-	* @param encryptedData	sem se ulozi zasifrovana data
-	* @param publicKey		klic
-	* @param size			delka dat
-
-	*/
-	int encryptRSA(unsigned char* publicKey, unsigned char* plainData, unsigned char* encryptedData, int size);
-
-
-	/**
-	* desifruje encryptedData
-	*
-	*
-	* @param encryptedData	data urcena k desifrovani
-	* @param decryptedData	sem se ulozi desifrovana data
-	* @param privateKey		klic
-	* @param size			delka dat
-
-	*/
-	int decryptRSA(unsigned char* privateKey, unsigned char* encryptedData, unsigned char* decryptedData, int size);
-
-	/**
-	* vygeneruje Dvojici RSA klicu
-	*
-	* @param publicKey	
-	* @param privateKey		
-	* @param size		
-
-	*/
-	int generateKeysRSA(unsigned char* privateKey, unsigned char* publicKey, int size);
 
 	/**
 	* vygeneruje AES klic
@@ -143,8 +106,6 @@ public:
     void getDecKeystream(unsigned char* stream, int length, int from = -1);
 
 private:
-    int addPadding(std::string &input_text);
-	int removePadding(unsigned char* data, int size);
     void getKeystream(unsigned char* stream, int* start, int* end, unsigned char* output, int length, int from);
     void generateCtrKeystream(unsigned char* stream, int* start, int* end);
     void generateEncCtrKeystream();

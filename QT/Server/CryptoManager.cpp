@@ -1,12 +1,20 @@
 #include "CryptoManager.h"
+#include "logger.h"
 
 
 CryptoManager::CryptoManager()
 {
     aes_init(&mAes);
 
-    mEncKeystream = new char[KEYSTREAM_SIZE];
-    mDecKeystream = new char[KEYSTREAM_SIZE];
+    try
+    {
+        mEncKeystream = new char[KEYSTREAM_SIZE];
+        mDecKeystream = new char[KEYSTREAM_SIZE];
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
 
     mEncKeystreamStart = -1;
     mDecKeystreamStart = -1;
@@ -22,46 +30,6 @@ CryptoManager::~CryptoManager()
     delete mDecKeystreamThread;
 }
 
-int CryptoManager::addPadding(std::string& input_text)
-{
-    std::string str (input_text);
-    int input_size = str.length();
-    int size_for_encryption;
-    int pom;
-
-    if (input_size % 16 != 0)
-    {
-        size_for_encryption = input_size + (16 - (input_size % 16)) + 16;
-        pom = (16 - (input_size % 16));
-    }
-    else
-    {
-        size_for_encryption = input_size + 16;
-        pom = 0;
-    }
-
-    if (input_size % 2 == 1)
-    {
-        input_size++;
-        str += "0";
-    }
-
-    while (input_size != size_for_encryption)
-    {
-        std::stringstream ss;
-
-        if (pom < 10)
-            str += "0";
-        ss << pom;
-        str += ss.str();
-
-        input_size += 2;
-    }
-
-    input_text = str;
-
-    return 0;
-}
 
 std::string CryptoManager::PrepairCounterForEncryption(int counter)
 {
@@ -121,37 +89,24 @@ bool CryptoManager::compareHash(unsigned char *hash1, unsigned char *hash2, int 
     return true;
 }
 
-int CryptoManager::removePadding(unsigned char * array, int length)
-{
-    char pom[2];
-
-    memcpy(pom, array + length - 2, 2);
-    int padding = atoi(pom);
-
-    size_t output_size = length - 16 - padding;
-
-    array[output_size] = 0;
-
-    return 0;
-}
-
-int cpyStringToUnsignedCharArray(std::string str, unsigned char * array)
-{
-    for (size_t i = 0; i < str.length(); i++)
-    {
-        array[i] = str.at(i);
-    }
-
-    return 0;
-}
 
 void CryptoManager::startCtrCalculation(unsigned char* key, unsigned char* counter)
 {
-    mAesKey = new unsigned char[AES_KEY_LENGTH / 8];
+    if(mAesKey != nullptr)
+        delete[] mAesKey;
+    try
+    {
+        mAesKey = new unsigned char[AES_KEY_LENGTH / 8];
+        mEncKeystreamThread = new std::thread(&CryptoManager::generateEncCtrKeystream, this);
+        mDecKeystreamThread = new std::thread(&CryptoManager::generateDecCtrKeystream, this);
+    }
+    catch(std::bad_alloc& exc)
+    {
+        Logger::getLogger()->Log(exc.what());
+    }
+
     memcpy(mAesKey, key, AES_KEY_LENGTH / 8);
     memcpy(mCounterStart, counter, CTR_PART_LENGTH);
-    mEncKeystreamThread = new std::thread(&CryptoManager::generateEncCtrKeystream, this);
-    mDecKeystreamThread = new std::thread(&CryptoManager::generateDecCtrKeystream, this);
 }
 
 void CryptoManager::generateCtrKeystream(unsigned char* stream, int* start, int* end)

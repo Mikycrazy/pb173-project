@@ -5,8 +5,16 @@ std::ofstream Logger::mFile;
 
 Logger* Logger::getLogger()
 {
-    if(mpThis == NULL){
-        mpThis = new Logger();
+    if(mpThis == NULL)
+    {
+        try
+        {
+            mpThis = new Logger();
+        }
+        catch(std::bad_alloc& exc)
+        {
+
+        }
         mFile.open("log.txt", std::ios::out | std::ios::app );
     }
     return mpThis;

@@ -12,6 +12,7 @@
 #include "logger.h"
 #include "User.h"
 #include <vector>
+#include <random>
 
 
 const int ID_LENGHT = 1;
