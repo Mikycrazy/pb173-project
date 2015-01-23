@@ -33,15 +33,15 @@ private:
 	std::string mUsername;
 	std::string mEmail;
 
-    unsigned char* mAESkey = NULL;
-    unsigned char* mAESIV = NULL;
-    unsigned char* mPublicRSAKey = NULL;
-    unsigned char* mPrivateRSAKey = NULL;
+    unsigned char* mAESkey = nullptr;
+    unsigned char* mAESIV = nullptr;
+    unsigned char* mPublicRSAKey = nullptr;
+    unsigned char* mPrivateRSAKey = nullptr;
 
     std::vector<User*> mOnlineList;
 
-    bool mLoggedToServer = NULL;
-    bool mConnectedToClient = NULL;
+    bool mLoggedToServer = nullptr;
+    bool mConnectedToClient = nullptr;
 
     QHostAddress mReceiverIP;
     int mReceiverPort;
@@ -49,7 +49,7 @@ private:
     NetworkManager* mNetwork;
     CryptoManager* mCrypto;
 
-    unsigned char* mLastReicevedData = NULL;
+    unsigned char* mLastReicevedData = nullptr;
     int mLastReicevedDataSize;
 
     int mStatus;
@@ -167,6 +167,7 @@ public:
     int sendDataToClient(QHostAddress address, quint16 port, std::string filename);
 
     int getStatus();
+
     void setStatus(int status);
     void setCypherPosition(int pos);
 

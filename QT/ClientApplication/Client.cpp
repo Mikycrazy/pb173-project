@@ -29,7 +29,6 @@ Client::Client(string username, string email, qint16 UDPport) : mUsername(userna
     mCypherPosition = 0;
     mCypherLastPositionreceived = 0;
 
-   // connect(this->mNetwork, SIGNAL(networkReceivedData(unsigned char*,int)), this, SLOT(processPacket(unsigned char*,int)));
 }
 
 Client::Client() : mLoggedToServer(false), mConnectedToClient(false)
@@ -82,7 +81,7 @@ void Client::initNetwork()
 
 int Client::login()
 {
-    unsigned char *data = NULL;
+    unsigned char *data = nullptr;
     int dataSize = mUsername.size() + mEmail.size() + DATA_SPLITER.size();
 
     try
@@ -94,19 +93,18 @@ int Client::login()
         Logger::getLogger()->Log(exc.what());
     }
 
-
-
-    if(data == NULL)
-        Logger::getLogger()->Log("Allocation memmory Failed");
-
     memcpy(data, mUsername.c_str(), mUsername.size());
     memcpy(&data[mUsername.size()], DATA_SPLITER.c_str(), DATA_SPLITER.size());
     memcpy(&data[mUsername.size() + DATA_SPLITER.size()], mEmail.c_str(), mEmail.size());
 
-    unsigned char *packet = NULL;
+    unsigned char *packet = nullptr;
     int packetSize = this->createPacket(LOGIN_REQUEST,data,&packet,dataSize);
-    Logger::getLogger()->Log("Client: "+ mUsername +" send LOGIN_REQUEST");
-    this->mNetwork->sendData(packet, packetSize);
+
+
+    if(!this->mNetwork->sendData(packet, packetSize))
+        Logger::getLogger()->Log("Failed while sending login request");
+    else
+        Logger::getLogger()->Log("Client: "+ mUsername +" send LOGIN_REQUEST");
 
     delete[] data;
     delete[] packet;
@@ -132,7 +130,7 @@ int Client::logout()
     if(!mLoggedToServer)
         return 1;
 
-    unsigned char *data = NULL;
+    unsigned char *data = nullptr;
     int dataSize = mUsername.size() + mEmail.size() + DATA_SPLITER.size();
     try
     {
@@ -143,20 +141,19 @@ int Client::logout()
         Logger::getLogger()->Log(exc.what());
     }
 
-    if(data == NULL)
-        Logger::getLogger()->Log("Allocation memmory Failed");
-
     memset(data, 0, dataSize);
 
     memcpy(data, mUsername.c_str(), mUsername.size());
     memcpy(&data[mUsername.size()], DATA_SPLITER.c_str(), DATA_SPLITER.size());
     memcpy(&data[mUsername.size() + DATA_SPLITER.size()], mEmail.c_str(), mEmail.size());
 
-    unsigned char *packet = NULL;
+    unsigned char *packet = nullptr;
     int packetSize = this->createPacket(LOGOUT_REQUEST,data,&packet,dataSize);
 
-    this->mNetwork->sendData(packet, packetSize);
-    Logger::getLogger()->Log("Client:"+ mUsername +" send LOGOUT_REQUEST");
+    if(!this->mNetwork->sendData(packet, packetSize))
+        Logger::getLogger()->Log("Failed while sending logout request");
+    else
+        Logger::getLogger()->Log("Client:"+ mUsername +" send LOGOUT_REQUEST");
 
     delete[] data;
     delete[] packet;
@@ -169,7 +166,7 @@ int Client::getOnlineList()
     if(!mLoggedToServer)
         return 1;
 
-    unsigned char *data = NULL;
+    unsigned char *data = nullptr;
     int dataSize = mUsername.size();
 
     try
@@ -181,19 +178,18 @@ int Client::getOnlineList()
         Logger::getLogger()->Log(exc.what());
     }
 
-    if(data == NULL)
-        Logger::getLogger()->Log("Allocation memmory Failed");
-
     memset(data, 0, dataSize);
 
 
     memcpy(data, mUsername.c_str(), mUsername.size());
 
-    unsigned char *packet = NULL;
+    unsigned char *packet = nullptr;
     int packetSize = this->createPacket(GET_ONLINE_USER_LIST_REQUEST,data,&packet,dataSize);
 
-    this->mNetwork->sendData(packet, packetSize);
-    Logger::getLogger()->Log("Client:"+ mUsername +" send GET_ONLINE_USER_LIST_REQUEST");
+    if(!this->mNetwork->sendData(packet, packetSize))
+        Logger::getLogger()->Log("Failed while sending getOnlineList request");
+    else
+        Logger::getLogger()->Log("Client:"+ mUsername +" send GET_ONLINE_USER_LIST_REQUEST");
 
     delete[] data;
     delete[] packet;
@@ -205,7 +201,7 @@ int Client::connectToClient(int connectionID)
     //if(!mLoggedToServer)
         //return 1;
 
-    unsigned char *data = NULL;
+    unsigned char *data = nullptr;
     int dataSize = sizeof(connectionID) + AES_KEY_LENGTH / 2;
     try
     {
@@ -215,9 +211,6 @@ int Client::connectToClient(int connectionID)
     {
         Logger::getLogger()->Log(exc.what());
     }
-
-    if(data == NULL)
-        Logger::getLogger()->Log("Allocation memmory Failed");
 
     memset(data, 0, dataSize);
 
@@ -241,11 +234,13 @@ int Client::connectToClient(int connectionID)
         data[i] = dis(gen) % 256;
     }
 
-    unsigned char *packet = NULL;
+    unsigned char *packet = nullptr;
     int packetSize = this->createPacket(CLIENT_COMUNICATION_REQUEST,data,&packet,dataSize);
 
-    this->mNetwork->sendData(packet, packetSize);
-    Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_REQUEST");
+    if(!this->mNetwork->sendData(packet, packetSize))
+        Logger::getLogger()->Log("Failed while sending CLIENT_COMUNICATION_REQUEST request");
+    else
+        Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_REQUEST");
 
     delete[] data;
     delete[] packet;
@@ -259,7 +254,7 @@ int Client::acceptConnection(int connectionID, unsigned char* receivedKey)
     //if(!mLoggedToServer)
        // return 1;
 
-    unsigned char *data = NULL;
+    unsigned char *data = nullptr;
     int dataSize = 1 + sizeof(dataSize) + AES_KEY_LENGTH + AES_IV_LENGTH;
 
     try
@@ -270,9 +265,6 @@ int Client::acceptConnection(int connectionID, unsigned char* receivedKey)
     {
         Logger::getLogger()->Log(exc.what());
     }
-
-    if(data == NULL)
-        Logger::getLogger()->Log("Allocation memmory Failed");
 
     memset(data, 0, dataSize);
 
@@ -293,30 +285,39 @@ int Client::acceptConnection(int connectionID, unsigned char* receivedKey)
 
     //key generation
 
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
+    std::uniform_int_distribution<unsigned long long> dis;
 
     for(int i = 1 + sizeof(connectionID) + AES_KEY_LENGTH / 2; i < 1 + sizeof(connectionID) + AES_KEY_LENGTH; i++)
-        data[i] = rand() % 256;
+        data[i] = dis(gen) % 256;
 
     memcpy(mAESkey,  data + 1 + sizeof(connectionID), AES_KEY_LENGTH);
 
     // generate IV
     for(int i = 1 + sizeof(connectionID) + AES_KEY_LENGTH; i < dataSize; i++)
-        data[i] = rand() % 256;
+        data[i] = dis(gen) % 256;
 
     memcpy(mAESIV,  &(data[1 + sizeof(connectionID) + AES_KEY_LENGTH]), AES_IV_LENGTH);
 
     mCrypto->computeHash(mAESkey,mAESkey,AES_KEY_LENGTH);
 
-    unsigned char *packet = NULL;
+    unsigned char *packet = nullptr;
     int packetSize = this->createPacket(CLIENT_COMUNICATION_RESPONSE,data,&packet,dataSize);
 
     QByteArray bdata((const char*)mAESkey, AES_KEY_LENGTH);
-    this->mNetwork->sendData(packet, packetSize);
-    Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_RESPONSE");
+
+    int result = this->mNetwork->sendData(packet, packetSize);
+
+    if(result)
+        Logger::getLogger()->Log("Failed while sending CLIENT_COMUNICATION_RESPONSE request");
+    else
+        Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_RESPONSE");
 
     delete[] data;
     delete[] packet;
-    return 0;
+
+    return result;
 }
 
 int Client::refuseConnection(int connectionID)
@@ -324,7 +325,7 @@ int Client::refuseConnection(int connectionID)
    //if(!mLoggedToServer)
       // return 1;
 
-   unsigned char *data = NULL;
+   unsigned char *data = nullptr;
    int dataSize = 1 + sizeof(dataSize);
    try
    {
@@ -335,7 +336,7 @@ int Client::refuseConnection(int connectionID)
        Logger::getLogger()->Log(exc.what());
    }
 
-   if(data == NULL)
+   if(data == nullptr)
        Logger::getLogger()->Log("Allocation memmory Failed");
 
 
@@ -350,16 +351,20 @@ int Client::refuseConnection(int connectionID)
    }
    else return 1;
 
-   unsigned char *packet = NULL;
+   unsigned char *packet = nullptr;
    int packetSize = this->createPacket(CLIENT_COMUNICATION_RESPONSE,data,&packet,dataSize);
 
-   this->mNetwork->sendData(packet, packetSize);
-   Logger::getLogger()->Log("Client: "+ mUsername +" send CLIENT_COMUNICATION_RESPONSE");
+   int result = this->mNetwork->sendData(packet, packetSize);
+
+   if(result)
+       Logger::getLogger()->Log("Failed while sending CLIENT_COMUNICATION_RESPONSE request");
+   else
+       Logger::getLogger()->Log("Client:"+ mUsername +" send CLIENT_COMUNICATION_RESPONSE");
 
    delete[] data;
    delete[] packet;
 
-   return 0;
+   return result;
 }
 
 int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* data, int size)
@@ -387,8 +392,13 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
     int packetSize = this->createPacket(CLIENT_COMMUNICATION_DATA,data,&packet,size);
     mCypherPosition++;
 
-    this->mNetwork->sendUdpData(address, port, packet, packetSize);
-    Logger::getLogger()->Log("Client: "+ mUsername +" send CLIENT_COMUNICATION_DATA");
+    int result = this->mNetwork->sendUdpData(address, port, packet, packetSize);
+
+    if(result)
+        Logger::getLogger()->Log("Failed while sending CLIENT_COMUNICATION_DATA");
+    else
+        Logger::getLogger()->Log("Client: "+ mUsername +" send CLIENT_COMUNICATION_DATA");
+
     std::cout << "data Cyp: ";
     for(int i = 0; i < size; i++)
         std::cout << std::hex << static_cast<int>(data[i]);
@@ -402,7 +412,7 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, unsigned char* 
     delete[] stream;
     delete[] packet;
 
-    return 0;
+    return result;
 }
 
 int Client::sendDataToClient(QHostAddress address, quint16 port, string filename)
@@ -410,17 +420,17 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, string filename
     std::ifstream t;
     int length;
     int dataSize = 1024;
-    t.open(filename);  // open input file
+    t.open(filename);
     if(t.is_open())
     {
-        t.seekg(0, std::ios::end);    // go to the end
-        length = t.tellg();           // report location (this is the length)
-        t.seekg(0, std::ios::beg);    // go back to the beginning
+        t.seekg(0, std::ios::end);
+        length = t.tellg();
+        t.seekg(0, std::ios::beg);
         unsigned char *buffer;
 
         try
         {
-            buffer = new unsigned char[length];    // allocate memory for a buffer of appropriate dimension
+            buffer = new unsigned char[length];
         }
         catch(std::bad_alloc& exc)
         {
@@ -428,7 +438,7 @@ int Client::sendDataToClient(QHostAddress address, quint16 port, string filename
         }
 
 
-        t.read((char *)buffer, length);       // read the whole file into the buffer
+        t.read((char *)buffer, length);
         t.close();
 
         for(int i = 0; i < length; i+=dataSize)
@@ -460,17 +470,17 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
         Logger::getLogger()->Log(exc.what());
     }
 
-
-    if(*packet == NULL)
-        Logger::getLogger()->Log("Allocation memmory Failed");
-
     memset(*packet,97 , newSize);
-
     (*packet)[0] = id;
+
+
+    std::random_device rd;
+    std::mt19937_64 gen(rd());
+    std::uniform_int_distribution<unsigned long long> dis;
 
     for(int i = ID_LENGHT; i < ID_LENGHT + RANDOM_BYTES_LENGTH; i++)
     {
-        (*packet)[i] = rand() % 256;
+        (*packet)[i] = dis(gen) % 256;
     }
 
     if(id == CLIENT_COMMUNICATION_DATA)
@@ -514,10 +524,7 @@ int Client::createPacket(unsigned char id, unsigned char *data, unsigned char **
 
 
         memcpy(((*packet) + (ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size))), data, size);
-
-
         mCrypto->computeHash(*packet, hash, newSize - INTERGRITY_HASH_SIZE);
-
         memcpy(((*packet) + ID_LENGHT + RANDOM_BYTES_LENGTH + sizeof(size) + size), hash, INTERGRITY_HASH_SIZE);
 
 
@@ -586,9 +593,6 @@ void Client::processPacket(unsigned char* packet, int size)
             Logger::getLogger()->Log(exc.what());
         }
 
-        if(data == NULL || mLastReicevedData == NULL)
-            Logger::getLogger()->Log("Allocation memmory Failed");
-
         memcpy(data, packet + ID_LENGHT + RANDOM_BYTES_LENGTH + 4, dataSize);
         memcpy(mLastReicevedData, &packet[ID_LENGHT + RANDOM_BYTES_LENGTH + 4], dataSize);
         mLastReicevedDataSize = dataSize;
@@ -629,7 +633,10 @@ void Client::processPacket(unsigned char* packet, int size)
         case SERVER_COMUNICATION_REQUEST:
             setStatus(SERVER_COMUNICATION_REQUEST);
             Logger::getLogger()->Log("Client: "+ mUsername +" got SERVER_COMUNICATION_REQUEST");
-            acceptConnection(processServerCommunicationRequest(data,dataSize),&data[4]);
+
+            if(acceptConnection(processServerCommunicationRequest(data,dataSize),&data[4]));
+                Logger::getLogger()->Log("Connection is not accepted");
+
             mCrypto->startCtrCalculation(mAESkey,mAESIV);
 
             std::cout << "aesKey: ";
@@ -761,10 +768,6 @@ int Client::processServerCommunicationData(unsigned char **data, int size)
         Logger::getLogger()->Log(exc.what());
     }
 
-
-    if(oldData == NULL)
-        Logger::getLogger()->Log("Allocation memmory Failed");
-
     memcpy(oldData, *data, size);
     int cypherPosition = 0;
     if(size > 3)
@@ -797,9 +800,6 @@ int Client::processServerCommunicationData(unsigned char **data, int size)
 
     unsigned char *stream = new unsigned char[size];
 
-    if(stream == NULL)
-        Logger::getLogger()->Log("Allocation memmory Failed");
-
 
     mCrypto->getDecKeystream(stream, size, mCypherLastPositionreceived);
     mCrypto->XORData(*data,*data,size, stream);
@@ -821,7 +821,7 @@ int Client::processServerCommunicationData(unsigned char **data, int size)
 
 int Client::processPacket(unsigned char* packet, unsigned char** data, int size)
 {
-    if(packet == NULL)
+    if(packet == nullptr)
      return -1;
 
     int id = 0;

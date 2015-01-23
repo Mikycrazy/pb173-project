@@ -47,9 +47,8 @@ bool NetworkManager::sendData(int connectionID, const unsigned char* data, int s
 
     QTcpSocket* socket = mConnections[connectionID];
     socket->write((const char*)data, size);
-    socket->flush();
 
-    return true;
+    return socket->flush();
 }
 
 void NetworkManager::clientDisconnect(int connection)

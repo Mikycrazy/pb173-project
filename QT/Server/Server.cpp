@@ -70,10 +70,10 @@ bool Server::loginUser(User* user)
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(LOGIN_RESPONSE,data,&packet,dataSize);
 
-    this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
+    bool result = this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
     delete[] data;
 
-    return true;
+    return result;
 }
 
 bool Server::logoutUser(User* user)
@@ -102,13 +102,14 @@ bool Server::logoutUser(User* user)
              unsigned char *packet = NULL;
              int packetSize = this->createPacket(LOGOUT_RESPONSE,data,&packet,dataSize);
 
-             this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
+             bool result = this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
 
              Logger::getLogger()->Log("Logout user" + user->getUsername());
              qDebug() << "Logout user" << (user->getUsername().c_str());
+
              delete[] data;
 
-             return true;
+             return result;
              break;
          }
     }
@@ -143,13 +144,20 @@ void Server::sendOnlineList(User* user)
     }
 
     memcpy(data, s.c_str(), s.size());
-    Logger::getLogger()->Log("send GET_ONLINE_USER_LIST_RESPONSE packet ");
-    Logger::getLogger()->Log(s);
+
 
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(GET_ONLINE_USER_LIST_RESPONSE,data,&packet,dataSize);
 
-    this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
+    bool result = this->mNetwork->sendData(user->getConnectionID(), packet, packetSize);
+
+    if(!result)
+        Logger::getLogger()->Log("send GET_ONLINE_USER_LIST_RESPONSE packet ");
+    else
+    {
+        Logger::getLogger()->Log("send GET_ONLINE_USER_LIST_RESPONSE packet ");
+        Logger::getLogger()->Log(s);
+    }
 }
 
 bool Server::sendConnectionRequest(User *from, User *to, unsigned char *data, int size)
@@ -168,10 +176,10 @@ bool Server::sendConnectionRequest(User *from, User *to, unsigned char *data, in
     unsigned char *packet = NULL;
     int packetSize = this->createPacket(SERVER_COMUNICATION_REQUEST,data,&packet,size);
 
-    this->mNetwork->sendData(to->getConnectionID(), packet, packetSize);
+    bool result = this->mNetwork->sendData(to->getConnectionID(), packet, packetSize);
     //delete[] data;
 
-    return true;
+    return result;
 }
 
 bool Server::sendConnectionResponse(User *from, User *to, unsigned char *data, int size)
@@ -181,10 +189,10 @@ bool Server::sendConnectionResponse(User *from, User *to, unsigned char *data, i
 
 
     //bude nasledovat sifrovani a poslani pres sit
-    this->mNetwork->sendData(to->getConnectionID(), packet, packetSize);
+    bool result = this->mNetwork->sendData(to->getConnectionID(), packet, packetSize);
   //  delete[] data;
 
-    return true;
+    return result;
 }
 
 int Server::createPacket(unsigned char id, unsigned char *data, unsigned char **packet, int size)
@@ -322,18 +330,18 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
             sendOnlineList(from);
             break;
         case CLIENT_COMUNICATION_REQUEST:
-
             from = getUserFromConnectionID(connectionID);
             to = getUserFromConnectionID(processClientComunicationRequest(data,dataSize));
             Logger::getLogger()->Log("Got CLIENT_COMUNICATION_REQUEST packet from: "+ from->getUsername() + " to: "+ to->getUsername());
-            sendConnectionRequest(from, to, data, dataSize);
+            if(sendConnectionRequest(from, to, data, dataSize))
+                Logger::getLogger()->Log("Failed sending CLIENT_COMUNICATION_REQUEST packet from " + from->getUsername());
             break;
         case CLIENT_COMUNICATION_RESPONSE:
-
             from = getUserFromConnectionID(connectionID);
             to = getUserFromConnectionID(processClientComunicationResponse(data,dataSize));
             Logger::getLogger()->Log("Got CLIENT_COMUNICATION_RESPONSE packet: "+ from->getUsername() + " to: "+ to->getUsername());
-            sendConnectionResponse(from, to, data, dataSize);
+            if(sendConnectionResponse(from, to, data, dataSize))
+                Logger::getLogger()->Log("Failed sending response " + to->getUsername());
             break;
          default:
              break;
@@ -341,13 +349,6 @@ void Server::processPacket(int connectionID, unsigned char* packet, int size)
         }
         delete[] data;
     }
-
-
-    else
-    {
-        return;
-    }
-
 }
 
 void Server::processLoginUserPacket(int connectionID, unsigned char *data, int size)

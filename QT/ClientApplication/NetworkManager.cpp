@@ -83,7 +83,10 @@ void NetworkManager::receiveUdpData()
 bool NetworkManager::sendUdpData(QHostAddress receiver, quint16 port, unsigned char* data, int size)
 {
     qDebug() << "Sending data of size" << size << "to address" << receiver.toString();
-    mUdpSocket->writeDatagram((const char*)data, size, receiver, port);
+    int i = mUdpSocket->writeDatagram((const char*)data, size, receiver, port);
 
-    return true;
+    if(i == -1)
+        return false;
+    else
+        return true;
 }
